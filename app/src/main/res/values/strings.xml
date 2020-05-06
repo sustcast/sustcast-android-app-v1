@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">SUSTcast</string>
+    <string name="tvSignUp">Sign Up</string>
+    <string name="tvSignUpText">It\'s easier to sign up now</string>
+    <string name="tvSignUpProceedText"> <u>I want to use email or phone</u> </string>
+    <string name="tvAccountAlreadyText">Already have an account?</string>
+    <string name="tvLoginText">Log in</string>
 </resources>
