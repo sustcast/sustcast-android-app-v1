@@ -2,8 +2,17 @@
     <string name="app_name">SUSTcast</string>
     <string name="tvSignUp">Sign Up</string>
     <string name="tvSignUpText">It\'s easier to sign up now</string>
-    <string name="tvSignUpProceedText"> <u>I will use email or phone</u></string>
+    <string name="tvSignUpProceedText">Create your SUSTCast Account</string>
     <string name="tvAccountAlreadyText">Already have an account?</string>
-    <string name="tvLoginText"><u>Log in</u></string>
+    <string name="tvLoginText">Login</string>
     <string name="ivLogoDescription">The Logo in front.</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
 </resources>
