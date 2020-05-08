@@ -13,5 +13,7 @@
     <color name="grey800">#424242</color>
     <color name="Black">#000</color>
     <color name="White">#FFF</color>
-    <color name="mtrl_textinput_default_box_stroke_color">#E0E0E0</color>
+    <color xmlns:tools="http://schemas.android.com/tools" name="mtrl_textinput_default_box_stroke_color" tools:override="true">
+        #E0E0E0
+    </color>
 </resources>
