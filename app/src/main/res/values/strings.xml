@@ -15,4 +15,16 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="welcome_login">Welcome Back,</string>
+    <string name="log_in">Log In!</string>
+    <string name="email_address">EMAIL ADDRESS</string>
+    <string name="password">PASSWORD</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="forgot_password"><u>Forgot Password?</u></string>
+    <string name="welcome_signup">Welcome,</string>
+    <string name="sign_up_signup">Sign Up!</string>
+    <string name="user_name">USER NAME</string>
+    <string name="phone_number">PHONE NUMBER</string>
+    <string name="department">DEPARTMENT</string>
+    <string name="i_accept_the_policy_and_terms">I accept the <u>policy and terms</u></string>
 </resources>
