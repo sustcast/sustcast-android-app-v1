@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/hindsiliguri_semibold"
+            android:fontFamily="@font/kollektif_bold"
             android:text="@string/welcome_signup"
             android:textColor="@color/grey700"
             android:textSize="25sp"
@@ -28,8 +28,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/hindsiliguri_bold"
+            android:fontFamily="@font/kollektif_bold"
             android:paddingTop="30dp"
+            android:paddingBottom="10dp"
             android:text="@string/sign_up_signup"
             android:textColor="@color/grey800"
             android:textSize="40sp"
@@ -68,7 +69,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/hindsiliguri_regular"
+                android:fontFamily="@font/kollektif"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,7 +88,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/hindsiliguri_regular"
+                android:fontFamily="@font/kollektif"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -106,7 +107,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/hindsiliguri_regular"
+                android:fontFamily="@font/kollektif"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -125,7 +126,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/hindsiliguri_regular"
+                android:fontFamily="@font/kollektif"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -145,7 +146,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/hindsiliguri_regular"
+                android:fontFamily="@font/kollektif"
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -161,7 +162,7 @@
                 android:id="@+id/remember_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/hindsiliguri_regular"
+                android:fontFamily="@font/kollektif"
                 android:text="@string/i_accept_the_policy_and_terms"
                 android:textColor="@color/grey500"
                 android:textSize="15sp"
@@ -196,6 +197,7 @@
             android:paddingHorizontal="70dp"
             android:stateListAnimator="@null"
             android:text="@string/tvSignUp"
+            android:fontFamily="@font/kollektif_bold"
             android:textAllCaps="false"
             android:textColor="@color/grey700"
             android:textSize="25sp"

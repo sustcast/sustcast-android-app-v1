@@ -10,7 +10,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startActivity(new Intent(MainActivity.this, LandingActivity.class));
+        startActivity(new Intent(MainActivity.this, SignUpActivity.class));
         finish();
     }
 }
