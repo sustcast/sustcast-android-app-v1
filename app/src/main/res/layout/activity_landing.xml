@@ -6,16 +6,30 @@
     android:layout_height="match_parent"
     tools:context=".LandingActivity">
 
-    <ImageView
-        android:id="@+id/ivLogo"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/logoLayout"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:contentDescription="@string/ivLogoDescription"
-        android:src="@drawable/ic_logo"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/SignUpLayout"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:contentDescription="@string/ivLogoDescription"
+            android:src="@drawable/ic_launcher_foreground"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:src="@drawable/ic_sustcast_logo_fonts_only"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/SignUpLayout"
@@ -24,13 +38,14 @@
         app:layout_constraintBottom_toTopOf="@id/LoginLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivLogo">
+        app:layout_constraintTop_toBottomOf="@id/logoLayout">
+
         <TextView
             android:id="@+id/tvSignUpProceed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tvSignUpProceedText"
             android:fontFamily="@font/kollektif"
+            android:text="@string/tvSignUpProceedText"
             android:textColor="@color/grey600"
             android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@id/tvSignUp"
@@ -42,12 +57,12 @@
             android:id="@+id/tvSignUp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/kollektif_bold"
-            android:text="@string/tvSignUp"
             android:layout_marginTop="10dp"
             android:background="@drawable/button_rounded"
+            android:fontFamily="@font/kollektif_bold"
             android:paddingHorizontal="70dp"
             android:stateListAnimator="@null"
+            android:text="@string/tvSignUp"
             android:textAllCaps="false"
             android:textColor="@color/grey800"
             android:textSize="25sp"
@@ -66,6 +81,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/SignUpLayout" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/LoginLayout"
         android:layout_width="wrap_content"
@@ -79,9 +95,9 @@
             android:id="@+id/tvAccountAlreadyText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/kollektif"
             android:text="@string/tvAccountAlreadyText"
             android:textColor="@color/grey500"
-            android:fontFamily="@font/kollektif"
             android:textSize="17sp"
             app:layout_constraintBottom_toTopOf="@id/tvLogin"
             app:layout_constraintHorizontal_bias="0.497"
@@ -94,14 +110,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:fontFamily="@font/kollektif_bold"
-            android:text="@string/tvLoginText"
             android:background="@drawable/button_rounded"
+            android:fontFamily="@font/kollektif_bold"
             android:paddingHorizontal="70dp"
             android:stateListAnimator="@null"
+            android:text="@string/tvLoginText"
             android:textAllCaps="false"
-            android:textSize="25sp"
             android:textColor="@color/grey800"
+            android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
