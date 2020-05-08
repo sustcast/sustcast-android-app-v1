@@ -18,4 +18,9 @@
     <style name="AppTheme.Launcher" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen_background</item>
     </style>
+
+    <style name="MyCustomAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/kollektif</item>
+        <item name="android:textColor">@color/grey800</item>
+    </style>
 </resources>
