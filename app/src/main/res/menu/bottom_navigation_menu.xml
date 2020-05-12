@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_stream_frag"
+        android:icon="@drawable/stream_bottom_button"
+        android:title="Search" />
+
+    <item
+        android:id="@+id/nav_news_frag"
+        android:icon="@drawable/news_bottom_button"
+        android:title="Comment" />
+
+
+    <item
+        android:id="@+id/nav_feedback_frag"
+        android:icon="@drawable/extras"
+        android:title="Stats" />
+</menu>
