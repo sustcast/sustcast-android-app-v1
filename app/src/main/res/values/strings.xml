@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">SUSTcast</string>
+    <string name="tvSignUp">Sign Up</string>
+    <string name="tvSignUpText">It\'s easier to sign up now</string>
+    <string name="tvSignUpProceedText">Create your SUSTCast Account</string>
+    <string name="tvAccountAlreadyText">Already have an account?</string>
+    <string name="tvLoginText">Login</string>
+    <string name="ivLogoDescription">The Logo in front.</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="welcome_login">Welcome Back,</string>
+    <string name="log_in">Log In!</string>
+    <string name="email_address">EMAIL ADDRESS</string>
+    <string name="password">PASSWORD</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="forgot_password"><u>Forgot Password?</u></string>
+    <string name="welcome_signup">Welcome,</string>
+    <string name="sign_up_signup">Sign Up!</string>
+    <string name="user_name">USER NAME</string>
+    <string name="phone_number">PHONE NUMBER</string>
+    <string name="department">DEPARTMENT</string>
+    <string name="i_accept_the_policy_and_terms">I accept the <u>policy and terms</u></string>
+    <string name="about_the_contributors">About the Contributors</string>
 </resources>
