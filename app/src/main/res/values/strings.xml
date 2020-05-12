@@ -27,4 +27,5 @@
     <string name="phone_number">PHONE NUMBER</string>
     <string name="department">DEPARTMENT</string>
     <string name="i_accept_the_policy_and_terms">I accept the <u>policy and terms</u></string>
+    <string name="about_the_contributors">About the Contributors</string>
 </resources>
