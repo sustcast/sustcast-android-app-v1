@@ -49,7 +49,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ic_logo"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintVertical_chainStyle="packed"
+            style="?android:attr/borderlessButtonStyle"/>
 
 
         <Button
@@ -69,7 +70,8 @@
             app:layout_constraintBottom_toTopOf="@id/rate_button"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/feedback_button" />
+            app:layout_constraintTop_toBottomOf="@id/feedback_button"
+            style="?android:attr/borderlessButtonStyle"/>
 
         <Button
             android:id="@+id/rate_button"
@@ -88,7 +90,8 @@
             app:layout_constraintBottom_toTopOf="@id/logout_button"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/facebook_button" />
+            app:layout_constraintTop_toBottomOf="@id/facebook_button"
+            style="?android:attr/borderlessButtonStyle"/>
 
         <Button
             android:id="@+id/logout_button"
@@ -107,7 +110,8 @@
             app:layout_constraintBottom_toTopOf="@id/tv_contributors"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rate_button" />
+            app:layout_constraintTop_toBottomOf="@id/rate_button"
+            style="?android:attr/borderlessButtonStyle"/>
 
         <TextView
             android:id="@+id/tv_contributors"
