@@ -84,7 +84,8 @@
             app:layout_constraintBottom_toTopOf="@id/tv_currently_reading"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ic_bgStream" />
+            app:layout_constraintTop_toBottomOf="@id/ic_bgStream"
+            style="?android:attr/borderlessButtonStyle"/>
 
         <TextView
             android:id="@+id/tv_currently_reading"
@@ -93,7 +94,7 @@
             android:layout_marginTop="20dp"
             android:text="Currently Reading : "
             android:textColor="@color/grey700"
-            android:textSize="10sp"
+            android:textSize="20sp"
             app:layout_constraintBottom_toTopOf="@id/tv_BBC"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
