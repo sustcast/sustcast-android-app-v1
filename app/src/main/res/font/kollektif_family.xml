@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:app="http://schemas.android.com/apk/res-auto">
+    <font
+        app:font="@font/kollektif"
+        app:fontStyle="normal"
+        app:fontWeight="200" />
+    <font
+        app:font="@font/kollektif_bold"
+        app:fontStyle="normal"
+        app:fontWeight="400" />
+    <font
+        app:font="@font/kollektif_italic"
+        app:fontStyle="italic"
+        app:fontWeight="500" />
+    <font
+        app:font="@font/kollektif_boldtalic"
+        app:fontStyle="italic"
+        app:fontWeight="600" />
+
+</font-family>
