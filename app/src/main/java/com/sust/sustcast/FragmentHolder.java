@@ -13,15 +13,23 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class FragmentHolder extends AppCompatActivity {
     BottomNavigationView bottomNavigation;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment_holder);
-        bottomNavigation = findViewById(R.id.bottom_navigation);
-        bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
-        openFragment(StreamFragment.newInstance("", ""));
-
-    }
+    BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.nav_stream_frag:
+                            openFragment(StreamFragment.newInstance());
+                            return true;
+                        case R.id.nav_news_frag:
+                            openFragment(NewsReaderFragment.newInstance());
+                            return true;
+                        case R.id.nav_feedback_frag:
+                            openFragment(FeedbackFragment.newInstance());
+                            return true;
+                    }
+                    return false;
+                }
+            };
 
 
     public void openFragment(Fragment fragment) {
@@ -30,21 +38,14 @@ public class FragmentHolder extends AppCompatActivity {
         transaction.addToBackStack(null);
         transaction.commit();
     }
-    BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.nav_stream_frag:
-                            openFragment(StreamFragment.newInstance("", ""));
-                            return true;
-                        case R.id.nav_news_frag:
-                            openFragment(NewsReaderFragment.newInstance());
-                            return true;
-                        case R.id.nav_feedback_frag:
-                            openFragment(FeedbackFragment.newInstance("", ""));
-                            return true;
-                    }
-                    return false;
-                }
-            };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_fragment_holder);
+        bottomNavigation = findViewById(R.id.bottom_navigation);
+        bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+        openFragment(StreamFragment.newInstance());
+
+    }
 }
