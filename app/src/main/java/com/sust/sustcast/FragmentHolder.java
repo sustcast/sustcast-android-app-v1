@@ -1,12 +1,12 @@
 package com.sust.sustcast;
 
+import android.os.Bundle;
+import android.view.MenuItem;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.os.Bundle;
-import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -38,7 +38,7 @@ public class FragmentHolder extends AppCompatActivity {
                             openFragment(StreamFragment.newInstance("", ""));
                             return true;
                         case R.id.nav_news_frag:
-                            openFragment(NewsReaderFragment.newInstance("", ""));
+                            openFragment(NewsReaderFragment.newInstance());
                             return true;
                         case R.id.nav_feedback_frag:
                             openFragment(FeedbackFragment.newInstance("", ""));
