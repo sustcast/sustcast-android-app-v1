@@ -1,10 +1,13 @@
 package com.sust.sustcast;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -53,7 +56,7 @@ public class FeedbackFragment extends Fragment {
         bFacebook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                visitFacebook();
+                startActivity(visitFacebook());
             }
         });
 
@@ -79,9 +82,26 @@ public class FeedbackFragment extends Fragment {
     private void giveRate() {
     }
 
-    private void visitFacebook() {
+    private Intent visitFacebook() {
+
+        try {
+            getContext().getPackageManager().getPackageInfo("com.facebook.katana", 0);
+            return new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/426253597411506"));
+        } catch (Exception e) {
+            return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/appetizerandroid"));
+        }
     }
 
     private void giveFeedback() {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse("mailto:" + "sustcast@gmail.com"));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "My email's subject");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "My email's body");
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send email using..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(getContext(), "No email clients installed.", Toast.LENGTH_SHORT).show();
+        }
     }
 }
