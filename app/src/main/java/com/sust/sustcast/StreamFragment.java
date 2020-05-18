@@ -43,9 +43,8 @@ public class StreamFragment extends Fragment {
     }
 
 
-    public static StreamFragment newInstance(String param1, String param2) {
+    public static StreamFragment newInstance() {
         StreamFragment fragment = new StreamFragment();
-
         return fragment;
     }
 
