@@ -100,14 +100,14 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
 
         <Button
-            android:id="@+id/button_play"
+            android:id="@+id/button_stream"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="@dimen/button_width"
             android:layout_height="@dimen/button_height"
             android:layout_margin="10dp"
 
             android:background="@drawable/rounded_button"
-            android:drawableLeft="@drawable/play_icon_selector"
+            android:drawableLeft="@drawable/play_button"
             android:drawablePadding="10dp"
             android:drawableTint="@color/grey700"
             android:foregroundGravity="center_horizontal"

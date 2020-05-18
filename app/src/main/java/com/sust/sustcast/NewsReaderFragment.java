@@ -38,6 +38,8 @@ public class NewsReaderFragment extends Fragment {
     private SimpleExoPlayer exoPlayer;
     private Unbinder unbinder;
     private Button bPlay;
+    private String TAG = "NewsFrag";
+
 
     public NewsReaderFragment() {
         // Required empty public constructor
