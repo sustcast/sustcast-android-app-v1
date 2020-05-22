@@ -12,25 +12,17 @@ import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
-import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.Format;
-import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.audio.AudioListener;
-import com.google.android.exoplayer2.audio.AudioRendererEventListener;
-import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -107,7 +99,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         });
 
         getPlayer();
-        getAudioListener();
         getMetadata();
 
         return rootView;
@@ -173,102 +164,5 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
     }
 
-    public void getAudioListener() {
-        exoPlayer.addAudioDebugListener(new AudioRendererEventListener() {
-            @Override
-            public void onAudioEnabled(DecoderCounters counters) {
-                Log.i("LINDA1 => ", String.valueOf(exoPlayer.getAudioAttributes()));
 
-            }
-
-            @Override
-            public void onAudioSessionId(int audioSessionId) {
-                Log.i("LINDA2 => ", String.valueOf(exoPlayer.getAudioAttributes()));
-
-            }
-
-            @Override
-            public void onAudioDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
-                Log.i("LINDA3 => ", String.valueOf(exoPlayer.getAudioAttributes()));
-
-            }
-
-            @Override
-            public void onAudioInputFormatChanged(Format format) {
-                Log.i("LINDA4 => ", String.valueOf(exoPlayer.getAudioAttributes()));
-
-            }
-
-            @Override
-            public void onAudioSinkUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
-                Log.i("LINDA5 => ", String.valueOf(exoPlayer.getAudioAttributes()));
-
-            }
-
-            @Override
-            public void onAudioDisabled(DecoderCounters counters) {
-                Log.i("LINDA6 => ", String.valueOf(exoPlayer.getAudioAttributes()));
-
-            }
-        });
-    }
-
-    @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
-        Log.i("KING1 => ", String.valueOf(exoPlayer.getCurrentWindowIndex()));
-
-    }
-
-    @Override
-    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-        Log.i("KING2 => ", String.valueOf(exoPlayer.getContentPosition()));
-
-    }
-
-    @Override
-    public void onLoadingChanged(boolean isLoading) {
-        Log.i("KING3 => ", String.valueOf(exoPlayer.getCurrentPosition()));
-
-    }
-
-    @Override
-    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        Log.i("KING4 => ", String.valueOf(exoPlayer.getCurrentTrackGroups()));
-
-    }
-
-    @Override
-    public void onRepeatModeChanged(int repeatMode) {
-        Log.i("KING5 => ", String.valueOf(exoPlayer.getCurrentWindowIndex()));
-
-    }
-
-    @Override
-    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-        Log.i("KING6 => ", String.valueOf(exoPlayer.getCurrentWindowIndex()));
-
-    }
-
-    @Override
-    public void onPlayerError(ExoPlaybackException error) {
-
-    }
-
-    @Override
-    public void onPositionDiscontinuity(int reason) {
-        Log.i("KING7 => ", String.valueOf(exoPlayer.getCurrentWindowIndex()));
-
-    }
-
-    @Override
-    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-        Log.i("KING8 => ", String.valueOf(exoPlayer.getCurrentWindowIndex()));
-
-    }
-
-    @Override
-    public void onSeekProcessed() {
-        Log.i("KING9 => ", String.valueOf(exoPlayer.getCurrentWindowIndex()));
-
-    }
 }
