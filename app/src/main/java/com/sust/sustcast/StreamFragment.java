@@ -12,15 +12,25 @@ import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Format;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.audio.AudioListener;
+import com.google.android.exoplayer2.audio.AudioRendererEventListener;
+import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -30,14 +40,17 @@ import com.google.android.exoplayer2.util.Util;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import wseemann.media.FFmpegMediaMetadataRetriever;
 
-public class StreamFragment extends Fragment {
+public class StreamFragment extends Fragment implements Player.EventListener {
 
     boolean isPlaying;
     private SimpleExoPlayer exoPlayer;
     private Unbinder unbinder;
     private Button bPlay;
     private String TAG = "StreamFrag";
+    String iceURL;
+    FFmpegMediaMetadataRetriever fmmr;
     public StreamFragment() {
         // Required empty public constructor
     }
@@ -51,6 +64,7 @@ public class StreamFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
 
         }
@@ -88,59 +102,173 @@ public class StreamFragment extends Fragment {
                 }
 
                 isPlaying = !isPlaying;
+
             }
         });
 
         getPlayer();
+        getAudioListener();
+        getMetadata();
+
         return rootView;
     }
 
 
     private void getPlayer() {
-        // URL of the video to stream
-        String newsURL = getString(R.string.bbc_news);
-
-	/* A TrackSelector that selects tracks provided by the MediaSource to be consumed by each of the available Renderers.
-	  A TrackSelector is injected when the player is created. */
+        iceURL = getString(R.string.ice_stream);
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        // Produces Extractor instances for parsing the media data.
         final ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-
         TrackSelection.Factory trackSelectionFactory =
                 new AdaptiveTrackSelection.Factory(bandwidthMeter);
         TrackSelector defaultTrackSelector =
                 new DefaultTrackSelector(trackSelectionFactory);
-
-        // Produces DataSource instances through which media data is loaded.
-        // Measures bandwidth during playback. Can be null if not required.
         DefaultBandwidthMeter defaultBandwidthMeter = new DefaultBandwidthMeter();
-
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
                 getContext(),
                 Util.getUserAgent(getContext(), "SUSTCast"),
                 defaultBandwidthMeter);
-
-        // This is the MediaSource representing the media to be played.
         MediaSource mediaSource = new ExtractorMediaSource(
-                Uri.parse(newsURL),
+                Uri.parse(iceURL),
                 dataSourceFactory,
                 extractorsFactory,
                 new Handler(), Throwable::printStackTrace);
-        // Create the player with previously created TrackSelector
+
         exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), defaultTrackSelector);
-
-        // Prepare the player with the source.
         exoPlayer.prepare(mediaSource);
-
-        // Autoplay the video when the player is ready
         exoPlayer.setPlayWhenReady(true);
+        exoPlayer.addAudioListener(new AudioListener() {
+            @Override
+            public void onAudioSessionId(int audioSessionId) {
+                Log.i("AUDIO => ", String.valueOf(audioSessionId));
+            }
+        });
+
     }
 
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-
-        // Release the player when it is not needed
+        fmmr.release();
         exoPlayer.release();
+    }
+
+    public void getMetadata() {
+        fmmr = new FFmpegMediaMetadataRetriever();
+        fmmr.setDataSource(iceURL);
+        try {
+            for (int i = 0; i < Constantss.METADATA_KEYS.length; i++) {
+                String key = Constantss.METADATA_KEYS[i];
+                String value = fmmr.extractMetadata(key);
+
+                if (value != null) {
+                    Log.i("METADATA => ", "Key: " + key + " Value: " + value);
+                } else {
+                    Log.i("METADATA => ", "Key: " + key + " Value: " + "NONE");
+
+                }
+            }
+        } catch (IllegalArgumentException ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    public void getAudioListener() {
+        exoPlayer.addAudioDebugListener(new AudioRendererEventListener() {
+            @Override
+            public void onAudioEnabled(DecoderCounters counters) {
+                Log.i("LINDA1 => ", String.valueOf(exoPlayer.getAudioAttributes()));
+
+            }
+
+            @Override
+            public void onAudioSessionId(int audioSessionId) {
+                Log.i("LINDA2 => ", String.valueOf(exoPlayer.getAudioAttributes()));
+
+            }
+
+            @Override
+            public void onAudioDecoderInitialized(String decoderName, long initializedTimestampMs, long initializationDurationMs) {
+                Log.i("LINDA3 => ", String.valueOf(exoPlayer.getAudioAttributes()));
+
+            }
+
+            @Override
+            public void onAudioInputFormatChanged(Format format) {
+                Log.i("LINDA4 => ", String.valueOf(exoPlayer.getAudioAttributes()));
+
+            }
+
+            @Override
+            public void onAudioSinkUnderrun(int bufferSize, long bufferSizeMs, long elapsedSinceLastFeedMs) {
+                Log.i("LINDA5 => ", String.valueOf(exoPlayer.getAudioAttributes()));
+
+            }
+
+            @Override
+            public void onAudioDisabled(DecoderCounters counters) {
+                Log.i("LINDA6 => ", String.valueOf(exoPlayer.getAudioAttributes()));
+
+            }
+        });
+    }
+
+    @Override
+    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+        Log.i("KING1 => ", String.valueOf(exoPlayer.getCurrentWindowIndex()));
+
+    }
+
+    @Override
+    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+        Log.i("KING2 => ", String.valueOf(exoPlayer.getContentPosition()));
+
+    }
+
+    @Override
+    public void onLoadingChanged(boolean isLoading) {
+        Log.i("KING3 => ", String.valueOf(exoPlayer.getCurrentPosition()));
+
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        Log.i("KING4 => ", String.valueOf(exoPlayer.getCurrentTrackGroups()));
+
+    }
+
+    @Override
+    public void onRepeatModeChanged(int repeatMode) {
+        Log.i("KING5 => ", String.valueOf(exoPlayer.getCurrentWindowIndex()));
+
+    }
+
+    @Override
+    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+        Log.i("KING6 => ", String.valueOf(exoPlayer.getCurrentWindowIndex()));
+
+    }
+
+    @Override
+    public void onPlayerError(ExoPlaybackException error) {
+
+    }
+
+    @Override
+    public void onPositionDiscontinuity(int reason) {
+        Log.i("KING7 => ", String.valueOf(exoPlayer.getCurrentWindowIndex()));
+
+    }
+
+    @Override
+    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+        Log.i("KING8 => ", String.valueOf(exoPlayer.getCurrentWindowIndex()));
+
+    }
+
+    @Override
+    public void onSeekProcessed() {
+        Log.i("KING9 => ", String.valueOf(exoPlayer.getCurrentWindowIndex()));
+
     }
 }
