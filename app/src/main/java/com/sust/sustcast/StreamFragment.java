@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.audio.AudioListener;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -44,7 +43,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     String iceURL;
     FFmpegMediaMetadataRetriever fmmr;
     public StreamFragment() {
-        // Required empty public constructor
     }
 
 
@@ -70,37 +68,26 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         bPlay = rootView.findViewById(R.id.button_stream);
         unbinder = ButterKnife.bind(this, rootView);
         isPlaying = false;
-        bPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isPlaying == false && exoPlayer.getPlayWhenReady() == true) { // should stop
-                    Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
-                    exoPlayer.setPlayWhenReady(false);
-                    exoPlayer.getPlaybackState();
-                    Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
-                    bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-                } else if (isPlaying == true && exoPlayer.getPlayWhenReady() == false) { //should play
-                    Log.i("CASE => ", "PLAY" + isPlaying + " " + exoPlayer.getPlayWhenReady());
-                    exoPlayer.setPlayWhenReady(true);
-                    exoPlayer.getPlaybackState();
-                    Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
-                    bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-                } else if (exoPlayer.getPlayWhenReady() == true && isPlaying == true) {  //restart
-                    Log.i("CASE => ", "RESTART" + isPlaying + " " + exoPlayer.getPlayWhenReady());
-                    exoPlayer.release();
-                    exoPlayer.stop();
-                    exoPlayer.setPlayWhenReady(true);
-
-                }
-
-                isPlaying = !isPlaying;
-
+        bPlay.setOnClickListener(view -> {
+            if (isPlaying == false && exoPlayer.getPlayWhenReady() == true) { // should stop
+                Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
+                exoPlayer.setPlayWhenReady(false);
+                exoPlayer.getPlaybackState();
+                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
+                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+            } else if (isPlaying == true && exoPlayer.getPlayWhenReady() == false) { //should play
+                Log.i("CASE => ", "PLAY" + isPlaying + " " + exoPlayer.getPlayWhenReady());
+                exoPlayer.setPlayWhenReady(true);
+                exoPlayer.getPlaybackState();
+                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
+                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
             }
+            isPlaying = !isPlaying;
+
         });
 
         getPlayer();
         getMetadata();
-
         return rootView;
     }
 
@@ -127,12 +114,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), defaultTrackSelector);
         exoPlayer.prepare(mediaSource);
         exoPlayer.setPlayWhenReady(true);
-        exoPlayer.addAudioListener(new AudioListener() {
-            @Override
-            public void onAudioSessionId(int audioSessionId) {
-                Log.i("AUDIO => ", String.valueOf(audioSessionId));
-            }
-        });
 
     }
 
