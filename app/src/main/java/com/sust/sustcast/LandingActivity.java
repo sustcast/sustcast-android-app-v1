@@ -8,6 +8,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LandingActivity extends AppCompatActivity {
+    String TAG = "LandingActivity";
     private Button button_login;
     private Button button_sigup;
 
