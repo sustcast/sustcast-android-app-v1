@@ -1,6 +1,5 @@
 package com.sust.sustcast;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,13 +39,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import wseemann.media.FFmpegMediaMetadataRetriever;
+//import wseemann.media.FFmpegMediaMetadataRetriever;
 
 public class StreamFragment extends Fragment implements Player.EventListener {
 
     boolean isPlaying;
     String iceURL;
-    FFmpegMediaMetadataRetriever fmmr;
+    //    FFmpegMediaMetadataRetriever fmmr;
     DatabaseReference mDatabase;
     Song song;
     String name;
@@ -169,36 +168,36 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        fmmr.release();
+//        fmmr.release();
         exoPlayer.release();
     }
 
-    public void getMetadata() {
-        fmmr = new FFmpegMediaMetadataRetriever();
-        try {
-            fmmr.setDataSource(iceURL);
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "DjMeow is taking a nap. He will be back soon", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getContext(), LandingActivity.class));
-
-        }
-        try {
-            for (int i = 0; i < Constantss.METADATA_KEYS.length; i++) {
-                String key = Constantss.METADATA_KEYS[i];
-                String value = fmmr.extractMetadata(key);
+//    public void getMetadata() {
+//        fmmr = new FFmpegMediaMetadataRetriever();
+//        try {
+//            fmmr.setDataSource(iceURL);
+//        } catch (Exception e) {
+//            Toast.makeText(getContext(), "DjMeow is taking a nap. He will be back soon", Toast.LENGTH_SHORT).show();
+//            startActivity(new Intent(getContext(), LandingActivity.class));
 //
-//                if (value != null) {
-//                    Log.i("METADATA => ", "Key: " + key + " Value: " + value);
-//                } else {
-//                    Log.i("METADATA => ", "Key: " + key + " Value: " + "NONE");
+//        }
+//        try {
+//            for (int i = 0; i < Constantss.METADATA_KEYS.length; i++) {
+//                String key = Constantss.METADATA_KEYS[i];
+//                String value = fmmr.extractMetadata(key);
+////
+////                if (value != null) {
+////                    Log.i("METADATA => ", "Key: " + key + " Value: " + value);
+////                } else {
+////                    Log.i("METADATA => ", "Key: " + key + " Value: " + "NONE");
+////
+////                }
+//            }
+//        } catch (IllegalArgumentException ex) {
+//            ex.printStackTrace();
+//        }
 //
-//                }
-            }
-        } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
-        }
-
-    }
+//    }
 
 
 }
