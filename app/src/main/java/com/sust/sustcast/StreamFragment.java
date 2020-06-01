@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -54,6 +55,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     private Unbinder unbinder;
     private Button bPlay;
     private String TAG = "StreamFrag";
+    private TextView tv_song;
+
 
     public StreamFragment() {
     }
@@ -78,6 +81,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_stream, container, false);
+        tv_song = rootView.findViewById(R.id.tv_track);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.addChildEventListener(new ChildEventListener() {
             @Override
@@ -86,6 +90,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 name = song.getName();
                 artist = song.getArtist();
                 Log.i(TAG, "Song name: " + name + ", artist " + artist);
+                tv_song.setText(name + " - " + artist);
                 Toast.makeText(getContext(), name + " - " + artist, Toast.LENGTH_SHORT).show();
             }
 
@@ -95,6 +100,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 name = song.getName();
                 artist = song.getArtist();
                 Log.i(TAG, "Song name: " + name + ", artist " + artist);
+                tv_song.setText(name + " - " + artist);
                 Toast.makeText(getContext(), name + " - " + artist, Toast.LENGTH_SHORT).show();
             }
 
@@ -123,12 +129,14 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 exoPlayer.getPlaybackState();
                 Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
                 bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+                bPlay.setText(R.string.now_paused);
             } else if (isPlaying == true && exoPlayer.getPlayWhenReady() == false) { //should play
                 Log.i("CASE => ", "PLAY" + isPlaying + " " + exoPlayer.getPlayWhenReady());
                 exoPlayer.setPlayWhenReady(true);
                 exoPlayer.getPlaybackState();
                 Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
                 bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+                bPlay.setText(R.string.now_playing);
             }
             isPlaying = !isPlaying;
 
