@@ -30,4 +30,6 @@
     <string name="about_the_contributors">About the Contributors</string>
     <string name="bbc_news">http://bbcwssc.ic.llnwd.net/stream/bbcwssc_mp1_ws-einws</string>
     <string name="ice_stream">http://103.84.159.230:8000/sustcast.ogg</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="now_paused">Stream Paused</string>
 </resources>
