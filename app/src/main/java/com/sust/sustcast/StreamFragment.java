@@ -129,7 +129,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
         });
 
-        getPlayer();
         return rootView;
     }
 
@@ -140,9 +139,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 count = dataSnapshot.getChildrenCount();
                 System.out.println("cl : " + countList + "count : " + count);
-                if (countList == count) {
-                    urlState = true;
-                }
+                System.out.println("We're done loading the initial " + dataSnapshot.getChildrenCount() + " items");
+                getPlayer();
 
             }
 
@@ -154,7 +152,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         urlRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                countList += 1;
                 IceUrl iceUrl = dataSnapshot.getValue(IceUrl.class);
                 int limit = iceUrl.getLimit();
                 String url = iceUrl.getUrl();
@@ -197,9 +194,15 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     }
 
     private void getPlayer() {
-        System.out.println("url : " + newUrl);
-        System.out.println("key : " + newKey);
-        System.out.println("load : " + newLoad);
+        System.out.println("newurl : " + newUrl);
+        System.out.println("newkey : " + newKey);
+        System.out.println("newload : " + newLoad);
+
+        if (newUrl.isEmpty() || newKey.isEmpty()) {
+            Toast.makeText(getContext(), "SERVERS ARE CURRENTLY FULL!!", Toast.LENGTH_SHORT).show();
+        }
+
+        //iceURL = newUrl
         iceURL = getString(R.string.ice_stream);
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         final ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
@@ -212,6 +215,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 getContext(),
                 Util.getUserAgent(getContext(), "SUSTCast"),
                 defaultBandwidthMeter);
+
         MediaSource mediaSource = new ExtractorMediaSource(
                 Uri.parse(iceURL),
                 dataSourceFactory,
