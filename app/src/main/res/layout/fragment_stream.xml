@@ -114,7 +114,7 @@
             android:gravity="left|center_vertical"
             android:paddingLeft="10dp"
 
-            android:text="Play the stream now"
+            android:text="@string/now_playing"
             android:textAllCaps="false"
             android:textColor="@color/grey700"
             android:fontFamily="@font/kollektif"
