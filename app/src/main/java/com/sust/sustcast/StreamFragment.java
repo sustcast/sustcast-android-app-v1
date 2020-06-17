@@ -1,6 +1,5 @@
 package com.sust.sustcast;
 
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,24 +37,30 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import wseemann.media.FFmpegMediaMetadataRetriever;
 
 public class StreamFragment extends Fragment implements Player.EventListener {
 
     boolean isPlaying;
     String iceURL;
-    FFmpegMediaMetadataRetriever fmmr;
-    DatabaseReference mDatabase;
-    Song song;
+    DatabaseReference rootRef;
+    DatabaseReference songReference;
     String name;
     String artist;
     private SimpleExoPlayer exoPlayer;
     private Unbinder unbinder;
     private Button bPlay;
     private String TAG = "StreamFrag";
+    int countList = 0;
+    boolean urlState = false;
+    String newUrl = "";
+    float newLoad = Integer.MAX_VALUE;
+    String newKey = "";
+    long count;
+    private TextView tvPlaying;
 
     public StreamFragment() {
     }
@@ -79,33 +85,19 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_stream, container, false);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.addChildEventListener(new ChildEventListener() {
+        tvPlaying = rootView.findViewById(R.id.tv_track);
+        tvPlaying.setText("Fetching Track info ......");
+        rootRef = FirebaseDatabase.getInstance().getReference();
+        setIceURL();
+        songReference = rootRef.child("song");
+        songReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                song = dataSnapshot.getValue(Song.class);
-                name = song.getName();
-                artist = song.getArtist();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                name = dataSnapshot.child("name").getValue(String.class);
+                artist = dataSnapshot.child("artist").getValue(String.class);
                 Log.i(TAG, "Song name: " + name + ", artist " + artist);
                 Toast.makeText(getContext(), name + " - " + artist, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                song = dataSnapshot.getValue(Song.class);
-                name = song.getName();
-                artist = song.getArtist();
-                Log.i(TAG, "Song name: " + name + ", artist " + artist);
-                Toast.makeText(getContext(), name + " - " + artist, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                tvPlaying.setText(name + " - " + artist);
 
             }
 
@@ -114,6 +106,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
             }
         });
+
+
         bPlay = rootView.findViewById(R.id.button_stream);
         unbinder = ButterKnife.bind(this, rootView);
         isPlaying = false;
@@ -136,12 +130,76 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         });
 
         getPlayer();
-        //getMetadata();
         return rootView;
     }
 
+    private void setIceURL() {
+        DatabaseReference urlRef = rootRef.child("IcecastServers");
+        urlRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                count = dataSnapshot.getChildrenCount();
+                System.out.println("cl : " + countList + "count : " + count);
+                if (countList == count) {
+                    urlState = true;
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        urlRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                countList += 1;
+                IceUrl iceUrl = dataSnapshot.getValue(IceUrl.class);
+                int limit = iceUrl.getLimit();
+                String url = iceUrl.getUrl();
+                int numList = iceUrl.getNumlistener();
+                float load = numList / limit;
+                if (load < 1 && load < newLoad) {
+                    newLoad = load;
+                    newUrl = url;
+                    newKey = dataSnapshot.getKey();
+
+                }
+
+                System.out.println("key => " + dataSnapshot.getKey());
+                System.out.println("limit = >" + iceUrl.getLimit());
+                System.out.println("url = >" + iceUrl.getUrl());
+                System.out.println("numlistener = >" + iceUrl.getNumlistener());
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 
     private void getPlayer() {
+        System.out.println("url : " + newUrl);
+        System.out.println("key : " + newKey);
+        System.out.println("load : " + newLoad);
         iceURL = getString(R.string.ice_stream);
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         final ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
@@ -169,35 +227,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        fmmr.release();
         exoPlayer.release();
-    }
-
-    public void getMetadata() {
-        fmmr = new FFmpegMediaMetadataRetriever();
-        try {
-            fmmr.setDataSource(iceURL);
-        } catch (Exception e) {
-            Toast.makeText(getContext(), "DjMeow is taking a nap. He will be back soon", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(getContext(), LandingActivity.class));
-
-        }
-        try {
-            for (int i = 0; i < Constantss.METADATA_KEYS.length; i++) {
-                String key = Constantss.METADATA_KEYS[i];
-                String value = fmmr.extractMetadata(key);
-//
-//                if (value != null) {
-//                    Log.i("METADATA => ", "Key: " + key + " Value: " + value);
-//                } else {
-//                    Log.i("METADATA => ", "Key: " + key + " Value: " + "NONE");
-//
-//                }
-            }
-        } catch (IllegalArgumentException ex) {
-            ex.printStackTrace();
-        }
-
     }
 
 
