@@ -227,7 +227,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 dataSourceFactory,
                 extractorsFactory,
                 new Handler(), error -> {
-            Toast.makeText(getContext(), "Mr.Meow is taking a nap, now. Please check back in sometimes", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Mr.Meow is taking a nap, now. Please check back in sometimes or check other features!!", Toast.LENGTH_SHORT).show();
             System.out.println("EXOPLAYER ERROR!!");
         });
 
