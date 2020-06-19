@@ -59,6 +59,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     String newUrl = "";
     float newLoad = Integer.MAX_VALUE;
     String newKey = "";
+    int newList;
     long count;
     private TextView tvPlaying;
 
@@ -133,14 +134,17 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     }
 
     private void setIceURL() {
-        DatabaseReference urlRef = rootRef.child("IcecastServers");
+        DatabaseReference urlRef = rootRef.child("IcecastServer");
         urlRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 count = dataSnapshot.getChildrenCount();
                 System.out.println("cl : " + countList + "count : " + count);
                 System.out.println("We're done loading the initial " + dataSnapshot.getChildrenCount() + " items");
-                getPlayer();
+                if (exoPlayer == null) {
+                    urlRef.child(newKey).child("numlisteners").setValue(newList + 1);
+                    getPlayer();
+                }
 
             }
 
@@ -155,19 +159,21 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 IceUrl iceUrl = dataSnapshot.getValue(IceUrl.class);
                 int limit = iceUrl.getLimit();
                 String url = iceUrl.getUrl();
-                int numList = iceUrl.getNumlistener();
-                float load = numList / limit;
+                int numList = iceUrl.getNumlisteners();
+                float load = (float) numList / (float) limit;
                 if (load < 1 && load < newLoad) {
                     newLoad = load;
                     newUrl = url;
                     newKey = dataSnapshot.getKey();
+                    newList = numList;
 
                 }
 
                 System.out.println("key => " + dataSnapshot.getKey());
                 System.out.println("limit = >" + iceUrl.getLimit());
                 System.out.println("url = >" + iceUrl.getUrl());
-                System.out.println("numlistener = >" + iceUrl.getNumlistener());
+                System.out.println("numlistener = >" + iceUrl.getNumlisteners());
+                System.out.println("load => " + load);
             }
 
             @Override

@@ -6,30 +6,32 @@ import com.google.firebase.database.IgnoreExtraProperties;
 public class IceUrl {
 
     private int limit;
-    private int numlistener;
+    private int numlisteners;
     private String url;
 
-    public IceUrl(int limit, int numlistener, String url) {
+    public IceUrl(int limit, int numlisteners, String url) {
         this.limit = limit;
-        this.numlistener = numlistener;
+        this.numlisteners = numlisteners;
         this.url = url;
+    }
+
+    public IceUrl() {
     }
 
     // Default constructor required for calls to
     // DataSnapshot.getValue(User.class)
-    public IceUrl() {
+    public IceUrl(Object value) {
     }
 
     public int getLimit() {
         return limit;
     }
 
-    public int getNumlistener() {
-        return numlistener;
+    public int getNumlisteners() {
+        return numlisteners;
     }
 
     public String getUrl() {
         return url;
     }
-
 }
