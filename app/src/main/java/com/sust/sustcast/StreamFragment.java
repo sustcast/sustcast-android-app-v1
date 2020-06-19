@@ -226,7 +226,10 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 Uri.parse(iceURL),
                 dataSourceFactory,
                 extractorsFactory,
-                new Handler(), Throwable::printStackTrace);
+                new Handler(), error -> {
+            Toast.makeText(getContext(), "Mr.Meow is taking a nap, now. Please check back in sometimes", Toast.LENGTH_SHORT).show();
+            System.out.println("EXOPLAYER ERROR!!");
+        });
 
         exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), defaultTrackSelector);
         exoPlayer.prepare(mediaSource);
