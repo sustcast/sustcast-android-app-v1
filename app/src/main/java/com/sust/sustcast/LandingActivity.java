@@ -35,7 +35,7 @@ public class LandingActivity extends AppCompatActivity {
     }
 
     private void startSignUp() {
-        startActivity(new Intent(LandingActivity.this, FragmentHolder.class));
+        startActivity(new Intent(LandingActivity.this, SignUpActivity.class));
         finish();
     }
 
