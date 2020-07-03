@@ -1,8 +1,10 @@
-package com.sust.sustcast;
+package com.sust.sustcast.authentication;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.sust.sustcast.R;
 
 public class SignUpActivity extends AppCompatActivity {
 

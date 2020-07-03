@@ -24,7 +24,6 @@
 
 
         <activity android:name=".SignUpActivity" />
-        <activity android:name=".LoginActivity" />
         <activity android:name=".FragmentHolder"/>
         <activity
             android:name=".LandingActivity"

@@ -26,6 +26,9 @@ android {
         targetCompatibility = 1.8
     }
 
+    dataBinding {
+        enabled = true
+    }
 }
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'

@@ -11,10 +11,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
+import static com.sust.sustcast.utils.Constants.USERS;
+
 class AuthenticationRepository {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private CollectionReference collectionReference = firebaseFirestore.collection("USERS");
+    private CollectionReference collectionReference = firebaseFirestore.collection(USERS);
 
     MutableLiveData<User> firebaseSignIn(String emailAddress, String password) {
         MutableLiveData<User> authenticatedUserMutableLiveData = new MutableLiveData<>();
