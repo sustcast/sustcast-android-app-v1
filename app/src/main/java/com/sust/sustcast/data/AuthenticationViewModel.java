@@ -24,5 +24,5 @@ public class AuthenticationViewModel extends AndroidViewModel {
     public void signUp(String userName, String emailAddress, String password, String phoneNumber, String department) {
         authenticatedUserLiveData = authRepo.firebaseSignUp(userName, emailAddress, password, phoneNumber, department);
     }
-
+//as
 }
