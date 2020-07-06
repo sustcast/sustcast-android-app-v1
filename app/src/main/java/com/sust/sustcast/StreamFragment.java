@@ -39,6 +39,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -48,18 +51,22 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     String iceURL;
     DatabaseReference rootRef;
     DatabaseReference songReference;
+    DatabaseReference urlRef;
     String name;
     String artist;
-    private SimpleExoPlayer exoPlayer;
-    private Unbinder unbinder;
-    private Button bPlay;
-    private String TAG = "StreamFrag";
     int countList = 0;
     boolean urlState = false;
     String newUrl = "";
     float newLoad = Integer.MAX_VALUE;
     String newKey = "";
+    int newList;
     long count;
+    ValueEventListener vListener;
+    ChildEventListener cListener;
+    private SimpleExoPlayer exoPlayer;
+    private Unbinder unbinder;
+    private Button bPlay;
+    private String TAG = "StreamFrag";
     private TextView tvPlaying;
 
     public StreamFragment() {
@@ -133,14 +140,26 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     }
 
     private void setIceURL() {
-        DatabaseReference urlRef = rootRef.child("IcecastServer");
-        urlRef.addValueEventListener(new ValueEventListener() {
+        urlRef = rootRef.child("IcecastServer");
+
+
+        vListener = urlRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 count = dataSnapshot.getChildrenCount();
                 System.out.println("cl : " + countList + "count : " + count);
                 System.out.println("We're done loading the initial " + dataSnapshot.getChildrenCount() + " items");
-                getPlayer();
+                if (exoPlayer == null) {
+                    System.out.println("IS NULL EXO");
+                    if (!newKey.isEmpty()) {
+                        Map<String, Object> updates = new HashMap<String, Object>();
+                        updates.put("numlisteners", newList + 1);
+                        urlRef.child(newKey).updateChildren(updates);
+                    }
+                    System.out.println("newkey in condition : " + urlRef.child(newKey).child("numlisteners"));
+
+                    getPlayer();
+                }
 
             }
 
@@ -149,25 +168,28 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
             }
         });
-        urlRef.addChildEventListener(new ChildEventListener() {
+        cListener = urlRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                System.out.println("ds => " + dataSnapshot.getValue());
                 IceUrl iceUrl = dataSnapshot.getValue(IceUrl.class);
                 int limit = iceUrl.getLimit();
                 String url = iceUrl.getUrl();
-                int numList = iceUrl.getNumlistener();
-                float load = numList / limit;
+                int numList = iceUrl.getNumlisteners();
+                float load = (float) numList / (float) limit;
                 if (load < 1 && load < newLoad) {
                     newLoad = load;
                     newUrl = url;
                     newKey = dataSnapshot.getKey();
+                    newList = numList;
 
                 }
 
                 System.out.println("key => " + dataSnapshot.getKey());
                 System.out.println("limit = >" + iceUrl.getLimit());
                 System.out.println("url = >" + iceUrl.getUrl());
-                System.out.println("numlistener = >" + iceUrl.getNumlistener());
+                System.out.println("numlistener = >" + iceUrl.getNumlisteners());
+                System.out.println("load => " + load);
             }
 
             @Override
@@ -220,7 +242,10 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 Uri.parse(iceURL),
                 dataSourceFactory,
                 extractorsFactory,
-                new Handler(), Throwable::printStackTrace);
+                new Handler(), error -> {
+            Toast.makeText(getContext(), "Mr.Meow is taking a nap, now. Please check back in sometimes or check other features!!", Toast.LENGTH_SHORT).show();
+            System.out.println("EXOPLAYER ERROR!!");
+        });
 
         exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), defaultTrackSelector);
         exoPlayer.prepare(mediaSource);
@@ -231,6 +256,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        urlRef.removeEventListener(vListener);
+        urlRef.removeEventListener(cListener);
         if (exoPlayer != null) {
             exoPlayer.release();
         }
