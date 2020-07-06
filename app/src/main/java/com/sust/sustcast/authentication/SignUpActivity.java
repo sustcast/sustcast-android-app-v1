@@ -31,7 +31,6 @@ public class SignUpActivity extends AppCompatActivity {
         authViewModel = new ViewModelProvider(this).get(AuthenticationViewModel.class);
 
         authViewModel.authenticatedUserLiveData.observe(this, authenticatedUser -> {
-            Logger.debug(authenticatedUser.userName);
             startActivity(new Intent(SignUpActivity.this, FragmentHolder.class).putExtra(USERS, authenticatedUser));
             finish();
         });
