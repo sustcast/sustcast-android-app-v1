@@ -50,10 +50,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     DatabaseReference songReference;
     String name;
     String artist;
-    private SimpleExoPlayer exoPlayer;
-    private Unbinder unbinder;
-    private Button bPlay;
-    private String TAG = "StreamFrag";
     int countList = 0;
     boolean urlState = false;
     String newUrl = "";
@@ -61,6 +57,10 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     String newKey = "";
     int newList;
     long count;
+    private SimpleExoPlayer exoPlayer;
+    private Unbinder unbinder;
+    private Button bPlay;
+    private String TAG = "StreamFrag";
     private TextView tvPlaying;
 
     public StreamFragment() {
@@ -240,7 +240,9 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        exoPlayer.release();
+        if (exoPlayer != null) {
+            exoPlayer.release();
+        }
     }
 
 
