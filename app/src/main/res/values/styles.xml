@@ -15,12 +15,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="AppTheme.Launcher" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash_screen_background</item>
-    </style>
-
     <style name="MyCustomAppearance" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/kollektif</item>
         <item name="android:textColor">@color/grey800</item>
     </style>
+
+    <style name="SplashActivity" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_screen_background</item>
+    </style>
+
 </resources>

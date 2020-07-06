@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-class AuthenticationViewModel extends AndroidViewModel {
+public class AuthenticationViewModel extends AndroidViewModel {
     public LiveData<User> authenticatedUserLiveData;
     private AuthenticationRepository authRepo;
 

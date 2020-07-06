@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:usesCleartextTraffic="true"
-        tools:targetApi="m"
+        tools:targetApi="n"
         android:theme="@style/AppTheme">
 
         <uses-library
@@ -23,17 +23,17 @@
             android:required="false" />
 
 
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".FragmentHolder"/>
+        <activity android:name=".authentication.SignUpActivity" />
+        <activity android:name=".authentication.LoginActivity" />
+        <activity android:name=".FragmentHolder" />
         <activity
             android:name=".LandingActivity"
             android:theme="@style/LandingTheme" />
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/AppTheme.Launcher">
+            android:name=".splash.SplashActivity"
+            android:theme="@style/SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

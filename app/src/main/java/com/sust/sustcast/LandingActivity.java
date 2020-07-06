@@ -7,6 +7,9 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.sust.sustcast.authentication.LoginActivity;
+import com.sust.sustcast.authentication.SignUpActivity;
+
 public class LandingActivity extends AppCompatActivity {
     String TAG = "LandingActivity";
     private Button button_login;
@@ -36,12 +39,10 @@ public class LandingActivity extends AppCompatActivity {
 
     private void startSignUp() {
         startActivity(new Intent(LandingActivity.this, SignUpActivity.class));
-        finish();
     }
 
     private void startLogin() {
-        startActivity(new Intent(LandingActivity.this, FragmentHolder.class));
-        finish();
+        startActivity(new Intent(LandingActivity.this, LoginActivity.class));
     }
 
 

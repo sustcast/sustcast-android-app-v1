@@ -13,7 +13,7 @@ import java.util.Objects;
 
 import static com.sust.sustcast.utils.Constants.USERS;
 
-class AuthenticationRepository {
+public class AuthenticationRepository {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private CollectionReference collectionReference = firebaseFirestore.collection(USERS);
@@ -31,7 +31,7 @@ class AuthenticationRepository {
                         if (dataTask.isSuccessful()) {
                             user.userName = Objects.requireNonNull(dataTask.getResult()).getString("userName");
                             user.phoneNumber = dataTask.getResult().getString("phoneNumber");
-                            user.department = dataTask.getResult().getString("userName");
+                            user.department = dataTask.getResult().getString("department");
                             user.emailAddress = emailAddress;
                             user.setAuthenticated(true);
                             authenticatedUserMutableLiveData.setValue(user);
