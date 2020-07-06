@@ -2,6 +2,7 @@ package com.sust.sustcast.authentication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -12,6 +13,7 @@ import com.sust.sustcast.R;
 import com.sust.sustcast.data.AuthenticationViewModel;
 import com.sust.sustcast.databinding.ActivityLoginBinding;
 
+import static com.sust.sustcast.utils.Constants.DATAERROR;
 import static com.sust.sustcast.utils.Constants.USERS;
 
 public class LoginActivity extends AppCompatActivity {
@@ -26,13 +28,16 @@ public class LoginActivity extends AppCompatActivity {
         binding.setLoginActivity(this);
 
         authViewModel = new ViewModelProvider(this).get(AuthenticationViewModel.class);
-        authViewModel.getUserLiveData().observe(this, authenticatedUser -> {
+        authViewModel.authenticatedUserLiveData.observe(this, authenticatedUser -> {
             startActivity(new Intent(LoginActivity.this, FragmentHolder.class).putExtra(USERS, authenticatedUser));
             finish();
         });
     }
 
     public void signIn(String email, String password) {
-        authViewModel.signIn(email, password);
+        if (email.length() != 0 && password.length() != 0)
+            authViewModel.signIn(email, password);
+        else
+            Toast.makeText(LoginActivity.this, DATAERROR, Toast.LENGTH_SHORT).show();
     }
 }

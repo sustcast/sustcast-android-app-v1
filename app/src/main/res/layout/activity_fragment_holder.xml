@@ -23,7 +23,7 @@
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
             android:layout_marginBottom="1dp"
-            android:background="@drawable/bottom_navigation_background"
+            android:background="@color/colorPrimary"
             android:verticalScrollbarPosition="left"
             app:itemIconSize="45dp"
             app:itemIconTint="@drawable/bottom_navigation_color_selector"

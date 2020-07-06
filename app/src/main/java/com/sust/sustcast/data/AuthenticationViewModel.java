@@ -25,7 +25,4 @@ public class AuthenticationViewModel extends AndroidViewModel {
         authenticatedUserLiveData = authRepo.firebaseSignUp(userName, emailAddress, password, phoneNumber, department);
     }
 
-    public LiveData<User> getUserLiveData() {
-        return authenticatedUserLiveData;
-    }
 }

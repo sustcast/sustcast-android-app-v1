@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "911091727898-56taajmjgg1v2uhqoquojrum4nvk4djo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sust.sustcast",
+            "certificate_hash": "21eb58e30c7bec4022b8a68c33223f6d11fba98c"
+          }
+        },
+        {
           "client_id": "911091727898-bfu0b08sbfq0mk03pjmetqjhn157t4hi.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

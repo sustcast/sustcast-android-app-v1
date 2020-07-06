@@ -2,7 +2,6 @@ package com.sust.sustcast;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,18 +22,8 @@ public class LandingActivity extends AppCompatActivity {
         button_login = findViewById(R.id.tvLogin);
         button_sigup = findViewById(R.id.tvSignUp);
 
-        button_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startLogin();
-            }
-        });
-        button_sigup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startSignUp();
-            }
-        });
+        button_login.setOnClickListener(view -> startLogin());
+        button_sigup.setOnClickListener(view -> startSignUp());
     }
 
     private void startSignUp() {

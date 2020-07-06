@@ -24,17 +24,16 @@ public class AuthenticationRepository {
             if (authTask.isSuccessful()) {
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
                 if (firebaseUser != null) {
-                    User user = new User();
-                    user.uid = firebaseUser.getUid();
-                    DocumentReference documentReference = collectionReference.document(user.uid);
-                    documentReference.get().addOnCompleteListener(dataTask -> {
+                    String uid = firebaseUser.getUid();
+                    collectionReference.document(uid).get().addOnCompleteListener(dataTask -> {
                         if (dataTask.isSuccessful()) {
-                            user.userName = Objects.requireNonNull(dataTask.getResult()).getString("userName");
-                            user.phoneNumber = dataTask.getResult().getString("phoneNumber");
-                            user.department = dataTask.getResult().getString("department");
-                            user.emailAddress = emailAddress;
-                            user.setAuthenticated(true);
-                            authenticatedUserMutableLiveData.setValue(user);
+                            DocumentSnapshot documentSnapshot = dataTask.getResult();
+                            assert documentSnapshot != null;
+                            if (documentSnapshot.exists()) {
+                                User user = documentSnapshot.toObject(User.class);
+                                user.setAuthenticated(true);
+                                authenticatedUserMutableLiveData.setValue(user);
+                            }
                         }
                     });
                 }

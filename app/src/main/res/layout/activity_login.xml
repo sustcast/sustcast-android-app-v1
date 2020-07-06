@@ -167,10 +167,7 @@
                 android:textSize="25sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:onClick="@{()-> loginActivity.signIn(
-                etEmail.getText().toString(),
-                etPassword.getText().toString()
-                )}"
+                android:onClick="@{()-> loginActivity.signIn(etEmail.getText().toString(),etPassword.getText().toString())}"
                 app:layout_constraintTop_toBottomOf="@id/remember_layout" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

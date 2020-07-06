@@ -209,13 +209,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_rounded"
                 android:fontFamily="@font/kollektif_bold"
-                android:onClick="@{()-> signUpActivity.signUp(
-                Name.getText().toString(),
-                Email.getText().toString(),
-                PhoneNumber.getText().toString(),
-                Department.getText().toString(),
-                Password.getText().toString()
-                )}"
+                android:onClick="@{()-> signUpActivity.signUp(Name.getText().toString(),Email.getText().toString(),Password.getText().toString(),PhoneNumber.getText().toString(),Department.getText().toString())}"
                 android:paddingHorizontal="70dp"
                 android:stateListAnimator="@null"
                 android:text="@string/tvSignUp"

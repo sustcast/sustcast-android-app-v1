@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 import com.sust.sustcast.data.User;
 
 public class SplashViewModel extends AndroidViewModel {
-    LiveData<User> checkAuthentication;
+    LiveData<User> checkAuthenticationLiveData;
     LiveData<User> userData;
     private SplashRepository splashRepository;
 
@@ -18,7 +18,7 @@ public class SplashViewModel extends AndroidViewModel {
     }
 
     void checkAuthentication() {
-        checkAuthentication = splashRepository.checkAuthentication();
+        checkAuthenticationLiveData = splashRepository.checkAuthentication();
     }
 
     void getData(String uid) {

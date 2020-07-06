@@ -9,14 +9,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-public class FeedbackFragment extends Fragment {
+
+public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthStateListener {
     private Button bFeedback;
     private Button bFacebook;
     private Button bRate;
     private Button bLogOut;
+
+    private FirebaseAuth firebaseAuth;
 
     public FeedbackFragment() {
         // Required empty public constructor
@@ -31,6 +37,7 @@ public class FeedbackFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
 
         }
@@ -46,37 +53,30 @@ public class FeedbackFragment extends Fragment {
         bRate = rootView.findViewById(R.id.rate_button);
         bLogOut = rootView.findViewById(R.id.logout_button);
 
-        bFeedback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                giveFeedback();
-            }
-        });
+        firebaseAuth = FirebaseAuth.getInstance();
 
-        bFacebook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(visitFacebook());
-            }
-        });
+        bFeedback.setOnClickListener(view -> giveFeedback());
+        bFacebook.setOnClickListener(view -> startActivity(visitFacebook()));
+        bRate.setOnClickListener(view -> giveRate());
+        bLogOut.setOnClickListener(view -> logOut());
 
-        bRate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                giveRate();
-            }
-        });
-
-        bLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                logOut();
-            }
-        });
         return rootView;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        firebaseAuth.addAuthStateListener(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        firebaseAuth.removeAuthStateListener(this);
+    }
+
     private void logOut() {
+        firebaseAuth.signOut();
     }
 
     private void giveRate() {
@@ -102,6 +102,15 @@ public class FeedbackFragment extends Fragment {
             startActivity(Intent.createChooser(emailIntent, "Send email using..."));
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(getContext(), "No email clients installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+        if (firebaseAuth == null) {
+            startActivity(new Intent(getContext(), LandingActivity.class));
+            getActivity().finish();
         }
     }
 }

@@ -11,6 +11,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -26,8 +27,8 @@ android {
         targetCompatibility = 1.8
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures{
+        dataBinding = true
     }
 }
 apply plugin: 'com.android.application'
@@ -41,7 +42,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0-beta01'
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-
+    implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.rm:rmswitch:1.2.2'
     implementation 'com.google.android.exoplayer:exoplayer:2.11.2'
     implementation 'com.jakewharton:butterknife:10.2.1'
