@@ -39,6 +39,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -48,6 +51,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     String iceURL;
     DatabaseReference rootRef;
     DatabaseReference songReference;
+    DatabaseReference urlRef;
     String name;
     String artist;
     int countList = 0;
@@ -57,6 +61,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     String newKey = "";
     int newList;
     long count;
+    ValueEventListener vListener;
+    ChildEventListener cListener;
     private SimpleExoPlayer exoPlayer;
     private Unbinder unbinder;
     private Button bPlay;
@@ -134,15 +140,24 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     }
 
     private void setIceURL() {
-        DatabaseReference urlRef = rootRef.child("IcecastServer");
-        urlRef.addValueEventListener(new ValueEventListener() {
+        urlRef = rootRef.child("IcecastServer");
+
+
+        vListener = urlRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 count = dataSnapshot.getChildrenCount();
                 System.out.println("cl : " + countList + "count : " + count);
                 System.out.println("We're done loading the initial " + dataSnapshot.getChildrenCount() + " items");
                 if (exoPlayer == null) {
-                    urlRef.child(newKey).child("numlisteners").setValue(newList + 1);
+                    System.out.println("IS NULL EXO");
+                    if (!newKey.isEmpty()) {
+                        Map<String, Object> updates = new HashMap<String, Object>();
+                        updates.put("numlisteners", newList + 1);
+                        urlRef.child(newKey).updateChildren(updates);
+                    }
+                    System.out.println("newkey in condition : " + urlRef.child(newKey).child("numlisteners"));
+
                     getPlayer();
                 }
 
@@ -153,9 +168,10 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
             }
         });
-        urlRef.addChildEventListener(new ChildEventListener() {
+        cListener = urlRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                System.out.println("ds => " + dataSnapshot.getValue());
                 IceUrl iceUrl = dataSnapshot.getValue(IceUrl.class);
                 int limit = iceUrl.getLimit();
                 String url = iceUrl.getUrl();
@@ -240,6 +256,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        urlRef.removeEventListener(vListener);
+        urlRef.removeEventListener(cListener);
         if (exoPlayer != null) {
             exoPlayer.release();
         }
