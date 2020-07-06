@@ -133,7 +133,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     }
 
     private void setIceURL() {
-        DatabaseReference urlRef = rootRef.child("IcecastServers");
+        DatabaseReference urlRef = rootRef.child("IcecastServer");
         urlRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -231,7 +231,9 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        exoPlayer.release();
+        if (exoPlayer != null) {
+            exoPlayer.release();
+        }
     }
 
 
