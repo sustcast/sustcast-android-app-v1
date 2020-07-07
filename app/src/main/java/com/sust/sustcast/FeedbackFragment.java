@@ -108,7 +108,7 @@ public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthState
     @Override
     public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-        if (firebaseAuth == null) {
+        if (firebaseUser == null) {
             startActivity(new Intent(getContext(), LandingActivity.class));
             getActivity().finish();
         }

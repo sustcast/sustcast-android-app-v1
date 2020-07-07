@@ -14,7 +14,7 @@ public class AuthenticationViewModel extends AndroidViewModel {
     public AuthenticationViewModel(@NonNull Application application) {
         super(application);
         authRepo = new AuthenticationRepository();
-        authenticatedUserLiveData = new MutableLiveData<>();
+        authenticatedUserLiveData = new MutableLiveData<User>();
     }
 
     public void signIn(String emailAddress, String password) {

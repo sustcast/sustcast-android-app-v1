@@ -17,9 +17,9 @@ public class AuthenticationRepository {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private CollectionReference collectionReference = firebaseFirestore.collection(USERS);
+    private MutableLiveData<User> authenticatedUserMutableLiveData = new MutableLiveData<>();
 
     MutableLiveData<User> firebaseSignIn(String emailAddress, String password) {
-        MutableLiveData<User> authenticatedUserMutableLiveData = new MutableLiveData<>();
         firebaseAuth.signInWithEmailAndPassword(emailAddress, password).addOnCompleteListener(authTask -> {
             if (authTask.isSuccessful()) {
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
@@ -43,7 +43,6 @@ public class AuthenticationRepository {
     }
 
     MutableLiveData<User> firebaseSignUp(String userName, String emailAddress, String password, String phoneNumber, String department) {
-        MutableLiveData<User> authenticatedUserMutableLiveData = new MutableLiveData<>();
         User user = new User(userName, emailAddress, phoneNumber, department);
         firebaseAuth.createUserWithEmailAndPassword(emailAddress, password).addOnCompleteListener(authTask -> {
             if (authTask.isSuccessful()) {
@@ -56,7 +55,9 @@ public class AuthenticationRepository {
                         if (!documentSnapshot.exists()) {
                             documentReference.set(user).addOnCompleteListener(userCreationTask -> {
                                 if (userCreationTask.isSuccessful()) {
+                                    user.setAuthenticated(true);
                                     authenticatedUserMutableLiveData.setValue(user);
+
                                 }
                             });
                         }
