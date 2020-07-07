@@ -40,7 +40,6 @@ public class NewsReaderFragment extends Fragment {
     private Button bPlay;
     private String TAG = "NewsFrag";
 
-
     public NewsReaderFragment() {
         // Required empty public constructor
     }
@@ -65,33 +64,30 @@ public class NewsReaderFragment extends Fragment {
         bPlay = rootView.findViewById(R.id.button_play);
         unbinder = ButterKnife.bind(this, rootView);
         isPlaying = false;
-        bPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (isPlaying == false && exoPlayer.getPlayWhenReady() == true) { // should stop
-                    Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
-                    exoPlayer.setPlayWhenReady(false);
-                    exoPlayer.getPlaybackState();
-                    Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
-                    bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-                    bPlay.setText(R.string.now_paused);
-                } else if (isPlaying == true && exoPlayer.getPlayWhenReady() == false) { //should play
-                    Log.i("CASE => ", "PLAY" + isPlaying + " " + exoPlayer.getPlayWhenReady());
-                    exoPlayer.setPlayWhenReady(true);
-                    exoPlayer.getPlaybackState();
-                    Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
-                    bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-                    bPlay.setText(R.string.now_playing);
-                } else if (exoPlayer.getPlayWhenReady() == true && isPlaying == true) {  //restart
-                    Log.i("CASE => ", "RESTART" + isPlaying + " " + exoPlayer.getPlayWhenReady());
-                    exoPlayer.release();
-                    exoPlayer.stop();
-                    exoPlayer.setPlayWhenReady(true);
+        bPlay.setOnClickListener(view -> {
+            if (isPlaying == false && exoPlayer.getPlayWhenReady() == true) { // should stop
+                Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
+                exoPlayer.setPlayWhenReady(false);
+                exoPlayer.getPlaybackState();
+                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
+                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+                bPlay.setText(R.string.now_paused);
+            } else if (isPlaying == true && exoPlayer.getPlayWhenReady() == false) { //should play
+                Log.i("CASE => ", "PLAY" + isPlaying + " " + exoPlayer.getPlayWhenReady());
+                exoPlayer.setPlayWhenReady(true);
+                exoPlayer.getPlaybackState();
+                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
+                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+                bPlay.setText(R.string.now_playing);
+            } else if (exoPlayer.getPlayWhenReady() == true && isPlaying == true) {  //restart
+                Log.i("CASE => ", "RESTART" + isPlaying + " " + exoPlayer.getPlayWhenReady());
+                exoPlayer.release();
+                exoPlayer.stop();
+                exoPlayer.setPlayWhenReady(true);
 
-                }
-
-                isPlaying = !isPlaying;
             }
+
+            isPlaying = !isPlaying;
         });
 
         getPlayer();

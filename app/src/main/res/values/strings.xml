@@ -23,7 +23,7 @@
     <string name="forgot_password"><u>Forgot Password?</u></string>
     <string name="welcome_signup">Welcome,</string>
     <string name="sign_up_signup">Sign Up!</string>
-    <string name="user_name">NAME </string>
+    <string name="user_name">USER NAME</string>
     <string name="phone_number">PHONE NUMBER</string>
     <string name="department">DEPARTMENT</string>
     <string name="i_accept_the_policy_and_terms">I accept the <u>policy and terms</u></string>
