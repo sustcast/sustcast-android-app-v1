@@ -113,36 +113,6 @@
                 app:layout_constraintTop_toBottomOf="@id/outlinedPasswordField">
 
                 <TextView
-                    android:id="@+id/remember_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/kollektif"
-                    android:text="@string/remember_me"
-                    android:paddingRight="30dp"
-                    android:textColor="@color/grey500"
-                    android:textSize="15sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toRightOf="@id/remember_switch"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.rm.rmswitch.RMSwitch
-                    android:id="@+id/remember_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="10dp"
-                    app:checked="true"
-                    app:enabled="true"
-                    app:forceAspectRatio="false"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:switchBkgCheckedColor="@color/colorPrimary"
-                    app:switchBkgNotCheckedColor="@color/grey600"
-                    app:switchDesign="slim"
-                    app:switchToggleCheckedColor="@color/colorPrimary"
-                    app:switchToggleNotCheckedColor="@color/grey600" />
-
-                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/kollektif"
@@ -150,6 +120,7 @@
                     android:textColor="@color/grey500"
                     android:textSize="15sp"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
