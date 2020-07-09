@@ -6,8 +6,8 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.sust.sustcast.FragmentHolder;
 import com.sust.sustcast.LandingActivity;
+import com.sust.sustcast.fragment.FragmentHolder;
 
 public class SplashActivity extends AppCompatActivity {
     SplashViewModel splashViewModel;

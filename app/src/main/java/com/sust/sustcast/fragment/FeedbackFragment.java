@@ -1,4 +1,4 @@
-package com.sust.sustcast;
+package com.sust.sustcast.fragment;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.sust.sustcast.LandingActivity;
+import com.sust.sustcast.R;
 
 
 public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthStateListener {

@@ -1,4 +1,4 @@
-package com.sust.sustcast;
+package com.sust.sustcast.fragment;
 
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -27,6 +27,7 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.sust.sustcast.R;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;

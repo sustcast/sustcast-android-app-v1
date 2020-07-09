@@ -1,7 +1,5 @@
 package com.sust.sustcast.data;
 
-import androidx.lifecycle.MutableLiveData;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -17,7 +15,6 @@ public abstract class AuthenticationRepository {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private CollectionReference collectionReference = firebaseFirestore.collection(USERS);
-    private MutableLiveData<User> authenticatedUserMutableLiveData = new MutableLiveData<>();
 
     abstract void setUser(User user);
 
@@ -33,6 +30,7 @@ public abstract class AuthenticationRepository {
                             assert documentSnapshot != null;
                             if (documentSnapshot.exists()) {
                                 User user = documentSnapshot.toObject(User.class);
+                                assert user != null;
                                 user.setAuthenticated(true);
                                 setUser(user);
                             }

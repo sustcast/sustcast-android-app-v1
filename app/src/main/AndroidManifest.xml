@@ -25,7 +25,7 @@
 
         <activity android:name=".authentication.SignUpActivity" />
         <activity android:name=".authentication.LoginActivity" />
-        <activity android:name=".FragmentHolder" />
+        <activity android:name=".fragment.FragmentHolder" />
         <activity
             android:name=".LandingActivity"
             android:theme="@style/LandingTheme" />

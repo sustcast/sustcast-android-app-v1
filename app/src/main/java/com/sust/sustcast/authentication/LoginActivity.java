@@ -8,10 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.sust.sustcast.FragmentHolder;
 import com.sust.sustcast.R;
 import com.sust.sustcast.data.AuthenticationViewModel;
 import com.sust.sustcast.databinding.ActivityLoginBinding;
+import com.sust.sustcast.fragment.FragmentHolder;
 
 import static com.sust.sustcast.utils.Constants.DATAERROR;
 import static com.sust.sustcast.utils.Constants.USERS;

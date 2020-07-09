@@ -1,4 +1,4 @@
-package com.sust.sustcast;
+package com.sust.sustcast.fragment;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.sust.sustcast.R;
 
 public class FragmentHolder extends AppCompatActivity {
     BottomNavigationView bottomNavigation;
