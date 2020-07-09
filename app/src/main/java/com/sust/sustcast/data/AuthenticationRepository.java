@@ -13,13 +13,15 @@ import java.util.Objects;
 
 import static com.sust.sustcast.utils.Constants.USERS;
 
-public class AuthenticationRepository {
+public abstract class AuthenticationRepository {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private CollectionReference collectionReference = firebaseFirestore.collection(USERS);
     private MutableLiveData<User> authenticatedUserMutableLiveData = new MutableLiveData<>();
 
-    MutableLiveData<User> firebaseSignIn(String emailAddress, String password) {
+    abstract void setUser(User user);
+
+    void firebaseSignIn(String emailAddress, String password) {
         firebaseAuth.signInWithEmailAndPassword(emailAddress, password).addOnCompleteListener(authTask -> {
             if (authTask.isSuccessful()) {
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
@@ -32,17 +34,16 @@ public class AuthenticationRepository {
                             if (documentSnapshot.exists()) {
                                 User user = documentSnapshot.toObject(User.class);
                                 user.setAuthenticated(true);
-                                authenticatedUserMutableLiveData.setValue(user);
+                                setUser(user);
                             }
                         }
                     });
                 }
             }
         });
-        return authenticatedUserMutableLiveData;
     }
 
-    MutableLiveData<User> firebaseSignUp(String userName, String emailAddress, String password, String phoneNumber, String department) {
+    void firebaseSignUp(String userName, String emailAddress, String password, String phoneNumber, String department) {
         User user = new User(userName, emailAddress, phoneNumber, department);
         firebaseAuth.createUserWithEmailAndPassword(emailAddress, password).addOnCompleteListener(authTask -> {
             if (authTask.isSuccessful()) {
@@ -56,8 +57,7 @@ public class AuthenticationRepository {
                             documentReference.set(user).addOnCompleteListener(userCreationTask -> {
                                 if (userCreationTask.isSuccessful()) {
                                     user.setAuthenticated(true);
-                                    authenticatedUserMutableLiveData.setValue(user);
-
+                                    setUser(user);
                                 }
                             });
                         }
@@ -65,6 +65,5 @@ public class AuthenticationRepository {
                 });
             }
         });
-        return authenticatedUserMutableLiveData;
     }
 }

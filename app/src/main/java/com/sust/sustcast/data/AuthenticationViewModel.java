@@ -8,20 +8,29 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 public class AuthenticationViewModel extends AndroidViewModel {
-    public LiveData<User> authenticatedUserLiveData;
+    public MutableLiveData<User> authenticatedUserLiveData;
     private AuthenticationRepository authRepo;
 
     public AuthenticationViewModel(@NonNull Application application) {
         super(application);
-        authRepo = new AuthenticationRepository();
-        authenticatedUserLiveData = new MutableLiveData<User>();
+        authenticatedUserLiveData = new MutableLiveData<>();
+        authRepo = new AuthenticationRepository() {
+            @Override
+            void setUser(User user) {
+                authenticatedUserLiveData.setValue(user);
+            }
+        };
     }
 
     public void signIn(String emailAddress, String password) {
-        authenticatedUserLiveData = authRepo.firebaseSignIn(emailAddress, password);
+        authRepo.firebaseSignIn(emailAddress, password);
     }
 
     public void signUp(String userName, String emailAddress, String password, String phoneNumber, String department) {
-        authenticatedUserLiveData = authRepo.firebaseSignUp(userName, emailAddress, password, phoneNumber, department);
+        authRepo.firebaseSignUp(userName, emailAddress, password, phoneNumber, department);
+    }
+
+    public LiveData<User> getAuthenticatedUser() {
+        return authenticatedUserLiveData;
     }
 }

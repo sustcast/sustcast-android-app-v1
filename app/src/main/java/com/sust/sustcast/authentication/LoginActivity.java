@@ -28,9 +28,9 @@ public class LoginActivity extends AppCompatActivity {
         binding.setLoginActivity(this);
 
         authViewModel = new ViewModelProvider(this).get(AuthenticationViewModel.class);
-        authViewModel.authenticatedUserLiveData.observe(this, authenticatedUser -> {
-                startActivity(new Intent(LoginActivity.this, FragmentHolder.class).putExtra(USERS, authenticatedUser));
-                finish();
+        authViewModel.getAuthenticatedUser().observe(this, authenticatedUser -> {
+            startActivity(new Intent(LoginActivity.this, FragmentHolder.class).putExtra(USERS, authenticatedUser));
+            finish();
         });
     }
 

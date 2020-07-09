@@ -12,7 +12,6 @@ import com.sust.sustcast.FragmentHolder;
 import com.sust.sustcast.R;
 import com.sust.sustcast.data.AuthenticationViewModel;
 import com.sust.sustcast.databinding.ActivitySignUpBinding;
-import com.sust.sustcast.utils.Logger;
 
 import static com.sust.sustcast.utils.Constants.DATAERROR;
 import static com.sust.sustcast.utils.Constants.USERS;
@@ -30,9 +29,9 @@ public class SignUpActivity extends AppCompatActivity {
 
         authViewModel = new ViewModelProvider(this).get(AuthenticationViewModel.class);
 
-        authViewModel.authenticatedUserLiveData.observe(this, authenticatedUser -> {
-                startActivity(new Intent(SignUpActivity.this, FragmentHolder.class).putExtra(USERS, authenticatedUser));
-                finish();
+        authViewModel.getAuthenticatedUser().observe(this, authenticatedUser -> {
+            startActivity(new Intent(SignUpActivity.this, FragmentHolder.class).putExtra(USERS, authenticatedUser));
+            finish();
         });
     }
 
