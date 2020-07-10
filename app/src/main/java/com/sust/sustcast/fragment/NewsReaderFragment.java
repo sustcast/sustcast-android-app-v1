@@ -39,22 +39,17 @@ public class NewsReaderFragment extends Fragment {
     private SimpleExoPlayer exoPlayer;
     private Unbinder unbinder;
     private Button bPlay;
-    private String TAG = "NewsFrag";
 
     public NewsReaderFragment() {
-        // Required empty public constructor
     }
 
     public static NewsReaderFragment newInstance() {
-        NewsReaderFragment fragment = new NewsReaderFragment();
-        return fragment;
+        return new NewsReaderFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
     }
 
     @Override

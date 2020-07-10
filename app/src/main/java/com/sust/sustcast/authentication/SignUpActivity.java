@@ -18,13 +18,12 @@ import static com.sust.sustcast.utils.Constants.USERS;
 
 public class SignUpActivity extends AppCompatActivity {
     private AuthenticationViewModel authViewModel;
-    private ActivitySignUpBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up);
+        ActivitySignUpBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up);
         binding.setSignUpActivity(this);
 
         authViewModel = new ViewModelProvider(this).get(AuthenticationViewModel.class);

@@ -6,63 +6,76 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sust.sustcast.LandingActivity;
 import com.sust.sustcast.R;
+import com.sust.sustcast.databinding.FragmentFeedbackBinding;
+
+import static com.sust.sustcast.utils.Constants.FACEBOOKAPP;
+import static com.sust.sustcast.utils.Constants.FACEBOOKAPPLINK;
+import static com.sust.sustcast.utils.Constants.FACEBOOKLINK;
+import static com.sust.sustcast.utils.Constants.MAILADDRESS;
+import static com.sust.sustcast.utils.Constants.MAILBODY;
+import static com.sust.sustcast.utils.Constants.MAILERROR;
+import static com.sust.sustcast.utils.Constants.MAILSUBJECT;
 
 
 public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthStateListener {
-    private Button bFeedback;
-    private Button bFacebook;
-    private Button bRate;
-    private Button bLogOut;
-
     private FirebaseAuth firebaseAuth;
 
     public FeedbackFragment() {
-        // Required empty public constructor
     }
 
     public static FeedbackFragment newInstance() {
-        FeedbackFragment fragment = new FeedbackFragment();
-
-        return fragment;
+        return new FeedbackFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-
-        }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_feedback, container, false);
-        bFeedback = rootView.findViewById(R.id.feedback_button);
-        bFacebook = rootView.findViewById(R.id.facebook_button);
-        bRate = rootView.findViewById(R.id.rate_button);
-        bLogOut = rootView.findViewById(R.id.logout_button);
-
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        FragmentFeedbackBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_feedback, container, false);
         firebaseAuth = FirebaseAuth.getInstance();
+        binding.setFeedbackFragment(this);
+        return binding.getRoot();
+    }
 
-        bFeedback.setOnClickListener(view -> giveFeedback());
-        bFacebook.setOnClickListener(view -> startActivity(visitFacebook()));
-        bRate.setOnClickListener(view -> giveRate());
-        bLogOut.setOnClickListener(view -> logOut());
+    public void giveRate() {
+    }
 
-        return rootView;
+    public Intent visitFacebook() {
+        try {
+            getContext().getPackageManager().getPackageInfo(FACEBOOKAPP, 0);
+            return new Intent(Intent.ACTION_VIEW, Uri.parse(FACEBOOKAPPLINK));
+        } catch (Exception e) {
+            return new Intent(Intent.ACTION_VIEW, Uri.parse(FACEBOOKLINK));
+        }
+    }
+
+    public void giveFeedback() {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse("mailto:" + MAILADDRESS));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, MAILSUBJECT);
+        emailIntent.putExtra(Intent.EXTRA_TEXT, MAILBODY);
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send email using..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(getContext(), MAILERROR, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void logOut() {
+        firebaseAuth.signOut();
     }
 
     @Override
@@ -75,36 +88,6 @@ public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthState
     public void onStop() {
         super.onStop();
         firebaseAuth.removeAuthStateListener(this);
-    }
-
-    private void logOut() {
-        firebaseAuth.signOut();
-    }
-
-    private void giveRate() {
-    }
-
-    private Intent visitFacebook() {
-
-        try {
-            getContext().getPackageManager().getPackageInfo("com.facebook.katana", 0);
-            return new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/426253597411506"));
-        } catch (Exception e) {
-            return new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/appetizerandroid"));
-        }
-    }
-
-    private void giveFeedback() {
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-        emailIntent.setData(Uri.parse("mailto:" + "sustcast@gmail.com"));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "My email's subject");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "My email's body");
-
-        try {
-            startActivity(Intent.createChooser(emailIntent, "Send email using..."));
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(getContext(), "No email clients installed.", Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override

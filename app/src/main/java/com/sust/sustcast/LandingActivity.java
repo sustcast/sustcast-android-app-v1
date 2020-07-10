@@ -11,14 +11,12 @@ import com.sust.sustcast.authentication.SignUpActivity;
 import com.sust.sustcast.databinding.ActivityLandingBinding;
 
 public class LandingActivity extends AppCompatActivity {
-    private ActivityLandingBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_landing);
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_landing);
+        ActivityLandingBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_landing);
         binding.setLandingActivity(this);
     }
 

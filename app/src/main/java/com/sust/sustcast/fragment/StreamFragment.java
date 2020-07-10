@@ -74,7 +74,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     public StreamFragment() {
     }
 
-
     public static StreamFragment newInstance() {
         StreamFragment fragment = new StreamFragment();
         return fragment;

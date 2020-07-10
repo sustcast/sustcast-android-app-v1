@@ -1,9 +1,7 @@
 package com.sust.sustcast.fragment;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -15,22 +13,19 @@ public class FragmentHolder extends AppCompatActivity {
     BottomNavigationView bottomNavigation;
 
     BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
-            new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.nav_stream_frag:
-                            openFragment(StreamFragment.newInstance());
-                            return true;
-                        case R.id.nav_news_frag:
-                            openFragment(NewsReaderFragment.newInstance());
-                            return true;
-                        case R.id.nav_feedback_frag:
-                            openFragment(FeedbackFragment.newInstance());
-                            return true;
-                    }
-                    return false;
+            item -> {
+                switch (item.getItemId()) {
+                    case R.id.nav_stream_frag:
+                        openFragment(StreamFragment.newInstance());
+                        return true;
+                    case R.id.nav_news_frag:
+                        openFragment(NewsReaderFragment.newInstance());
+                        return true;
+                    case R.id.nav_feedback_frag:
+                        openFragment(FeedbackFragment.newInstance());
+                        return true;
                 }
+                return false;
             };
 
 
