@@ -63,27 +63,30 @@ public class NewsReaderFragment extends Fragment {
         bPlay.setOnClickListener(view -> {
             if (isPlaying == false && exoPlayer.getPlayWhenReady() == true) { // should stop
                 Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
-                exoPlayer.setPlayWhenReady(false);
-                exoPlayer.getPlaybackState();
+                if (exoPlayer != null) {
+                    exoPlayer.stop();
+                    exoPlayer.release();
+                    exoPlayer = null;
+                }
+                //exoPlayer.setPlayWhenReady(false);
+                //exoPlayer.getPlaybackState();
                 Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
                 bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
                 bPlay.setText(R.string.now_paused);
-            } else if (isPlaying == true && exoPlayer.getPlayWhenReady() == false) { //should play
-                Log.i("CASE => ", "PLAY" + isPlaying + " " + exoPlayer.getPlayWhenReady());
-                exoPlayer.setPlayWhenReady(true);
-                exoPlayer.getPlaybackState();
+                isPlaying = !isPlaying;
+
+            } else {
+                isPlaying = !isPlaying;
+
+                if (exoPlayer == null) {
+                    getPlayer();
+                }
                 Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
                 bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
                 bPlay.setText(R.string.now_playing);
-            } else if (exoPlayer.getPlayWhenReady() == true && isPlaying == true) {  //restart
-                Log.i("CASE => ", "RESTART" + isPlaying + " " + exoPlayer.getPlayWhenReady());
-                exoPlayer.release();
-                exoPlayer.stop();
-                exoPlayer.setPlayWhenReady(true);
-
             }
 
-            isPlaying = !isPlaying;
+
         });
 
         getPlayer();
@@ -119,7 +122,9 @@ public class NewsReaderFragment extends Fragment {
                 Uri.parse(newsURL),
                 dataSourceFactory,
                 extractorsFactory,
-                new Handler(), Throwable::printStackTrace);
+                new Handler(), error -> {
+            catchError(error);
+        });
         // Create the player with previously created TrackSelector
         exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), defaultTrackSelector);
 
@@ -130,12 +135,19 @@ public class NewsReaderFragment extends Fragment {
         exoPlayer.setPlayWhenReady(true);
     }
 
+    private void catchError(Exception e) {
+        System.out.println(e.toString());
+        System.exit(0);
+    }
+
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-
         // Release the player when it is not needed
-        exoPlayer.release();
+        if (exoPlayer != null) {
+            exoPlayer.stop();
+            exoPlayer.release();
+        }
     }
 
 

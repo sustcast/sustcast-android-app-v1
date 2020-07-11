@@ -38,8 +38,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.sust.sustcast.IceUrl;
 import com.sust.sustcast.R;
+import com.sust.sustcast.data.IceUrl;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -114,26 +114,34 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
             }
         });
-
-
         bPlay = rootView.findViewById(R.id.button_stream);
         unbinder = ButterKnife.bind(this, rootView);
         isPlaying = false;
         bPlay.setOnClickListener(view -> {
             if (isPlaying == false && exoPlayer.getPlayWhenReady() == true) { // should stop
                 Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
-                exoPlayer.setPlayWhenReady(false);
-                exoPlayer.getPlaybackState();
+                if (exoPlayer != null) {
+                    exoPlayer.stop();
+                    exoPlayer.release();
+                    exoPlayer = null;
+                }
+
+                //exoPlayer.getPlaybackState();
                 Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
                 bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-            } else if (isPlaying == true && exoPlayer.getPlayWhenReady() == false) { //should play
-                Log.i("CASE => ", "PLAY" + isPlaying + " " + exoPlayer.getPlayWhenReady());
-                exoPlayer.setPlayWhenReady(true);
-                exoPlayer.getPlaybackState();
+                isPlaying = !isPlaying;
+
+            } else { //should play
+                isPlaying = !isPlaying;
+
+                if (exoPlayer == null) {
+                    getPlayer();
+                }
+                //exoPlayer.setPlayWhenReady(true);
+                //exoPlayer.getPlaybackState();
                 Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
                 bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
             }
-            isPlaying = !isPlaying;
 
         });
 
@@ -227,6 +235,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
         //iceURL = newUrl
         iceURL = getString(R.string.ice_stream);
+
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         final ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
         TrackSelection.Factory trackSelectionFactory =
@@ -238,21 +247,24 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 getContext(),
                 Util.getUserAgent(getContext(), "SUSTCast"),
                 defaultBandwidthMeter);
+        MediaSource mediaSource;
 
-        MediaSource mediaSource = new ExtractorMediaSource(
+        mediaSource = new ExtractorMediaSource(
                 Uri.parse(iceURL),
                 dataSourceFactory,
                 extractorsFactory,
-                new Handler(), error -> {
-            Toast.makeText(getContext(), "Mr.Meow is taking a nap, now. Please check back in sometimes or check other features!!", Toast.LENGTH_SHORT).show();
-            System.out.println("EXOPLAYER ERROR!!");
-        });
+                new Handler(), null
+
+        );
 
         exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), defaultTrackSelector);
+
         exoPlayer.prepare(mediaSource);
         exoPlayer.setPlayWhenReady(true);
 
+
     }
+
 
     public void onDestroyView() {
         super.onDestroyView();
@@ -260,6 +272,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         urlRef.removeEventListener(vListener);
         urlRef.removeEventListener(cListener);
         if (exoPlayer != null) {
+            exoPlayer.stop();
             exoPlayer.release();
         }
     }

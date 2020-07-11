@@ -1,4 +1,4 @@
-package com.sust.sustcast;
+package com.sust.sustcast.data;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
