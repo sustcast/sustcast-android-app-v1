@@ -57,7 +57,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     String name;
     String artist;
     int countList = 0;
-    boolean urlState = false;
     String newUrl = "";
     float newLoad = Integer.MAX_VALUE;
     String newKey = "";
@@ -159,7 +158,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 System.out.println("cl : " + countList + "count : " + count);
                 System.out.println("We're done loading the initial " + dataSnapshot.getChildrenCount() + " items");
                 if (exoPlayer == null) {
-                    System.out.println("IS NULL EXO");
                     if (!newKey.isEmpty()) {
                         Map<String, Object> updates = new HashMap<String, Object>();
                         updates.put("numlisteners", newList + 1);
