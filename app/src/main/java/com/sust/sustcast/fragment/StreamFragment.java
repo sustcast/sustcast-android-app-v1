@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -230,7 +231,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         System.out.println("newload : " + newLoad);
 
         if (newUrl.isEmpty() || newKey.isEmpty()) {
-            Toast.makeText(getContext(), "SERVERS ARE CURRENTLY FULL!!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "ALL SERVERS ARE CURRENTLY FULL!!", Toast.LENGTH_SHORT).show();
         }
 
         //iceURL = newUrl
@@ -238,6 +239,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         final ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+
         TrackSelection.Factory trackSelectionFactory =
                 new AdaptiveTrackSelection.Factory(bandwidthMeter);
         TrackSelector defaultTrackSelector =
@@ -247,18 +249,25 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 getContext(),
                 Util.getUserAgent(getContext(), "SUSTCast"),
                 defaultBandwidthMeter);
-        MediaSource mediaSource;
 
-        mediaSource = new ExtractorMediaSource(
+        MediaSource mediaSource = new ExtractorMediaSource(
                 Uri.parse(iceURL),
                 dataSourceFactory,
                 extractorsFactory,
-                new Handler(), null
+                new Handler(), error -> {
+
+        }
 
         );
 
         exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), defaultTrackSelector);
-
+        exoPlayer.addListener(new Player.EventListener() {
+            @Override
+            public void onPlayerError(ExoPlaybackException error) {
+                System.out.println("ERROR ERROR ERRROOOOOOOR");
+                Toast.makeText(getContext(), "Mr. Meow is taking a nap :( Check back after a while or try our other features!!", Toast.LENGTH_SHORT).show();
+            }
+        });
         exoPlayer.prepare(mediaSource);
         exoPlayer.setPlayWhenReady(true);
 
