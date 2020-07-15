@@ -94,10 +94,10 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         rootRef = FirebaseDatabase.getInstance().getReference();
         setIceURL();
         getMetadata();
+        bPlay = rootView.findViewById(R.id.button_stream);
         setButton();
         unbinder = ButterKnife.bind(this, rootView);
         isPlaying = false;
-
         return rootView;
     }
 

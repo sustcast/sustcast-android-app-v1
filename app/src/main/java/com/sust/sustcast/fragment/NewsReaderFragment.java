@@ -58,11 +58,51 @@ public class NewsReaderFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_news_reader, container, false);
         bPlay = rootView.findViewById(R.id.button_play);
         unbinder = ButterKnife.bind(this, rootView);
         isPlaying = false;
+        setButton();
+        if (exoPlayer == null) {
+            getPlayer();
+        }
+        return rootView;
+    }
+
+    private void getPlayer() {
+        // URL of the video to stream
+        String newsURL = getString(R.string.bbc_news);
+        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+        final ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+
+        TrackSelection.Factory trackSelectionFactory =
+                new AdaptiveTrackSelection.Factory(bandwidthMeter);
+        TrackSelector defaultTrackSelector =
+                new DefaultTrackSelector(trackSelectionFactory);
+        DefaultBandwidthMeter defaultBandwidthMeter = new DefaultBandwidthMeter();
+
+        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
+                getContext(),
+                Util.getUserAgent(getContext(), "SUSTCast"),
+                defaultBandwidthMeter);
+        MediaSource mediaSource = new ExtractorMediaSource(
+                Uri.parse(newsURL),
+                dataSourceFactory,
+                extractorsFactory,
+                new Handler(), null);
+        exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), defaultTrackSelector);
+        exoPlayer.addListener(new Player.EventListener() {
+            @Override
+            public void onPlayerError(ExoPlaybackException error) {
+                Toast.makeText(getContext(), "BBC is taking a break :( Check back after a while or try our other features!!", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        exoPlayer.prepare(mediaSource);
+        exoPlayer.setPlayWhenReady(true);
+    }
+
+    private void setButton() {
         bPlay.setOnClickListener(view -> {
             if (isPlaying == false && exoPlayer.getPlayWhenReady() == true) { // should stop
                 Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
@@ -71,8 +111,6 @@ public class NewsReaderFragment extends Fragment {
                     exoPlayer.release();
                     exoPlayer = null;
                 }
-                //exoPlayer.setPlayWhenReady(false);
-                //exoPlayer.getPlaybackState();
                 Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
                 bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
                 bPlay.setText(R.string.now_paused);
@@ -92,54 +130,6 @@ public class NewsReaderFragment extends Fragment {
 
         });
 
-        getPlayer();
-        return rootView;
-    }
-
-    private void getPlayer() {
-        // URL of the video to stream
-        String newsURL = getString(R.string.bbc_news);
-
-	/* A TrackSelector that selects tracks provided by the MediaSource to be consumed by each of the available Renderers.
-	  A TrackSelector is injected when the player is created. */
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        // Produces Extractor instances for parsing the media data.
-        final ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-
-        TrackSelection.Factory trackSelectionFactory =
-                new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        TrackSelector defaultTrackSelector =
-                new DefaultTrackSelector(trackSelectionFactory);
-
-        // Produces DataSource instances through which media data is loaded.
-        // Measures bandwidth during playback. Can be null if not required.
-        DefaultBandwidthMeter defaultBandwidthMeter = new DefaultBandwidthMeter();
-
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
-                getContext(),
-                Util.getUserAgent(getContext(), "SUSTCast"),
-                defaultBandwidthMeter);
-
-        // This is the MediaSource representing the media to be played.
-        MediaSource mediaSource = new ExtractorMediaSource(
-                Uri.parse(newsURL),
-                dataSourceFactory,
-                extractorsFactory,
-                new Handler(), null);
-        // Create the player with previously created TrackSelector
-        exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), defaultTrackSelector);
-        exoPlayer.addListener(new Player.EventListener() {
-            @Override
-            public void onPlayerError(ExoPlaybackException error) {
-                Toast.makeText(getContext(), "BBC is taking a break :( Check back after a while or try our other features!!", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-        // Prepare the player with the source.
-        exoPlayer.prepare(mediaSource);
-
-        // Autoplay the video when the player is ready
-        exoPlayer.setPlayWhenReady(true);
     }
 
     public void onDestroyView() {
