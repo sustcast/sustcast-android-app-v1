@@ -93,6 +93,39 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         tvPlaying.setText("Fetching Track info ......");
         rootRef = FirebaseDatabase.getInstance().getReference();
         setIceURL();
+        getMetadata();
+        bPlay = rootView.findViewById(R.id.button_stream);
+        unbinder = ButterKnife.bind(this, rootView);
+        isPlaying = false;
+        bPlay.setOnClickListener(view -> {
+            if (isPlaying == false && exoPlayer.getPlayWhenReady() == true) { // should stop
+                Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
+                if (exoPlayer != null) {
+                    exoPlayer.stop();
+                    exoPlayer.release();
+                    exoPlayer = null;
+                }
+                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
+                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+                isPlaying = !isPlaying;
+
+            } else { //should play
+                isPlaying = !isPlaying;
+
+                if (exoPlayer == null) {
+                    getPlayer();
+                }
+                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
+                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+            }
+
+        });
+
+        return rootView;
+    }
+
+
+    private void getMetadata() {
         songReference = rootRef.child("song");
         songReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -107,40 +140,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
             }
         });
-        bPlay = rootView.findViewById(R.id.button_stream);
-        unbinder = ButterKnife.bind(this, rootView);
-        isPlaying = false;
-        bPlay.setOnClickListener(view -> {
-            if (isPlaying == false && exoPlayer.getPlayWhenReady() == true) { // should stop
-                Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
-                if (exoPlayer != null) {
-                    exoPlayer.stop();
-                    exoPlayer.release();
-                    exoPlayer = null;
-                }
-
-                //exoPlayer.getPlaybackState();
-                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-                isPlaying = !isPlaying;
-
-            } else { //should play
-                isPlaying = !isPlaying;
-
-                if (exoPlayer == null) {
-                    getPlayer();
-                }
-                //exoPlayer.setPlayWhenReady(true);
-                //exoPlayer.getPlaybackState();
-                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-            }
-
-        });
-
-        return rootView;
     }
-
 
     private void setIceURL() {
         urlRef = rootRef.child("IcecastServer");
@@ -213,6 +213,10 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
             }
         });
+
+    }
+
+    private void setButton() {
 
     }
 
