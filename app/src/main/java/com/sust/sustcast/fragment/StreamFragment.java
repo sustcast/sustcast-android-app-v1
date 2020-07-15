@@ -125,7 +125,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 count = dataSnapshot.getChildrenCount();
-                System.out.println("cl : " + countList + "count : " + count);
                 System.out.println("We're done loading the initial " + dataSnapshot.getChildrenCount() + " items");
                 if (exoPlayer == null) {
                     if (!newKey.isEmpty()) {
@@ -133,7 +132,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                         updates.put("numlisteners", newList + 1);
                         urlRef.child(newKey).updateChildren(updates);
                     }
-                    System.out.println("newkey in condition : " + urlRef.child(newKey).child("numlisteners"));
                     if (exoPlayer == null) {
                         getPlayer();
                     }
@@ -149,7 +147,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         cListener = urlRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                System.out.println("ds => " + dataSnapshot.getValue());
                 IceUrl iceUrl = dataSnapshot.getValue(IceUrl.class);
                 int limit = iceUrl.getLimit();
                 String url = iceUrl.getUrl();
@@ -164,9 +161,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 }
 
                 System.out.println("key => " + dataSnapshot.getKey());
-                System.out.println("limit = >" + iceUrl.getLimit());
-                System.out.println("url = >" + iceUrl.getUrl());
-                System.out.println("numlistener = >" + iceUrl.getNumlisteners());
                 System.out.println("load => " + load);
             }
 
