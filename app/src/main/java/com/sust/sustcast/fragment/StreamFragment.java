@@ -56,7 +56,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     DatabaseReference songReference;
     DatabaseReference urlRef;
     String name;
-    String artist;
     int countList = 0;
     String newUrl = "";
     float newLoad = Integer.MAX_VALUE;
@@ -68,7 +67,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     private SimpleExoPlayer exoPlayer;
     private Unbinder unbinder;
     private Button bPlay;
-    private String TAG = "StreamFrag";
     private TextView tvPlaying;
 
     public StreamFragment() {
@@ -82,7 +80,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
 
         }
@@ -91,7 +88,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_stream, container, false);
         tvPlaying = rootView.findViewById(R.id.tv_track);
         tvPlaying.setText("Fetching Track info ......");
@@ -145,6 +141,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         return rootView;
     }
 
+
     private void setIceURL() {
         urlRef = rootRef.child("IcecastServer");
         vListener = urlRef.addValueEventListener(new ValueEventListener() {
@@ -160,8 +157,9 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                         urlRef.child(newKey).updateChildren(updates);
                     }
                     System.out.println("newkey in condition : " + urlRef.child(newKey).child("numlisteners"));
-
-                    getPlayer();
+                    if (exoPlayer == null) {
+                        getPlayer();
+                    }
                 }
 
             }

@@ -15,6 +15,10 @@ public class IceUrl {
         this.url = url;
     }
 
+    public IceUrl() {
+
+    }
+
     public int getLimit() {
         return limit;
     }
