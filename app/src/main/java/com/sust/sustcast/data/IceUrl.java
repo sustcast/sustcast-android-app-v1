@@ -15,14 +15,6 @@ public class IceUrl {
         this.url = url;
     }
 
-    public IceUrl() {
-    }
-
-//    // Default constructor required for calls to
-//    // DataSnapshot.getValue(User.class)
-//    public IceUrl(Object value) {
-//    }
-
     public int getLimit() {
         return limit;
     }
