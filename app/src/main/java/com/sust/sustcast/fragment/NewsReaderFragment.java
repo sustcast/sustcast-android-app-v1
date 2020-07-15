@@ -9,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
@@ -122,22 +125,21 @@ public class NewsReaderFragment extends Fragment {
                 Uri.parse(newsURL),
                 dataSourceFactory,
                 extractorsFactory,
-                new Handler(), error -> {
-            catchError(error);
-        });
+                new Handler(), null);
         // Create the player with previously created TrackSelector
         exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), defaultTrackSelector);
+        exoPlayer.addListener(new Player.EventListener() {
+            @Override
+            public void onPlayerError(ExoPlaybackException error) {
+                Toast.makeText(getContext(), "BBC is taking a break :( Check back after a while or try our other features!!", Toast.LENGTH_SHORT).show();
 
+            }
+        });
         // Prepare the player with the source.
         exoPlayer.prepare(mediaSource);
 
         // Autoplay the video when the player is ready
         exoPlayer.setPlayWhenReady(true);
-    }
-
-    private void catchError(Exception e) {
-        System.out.println(e.toString());
-        System.exit(0);
     }
 
     public void onDestroyView() {

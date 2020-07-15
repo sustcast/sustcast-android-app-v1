@@ -101,11 +101,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         songReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                name = dataSnapshot.child("name").getValue(String.class);
-                artist = dataSnapshot.child("artist").getValue(String.class);
-                Log.i(TAG, "Song name: " + name + ", artist " + artist);
-                Toast.makeText(getContext(), name + " - " + artist, Toast.LENGTH_SHORT).show();
-                tvPlaying.setText(name + " - " + artist);
+                name = dataSnapshot.child("title_show").getValue(String.class);
+                tvPlaying.setText(name);
 
             }
 
@@ -150,8 +147,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
     private void setIceURL() {
         urlRef = rootRef.child("IcecastServer");
-
-
         vListener = urlRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -232,8 +227,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             Toast.makeText(getContext(), "ALL SERVERS ARE CURRENTLY FULL!!", Toast.LENGTH_SHORT).show();
         }
 
-        //iceURL = newUrl
-        iceURL = getString(R.string.ice_stream);
+        iceURL = newUrl;
+        //iceURL = getString(R.string.ice_stream);
 
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         final ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();

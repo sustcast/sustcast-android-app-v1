@@ -54,6 +54,7 @@ public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthState
     }
 
     public Intent visitFacebook() {
+
         try {
             getContext().getPackageManager().getPackageInfo(FACEBOOKAPP, 0);
             return new Intent(Intent.ACTION_VIEW, Uri.parse(FACEBOOKAPPLINK));
