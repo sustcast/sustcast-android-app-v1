@@ -91,14 +91,12 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         View rootView = inflater.inflate(R.layout.fragment_stream, container, false);
         tvPlaying = rootView.findViewById(R.id.tv_track);
         tvPlaying.setText("Fetching Track info ......");
-        setButton();
         rootRef = FirebaseDatabase.getInstance().getReference();
         setIceURL();
         getMetadata();
-        bPlay = rootView.findViewById(R.id.button_stream);
+        setButton();
         unbinder = ButterKnife.bind(this, rootView);
         isPlaying = false;
-
 
         return rootView;
     }
@@ -206,6 +204,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 }
                 Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
                 bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+                bPlay.setText(R.string.now_paused);
                 isPlaying = !isPlaying;
 
             } else { //should play
@@ -216,6 +215,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 }
                 Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
                 bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+                bPlay.setText(R.string.now_playing);
             }
 
         });
