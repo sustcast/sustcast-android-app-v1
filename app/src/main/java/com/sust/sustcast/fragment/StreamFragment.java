@@ -91,35 +91,14 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         View rootView = inflater.inflate(R.layout.fragment_stream, container, false);
         tvPlaying = rootView.findViewById(R.id.tv_track);
         tvPlaying.setText("Fetching Track info ......");
+        setButton();
         rootRef = FirebaseDatabase.getInstance().getReference();
         setIceURL();
         getMetadata();
         bPlay = rootView.findViewById(R.id.button_stream);
         unbinder = ButterKnife.bind(this, rootView);
         isPlaying = false;
-        bPlay.setOnClickListener(view -> {
-            if (isPlaying == false && exoPlayer.getPlayWhenReady() == true) { // should stop
-                Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
-                if (exoPlayer != null) {
-                    exoPlayer.stop();
-                    exoPlayer.release();
-                    exoPlayer = null;
-                }
-                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-                isPlaying = !isPlaying;
 
-            } else { //should play
-                isPlaying = !isPlaying;
-
-                if (exoPlayer == null) {
-                    getPlayer();
-                }
-                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-            }
-
-        });
 
         return rootView;
     }
@@ -217,7 +196,29 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     }
 
     private void setButton() {
+        bPlay.setOnClickListener(view -> {
+            if (isPlaying == false && exoPlayer.getPlayWhenReady() == true) { // should stop
+                Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
+                if (exoPlayer != null) {
+                    exoPlayer.stop();
+                    exoPlayer.release();
+                    exoPlayer = null;
+                }
+                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
+                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+                isPlaying = !isPlaying;
 
+            } else { //should play
+                isPlaying = !isPlaying;
+
+                if (exoPlayer == null) {
+                    getPlayer();
+                }
+                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
+                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+            }
+
+        });
     }
 
     private void getPlayer() {
