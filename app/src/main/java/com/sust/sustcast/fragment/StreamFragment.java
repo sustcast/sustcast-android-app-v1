@@ -48,6 +48,7 @@ import java.util.Map;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+
 public class StreamFragment extends Fragment implements Player.EventListener {
 
     boolean isPlaying;
@@ -56,7 +57,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     DatabaseReference songReference;
     DatabaseReference urlRef;
     String name;
-    int countList = 0;
     String newUrl = "";
     float newLoad = Integer.MAX_VALUE;
     String newKey = "";
@@ -83,6 +83,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         if (getArguments() != null) {
 
         }
+
     }
 
     @Override
@@ -108,8 +109,9 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 name = dataSnapshot.child("title_show").getValue(String.class);
+                String title = dataSnapshot.child("title").getValue(String.class);
+                String artist = dataSnapshot.child("artist").getValue(String.class);
                 tvPlaying.setText(name);
-
             }
 
             @Override
@@ -190,18 +192,9 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
     private void setButton() {
         bPlay.setOnClickListener(view -> {
-            if (isPlaying == false) { // should stop
-                Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
-                if (exoPlayer != null) {
-                    exoPlayer.stop();
-                    exoPlayer.release();
-                    exoPlayer = null;
-                }
-                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-                bPlay.setText(R.string.now_paused);
-
-            } else { //should play
+            if (isPlaying == false) {
+                stopExo();
+            } else {
                 if (exoPlayer == null) {
                     System.out.println("SET BUTTON");
                     getPlayer();
@@ -215,18 +208,28 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         });
     }
 
+    private void stopExo() {
+        Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
+        if (exoPlayer != null) {
+            exoPlayer.stop();
+            exoPlayer.release();
+            exoPlayer = null;
+        }
+        Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
+        bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+        bPlay.setText(R.string.now_paused);
+    }
+
     private void getPlayer() {
         System.out.println("newurl : " + newUrl);
         System.out.println("newkey : " + newKey);
         System.out.println("newload : " + newLoad);
 
         if (newUrl.isEmpty() || newKey.isEmpty()) {
-            Toast.makeText(getContext(), "ALL SERVERS ARE CURRENTLY FULL!!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.server_full, Toast.LENGTH_SHORT).show();
         }
 
         iceURL = newUrl;
-        //iceURL = getString(R.string.ice_stream);
-
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         final ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
 
@@ -237,7 +240,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         DefaultBandwidthMeter defaultBandwidthMeter = new DefaultBandwidthMeter();
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
                 getContext(),
-                Util.getUserAgent(getContext(), "SUSTCast"),
+                Util.getUserAgent(getContext(), getString(R.string.app_name)),
                 defaultBandwidthMeter);
 
         MediaSource mediaSource = new ExtractorMediaSource(
@@ -255,9 +258,10 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             @Override
             public void onPlayerError(ExoPlaybackException error) {
                 System.out.println("ERROR ERROR ERRROOOOOOOR");
-                Toast.makeText(getContext(), "Mr. Meow is taking a nap :( Check back after a while or try our other features!!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.server_off, Toast.LENGTH_SHORT).show();
             }
         });
+
         exoPlayer.prepare(mediaSource);
         exoPlayer.setPlayWhenReady(true);
 
@@ -270,6 +274,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         unbinder.unbind();
         urlRef.removeEventListener(vListener);
         urlRef.removeEventListener(cListener);
+
         if (exoPlayer != null) {
             exoPlayer.stop();
             exoPlayer.release();

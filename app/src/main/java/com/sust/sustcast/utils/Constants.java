@@ -7,4 +7,6 @@ public interface Constants {
     String FACEBOOKAPP = "com.facebook.katana";
     String MAILBODY = "My email's body";
     String MAILERROR = "No email clients installed.";
+    String PLAYBACK_CHANNEL_ID = "playback_channel";
+    int PLAYBACK_NOTIFICATION_ID = 1;
 }
