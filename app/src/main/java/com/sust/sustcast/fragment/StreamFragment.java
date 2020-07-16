@@ -133,6 +133,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                         urlRef.child(newKey).updateChildren(updates);
                     }
                     if (exoPlayer == null) {
+                        System.out.println("SET ICE URL");
                         getPlayer();
                     }
                 }
@@ -189,7 +190,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
     private void setButton() {
         bPlay.setOnClickListener(view -> {
-            if (isPlaying == false && exoPlayer.getPlayWhenReady() == true) { // should stop
+            if (isPlaying == false) { // should stop
                 Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
                 if (exoPlayer != null) {
                     exoPlayer.stop();
@@ -199,12 +200,10 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
                 bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
                 bPlay.setText(R.string.now_paused);
-                isPlaying = !isPlaying;
 
             } else { //should play
-                isPlaying = !isPlaying;
-
                 if (exoPlayer == null) {
+                    System.out.println("SET BUTTON");
                     getPlayer();
                 }
                 Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
@@ -212,6 +211,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 bPlay.setText(R.string.now_playing);
             }
 
+            isPlaying = !isPlaying;
         });
     }
 
