@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +19,7 @@ import com.sust.sustcast.fragment.FragmentHolder;
 import com.sust.sustcast.utils.StringValidationRules;
 
 import static com.sust.sustcast.utils.Constants.DATAERROR;
+import static com.sust.sustcast.utils.Constants.DEPARTMENTS;
 import static com.sust.sustcast.utils.Constants.INVALIDEMAIL;
 import static com.sust.sustcast.utils.Constants.INVALIDNAME;
 import static com.sust.sustcast.utils.Constants.INVALIDPASSWORD;
@@ -31,6 +34,8 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         ActivitySignUpBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up);
+        ArrayAdapter<String> departmentAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_department_items, DEPARTMENTS);
+
         binding.setSignUpActivity(this);
         binding.Email.addTextChangedListener(new TextWatcher() {
             @Override
@@ -102,6 +107,8 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
+        binding.Department.setAdapter(departmentAdapter);
+        binding.tocText.setMovementMethod(LinkMovementMethod.getInstance());
 
         authViewModel = new ViewModelProvider(this).get(AuthenticationViewModel.class);
 
