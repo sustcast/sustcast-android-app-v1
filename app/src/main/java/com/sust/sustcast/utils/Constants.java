@@ -11,4 +11,8 @@ public interface Constants {
     String MAILSUBJECT = "My email's subject";
     String MAILBODY = "My email's body";
     String MAILERROR = "No email clients installed.";
+    String INVALIDEMAIL = "Invalid Email";
+    String INVALIDPASSWORD = "Weak or invalid password";
+    String INVALIDNAME = "Please Fill in with your name";
+    String INVALIDPHONE = "Invalid Phone Number";
 }

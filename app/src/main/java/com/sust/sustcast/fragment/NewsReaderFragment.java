@@ -61,21 +61,21 @@ public class NewsReaderFragment extends Fragment {
         unbinder = ButterKnife.bind(this, rootView);
         isPlaying = false;
         bPlay.setOnClickListener(view -> {
-            if (isPlaying == false && exoPlayer.getPlayWhenReady() == true) { // should stop
+            if (!isPlaying && exoPlayer.getPlayWhenReady()) { // should stop
                 Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
                 exoPlayer.setPlayWhenReady(false);
                 exoPlayer.getPlaybackState();
                 Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
                 bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
                 bPlay.setText(R.string.now_paused);
-            } else if (isPlaying == true && exoPlayer.getPlayWhenReady() == false) { //should play
+            } else if (isPlaying && !exoPlayer.getPlayWhenReady()) { //should play
                 Log.i("CASE => ", "PLAY" + isPlaying + " " + exoPlayer.getPlayWhenReady());
                 exoPlayer.setPlayWhenReady(true);
                 exoPlayer.getPlaybackState();
                 Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
                 bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
                 bPlay.setText(R.string.now_playing);
-            } else if (exoPlayer.getPlayWhenReady() == true && isPlaying == true) {  //restart
+            } else if (exoPlayer.getPlayWhenReady() && isPlaying) {  //restart
                 Log.i("CASE => ", "RESTART" + isPlaying + " " + exoPlayer.getPlayWhenReady());
                 exoPlayer.release();
                 exoPlayer.stop();
