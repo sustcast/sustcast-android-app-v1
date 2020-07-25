@@ -1,6 +1,7 @@
 package com.sust.sustcast;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -11,6 +12,7 @@ import com.sust.sustcast.authentication.LoginActivity;
 import com.sust.sustcast.authentication.SignUpActivity;
 import com.sust.sustcast.databinding.ActivityLandingBinding;
 import com.sust.sustcast.utils.CheckNetworkConnection;
+import com.sust.sustcast.utils.FontHelper;
 
 import static com.sust.sustcast.utils.Constants.CHECKNET;
 
@@ -34,6 +36,9 @@ public class LandingActivity extends AppCompatActivity {
             }
         }).execute();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            FontHelper.adjustFontScale(this, getResources().getConfiguration());
+        }
     }
 
     public void startSignUp() {

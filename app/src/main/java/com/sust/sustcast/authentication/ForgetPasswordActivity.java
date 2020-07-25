@@ -1,5 +1,6 @@
 package com.sust.sustcast.authentication;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -12,6 +13,7 @@ import androidx.databinding.DataBindingUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.sust.sustcast.R;
 import com.sust.sustcast.databinding.ActivityForgetPasswordBinding;
+import com.sust.sustcast.utils.FontHelper;
 import com.sust.sustcast.utils.StringValidationRules;
 
 import static com.sust.sustcast.utils.Constants.CHECKMAIL;
@@ -44,6 +46,9 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                 }
             }
         });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            FontHelper.adjustFontScale(this, getResources().getConfiguration());
+        }
     }
 
     public void resetPassword(String email) {

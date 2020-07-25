@@ -1,6 +1,7 @@
 package com.sust.sustcast.authentication;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,6 +15,7 @@ import com.sust.sustcast.R;
 import com.sust.sustcast.data.AuthenticationViewModel;
 import com.sust.sustcast.databinding.ActivityLoginBinding;
 import com.sust.sustcast.fragment.FragmentHolder;
+import com.sust.sustcast.utils.FontHelper;
 import com.sust.sustcast.utils.StringValidationRules;
 
 import static com.sust.sustcast.utils.Constants.DATAERROR;
@@ -68,6 +70,10 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, FragmentHolder.class).putExtra(USERS, authenticatedUser));
             finish();
         });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            FontHelper.adjustFontScale(this, getResources().getConfiguration());
+        }
+
     }
 
     public void signIn(String email, String password) {
