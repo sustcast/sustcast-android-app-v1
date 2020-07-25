@@ -143,20 +143,25 @@
             android:layout_marginRight="5sp"
             android:text="Currently Playing : "
             android:textColor="@color/grey700"
+            android:gravity="center_horizontal"
             android:textSize="15sp"
             android:fontFamily="@font/kollektif"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/tv_track"
-            android:layout_width="wrap_content"
+            android:layout_width="270sp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5sp"
-            android:text="Hok Kolorob- Arnob"
+            android:fontFamily="@font/kollektif"
+            android:gravity="center_horizontal"
+            android:text="lorem ipsum dolor est - muchacha"
+            android:textAlignment="center"
             android:textColor="@color/grey700"
             android:textSize="12sp"
-            android:fontFamily="@font/kollektif"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_currently_playing" />
