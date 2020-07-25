@@ -1,37 +1,19 @@
 package com.sust.sustcast.fragment;
 
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sust.sustcast.R;
 import com.sust.sustcast.data.IceUrl;
+import com.sust.sustcast.utils.ExoHelper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -63,10 +46,11 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     long count;
     ValueEventListener vListener;
     ChildEventListener cListener;
+    Unbinder unbinder;
+    Button bPlay;
+    TextView tvPlaying;
+    ExoHelper exoHelper;
     private SimpleExoPlayer exoPlayer;
-    private Unbinder unbinder;
-    private Button bPlay;
-    private TextView tvPlaying;
 
     public StreamFragment() {
     }
@@ -92,6 +76,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         tvPlaying = rootView.findViewById(R.id.tv_track);
         tvPlaying.setText("Fetching Track info ......");
         rootRef = FirebaseDatabase.getInstance().getReference(); //root database reference
+        exoHelper = new ExoHelper(getContext());
         setIceURL();
         getMetadata();
         bPlay = rootView.findViewById(R.id.button_stream);
@@ -136,9 +121,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                     newList = numList;
 
                 }
-//
-//                System.out.println("key => " + dataSnapshot.getKey());
-//                System.out.println("load => " + load);
             }
 
             @Override
@@ -177,12 +159,13 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                     updates.put("numlisteners", newList + 1);
                     urlRef.child(newKey).updateChildren(updates);
                     if (isPlaying == true) {
-                        getPlayer();
+                        exoPlayer = exoHelper.startExo(newUrl);
+//                        getPlayer();
                     } else {
-                        System.out.println("can't start player because button state -> " + isPlaying + "paused state");
+                        System.out.println("can't start player because button state -> " + isPlaying + " paused state");
                     }
                 } else {
-                    System.out.println("can't set ICE URL because ex0player state -> " + (exoPlayer == null) + "final key" + newKey);
+                    System.out.println("can't set ICE URL because exoplayer state -> " + (exoPlayer == null) + "f inal key" + newKey);
                 }
 
 
@@ -198,16 +181,19 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
     private void setButton() {
         bPlay.setOnClickListener(view -> {
-            isPlaying = !isPlaying;
             System.out.println("player state for button -> " + isPlaying);
 
             if (isPlaying == false) { //isPlaying : false -> button should stop exoPlayer
+                isPlaying = !isPlaying;
                 System.out.println(" Stop button \n exoState :  " + (exoPlayer == null)); // exoState : True -> can't stop player
-                stopExo();
+                exoPlayer = exoHelper.stopExo(bPlay);
+//                stopExo();
             } else {
+                isPlaying = !isPlaying;
                 System.out.println("Play button \n exoState :  " + (exoPlayer == null)); // exoState : True -> can start player
                 if (exoPlayer == null) {
-                    getPlayer();
+                    exoPlayer = exoHelper.startExo(newUrl);
+//                    getPlayer();
                 }
                 Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
                 bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
@@ -216,74 +202,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
         });
     }
-
-    private void stopExo() {
-        if (exoPlayer != null) { //if exo is running
-            System.out.println("Stopping exo....");
-            exoPlayer.stop();
-            exoPlayer.release();
-            exoPlayer = null;
-        } else {
-            System.out.println("Can't stop because No exoplayer is running");
-        }
-        Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
-        bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-        bPlay.setText(R.string.now_paused);
-    }
-
-    private void getPlayer() {
-//        System.out.println("newurl : " + newUrl);
-//        System.out.println("newkey : " + newKey);
-//        System.out.println("newload : " + newLoad);
-
-        if (newUrl.isEmpty() || newKey.isEmpty()) {
-            Toast.makeText(getContext(), R.string.server_full, Toast.LENGTH_SHORT).show();
-        }
-
-        if (exoPlayer != null) {
-            System.out.println("Exo is already running now");
-            return;
-        }
-        iceURL = newUrl;
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        final ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-
-        TrackSelection.Factory trackSelectionFactory =
-                new AdaptiveTrackSelection.Factory(bandwidthMeter);
-        TrackSelector defaultTrackSelector =
-                new DefaultTrackSelector(trackSelectionFactory);
-        DefaultBandwidthMeter defaultBandwidthMeter = new DefaultBandwidthMeter();
-        DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
-                getContext(),
-                Util.getUserAgent(getContext(), getString(R.string.app_name)),
-                defaultBandwidthMeter);
-
-        MediaSource mediaSource = new ExtractorMediaSource(
-                Uri.parse(iceURL),
-                dataSourceFactory,
-                extractorsFactory,
-                new Handler(), error -> {
-
-        }
-
-        );
-
-        exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), defaultTrackSelector);
-        exoPlayer.addListener(new Player.EventListener() {
-            @Override
-            public void onPlayerError(ExoPlaybackException error) {
-                System.out.println("ERROR ERROR ERRROOOOOOOR");
-                Toast.makeText(getContext(), R.string.server_off, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        exoPlayer.prepare(mediaSource);
-        exoPlayer.setPlayWhenReady(true);
-
-
-
-    }
-
 
     public void onDestroyView() {
         super.onDestroyView();
