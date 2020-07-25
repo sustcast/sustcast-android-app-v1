@@ -19,6 +19,7 @@
     <string name="log_in">Log In!</string>
     <string name="email_address">EMAIL ADDRESS</string>
     <string name="password">PASSWORD</string>
+    <string name="lowerPassword">Password</string>
     <string name="remember_me">Remember Me</string>
     <string name="forgot_password"><u>Forgot Password?</u></string>
     <string name="welcome_signup">Welcome,</string>
@@ -33,4 +34,7 @@
     <string name="now_playing">Now Playing</string>
     <string name="now_paused">Stream Paused</string>
     <string name="go_back"> Go back </string>
+    <string name="reset_your">Reset Your</string>
+    <string name="forgetPasstext">Please enter your mail, press the reset button and check your mail to follow further instructions.</string>
+    <string name="reset_password">Reset Password</string>
 </resources>

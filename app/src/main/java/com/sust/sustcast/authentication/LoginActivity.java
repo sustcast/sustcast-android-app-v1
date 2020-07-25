@@ -69,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         });
     }
+
     public void signIn(String email, String password) {
         if (email.length() != 0 && password.length() != 0)
             authViewModel.signIn(email, password);
@@ -76,4 +77,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(LoginActivity.this, DATAERROR, Toast.LENGTH_SHORT).show();
     }
 
+    public void startForget() {
+        startActivity(new Intent(LoginActivity.this, ForgetPasswordActivity.class));
+    }
 }

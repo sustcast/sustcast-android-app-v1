@@ -15,6 +15,8 @@ public interface Constants {
     String INVALIDPASSWORD = "Weak or invalid password";
     String INVALIDNAME = "Please Fill in with your name";
     String INVALIDPHONE = "Invalid Phone Number";
+    String CHECKMAIL = "Check email to reset your password.";
+    String FAILMAIL = "Fail to send reset password email!";
 
     String[] DEPARTMENTS = new String[]{"CSE", "EEE", "ME", "IPE", "ARC", "CEP", "CEE", "FET", "PME", "BMB", "GEB", "BBA", "GEE", "MAT", "PHY", "STA", "CHE", "OCG", "ANP", "BNG", "ENG", "PSS", "PAD", "SCW", "SOC"};
 
