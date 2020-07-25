@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="materialButtonStyle">@style/ButtonTheme</item>
     </style>
 
     <style name="LandingTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -13,6 +14,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/White</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:buttonStyle">@style/ButtonTheme</item>
     </style>
 
     <style name="MyCustomAppearance" parent="TextAppearance.AppCompat">
@@ -24,4 +26,12 @@
         <item name="android:windowBackground">@drawable/splash_screen_background</item>
     </style>
 
+    <style name="ButtonTheme" parent="Widget.MaterialComponents.Button">
+        <item name="materialThemeOverlay">@style/ButtonOverlay</item>
+
+    </style>
+
+    <style name="ButtonOverlay">
+        <item name="colorPrimary">@color/grey200</item>
+    </style>
 </resources>
