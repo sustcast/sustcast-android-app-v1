@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -18,7 +19,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="n">
-        <activity android:name=".authentication.ForgetPasswordActivity"></activity>
+        <activity android:name=".authentication.ForgetPasswordActivity" />
         <activity android:name=".authentication.TocActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

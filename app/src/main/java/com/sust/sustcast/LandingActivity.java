@@ -10,8 +10,7 @@ import androidx.databinding.DataBindingUtil;
 import com.sust.sustcast.authentication.LoginActivity;
 import com.sust.sustcast.authentication.SignUpActivity;
 import com.sust.sustcast.databinding.ActivityLandingBinding;
-
-import java.net.InetAddress;
+import com.sust.sustcast.utils.CheckNetworkConnection;
 
 import static com.sust.sustcast.utils.Constants.CHECKNET;
 
@@ -24,9 +23,17 @@ public class LandingActivity extends AppCompatActivity {
         ActivityLandingBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_landing);
         binding.setLandingActivity(this);
 
-        if (!isInternetAvailable()) {
-            Toast.makeText(LandingActivity.this, CHECKNET, Toast.LENGTH_LONG).show();
-        }
+        new CheckNetworkConnection(this, new CheckNetworkConnection.OnConnectionCallback() {
+            @Override
+            public void onConnectionSuccess() {
+            }
+
+            @Override
+            public void onConnectionFail(String errorMsg) {
+                Toast.makeText(getApplicationContext(), CHECKNET, Toast.LENGTH_LONG).show();
+            }
+        }).execute();
+
     }
 
     public void startSignUp() {
@@ -37,12 +44,4 @@ public class LandingActivity extends AppCompatActivity {
         startActivity(new Intent(LandingActivity.this, LoginActivity.class));
     }
 
-    public boolean isInternetAvailable() {
-        try {
-            InetAddress ipAddr = InetAddress.getByName("google.com");
-            return !ipAddr.equals("");
-        } catch (Exception e) {
-            return false;
-        }
-    }
 }
