@@ -1,13 +1,16 @@
 package com.sust.sustcast.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.sust.sustcast.R;
+import com.sust.sustcast.utils.FontHelper;
 
 public class FragmentHolder extends AppCompatActivity {
     BottomNavigationView bottomNavigation;
@@ -36,10 +39,13 @@ public class FragmentHolder extends AppCompatActivity {
         transaction.commit();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_holder);
+        FontHelper.adjustFontScale(this, getResources().getConfiguration());
+
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
         openFragment(StreamFragment.newInstance());

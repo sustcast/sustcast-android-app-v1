@@ -4,7 +4,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,13 +91,13 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         View rootView = inflater.inflate(R.layout.fragment_stream, container, false);
         tvPlaying = rootView.findViewById(R.id.tv_track);
         tvPlaying.setText("Fetching Track info ......");
-        rootRef = FirebaseDatabase.getInstance().getReference();
+        rootRef = FirebaseDatabase.getInstance().getReference(); //root database reference
         setIceURL();
         getMetadata();
         bPlay = rootView.findViewById(R.id.button_stream);
         setButton();
         unbinder = ButterKnife.bind(this, rootView);
-        isPlaying = false;
+        isPlaying = true;
         return rootView;
     }
 
@@ -109,8 +108,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 name = dataSnapshot.child("title_show").getValue(String.class);
-                String title = dataSnapshot.child("title").getValue(String.class);
-                String artist = dataSnapshot.child("artist").getValue(String.class);
                 tvPlaying.setText(name);
             }
 
@@ -123,30 +120,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
     private void setIceURL() {
         urlRef = rootRef.child("IcecastServer");
-        vListener = urlRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                count = dataSnapshot.getChildrenCount();
-                System.out.println("We're done loading the initial " + dataSnapshot.getChildrenCount() + " items");
-                if (exoPlayer == null) {
-                    if (!newKey.isEmpty()) {
-                        Map<String, Object> updates = new HashMap<String, Object>();
-                        updates.put("numlisteners", newList + 1);
-                        urlRef.child(newKey).updateChildren(updates);
-                    }
-                    if (exoPlayer == null) {
-                        System.out.println("SET ICE URL");
-                        getPlayer();
-                    }
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        //value listener triggers after child listener ends
         cListener = urlRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -162,9 +136,9 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                     newList = numList;
 
                 }
-
-                System.out.println("key => " + dataSnapshot.getKey());
-                System.out.println("load => " + load);
+//
+//                System.out.println("key => " + dataSnapshot.getKey());
+//                System.out.println("load => " + load);
             }
 
             @Override
@@ -188,15 +162,51 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             }
         });
 
+        vListener = urlRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                count = dataSnapshot.getChildrenCount();
+                System.out.println("We're done loading the initial " + dataSnapshot.getChildrenCount() + " items");
+                System.out.println("final url -> " + newUrl);
+                System.out.println("final load -> " + newLoad);
+                System.out.println("final key -> " + newKey);
+
+                if (exoPlayer == null && newKey.isEmpty() == false) { // if there is no previous exoplayer instance and we have a load-balanced URL, init exoplayer
+                    System.out.println("Setting ICE url because exoplayer state -> " + (exoPlayer == null) + " & newKey state -> " + (newKey.isEmpty()));
+                    Map<String, Object> updates = new HashMap<String, Object>();
+                    updates.put("numlisteners", newList + 1);
+                    urlRef.child(newKey).updateChildren(updates);
+                    if (isPlaying == true) {
+                        getPlayer();
+                    } else {
+                        System.out.println("can't start player because button state -> " + isPlaying + "paused state");
+                    }
+                } else {
+                    System.out.println("can't set ICE URL because ex0player state -> " + (exoPlayer == null) + "final key" + newKey);
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private void setButton() {
         bPlay.setOnClickListener(view -> {
-            if (isPlaying == false) {
+            isPlaying = !isPlaying;
+            System.out.println("player state for button -> " + isPlaying);
+
+            if (isPlaying == false) { //isPlaying : false -> button should stop exoPlayer
+                System.out.println(" Stop button \n exoState :  " + (exoPlayer == null)); // exoState : True -> can't stop player
                 stopExo();
             } else {
+                System.out.println("Play button \n exoState :  " + (exoPlayer == null)); // exoState : True -> can start player
                 if (exoPlayer == null) {
-                    System.out.println("SET BUTTON");
                     getPlayer();
                 }
                 Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
@@ -204,16 +214,17 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 bPlay.setText(R.string.now_playing);
             }
 
-            isPlaying = !isPlaying;
         });
     }
 
     private void stopExo() {
-        Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
-        if (exoPlayer != null) {
+        if (exoPlayer != null) { //if exo is running
+            System.out.println("Stopping exo....");
             exoPlayer.stop();
             exoPlayer.release();
             exoPlayer = null;
+        } else {
+            System.out.println("Can't stop because No exoplayer is running");
         }
         Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
         bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
@@ -221,14 +232,18 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     }
 
     private void getPlayer() {
-        System.out.println("newurl : " + newUrl);
-        System.out.println("newkey : " + newKey);
-        System.out.println("newload : " + newLoad);
+//        System.out.println("newurl : " + newUrl);
+//        System.out.println("newkey : " + newKey);
+//        System.out.println("newload : " + newLoad);
 
         if (newUrl.isEmpty() || newKey.isEmpty()) {
             Toast.makeText(getContext(), R.string.server_full, Toast.LENGTH_SHORT).show();
         }
 
+        if (exoPlayer != null) {
+            System.out.println("Exo is already running now");
+            return;
+        }
         iceURL = newUrl;
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         final ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
@@ -266,6 +281,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         exoPlayer.setPlayWhenReady(true);
 
 
+
     }
 
 
@@ -276,8 +292,10 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         urlRef.removeEventListener(cListener);
 
         if (exoPlayer != null) {
+            System.out.println("On destroy View ");
             exoPlayer.stop();
             exoPlayer.release();
+            exoPlayer = null;
         }
     }
 
