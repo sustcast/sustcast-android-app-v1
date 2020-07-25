@@ -14,21 +14,29 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sust.sustcast.LandingActivity;
 import com.sust.sustcast.R;
+import com.sust.sustcast.data.Config;
 import com.sust.sustcast.databinding.FragmentFeedbackBinding;
 
 import static com.sust.sustcast.utils.Constants.FACEBOOKAPP;
-import static com.sust.sustcast.utils.Constants.FACEBOOKAPPLINK;
-import static com.sust.sustcast.utils.Constants.FACEBOOKLINK;
-import static com.sust.sustcast.utils.Constants.MAILADDRESS;
 import static com.sust.sustcast.utils.Constants.MAILBODY;
 import static com.sust.sustcast.utils.Constants.MAILERROR;
-import static com.sust.sustcast.utils.Constants.MAILSUBJECT;
 
 
 public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthStateListener {
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference configRef;
+    private ValueEventListener vListener;
+    private String FACEBOOKAPPLINK;
+    private String FACEBOOKLINK;
+    private String MAILADDRESS;
+    private String MAILSUBJECT;
 
     public FeedbackFragment() {
     }
@@ -46,6 +54,8 @@ public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthState
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FragmentFeedbackBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_feedback, container, false);
         firebaseAuth = FirebaseAuth.getInstance();
+        configRef = FirebaseDatabase.getInstance().getReference().child("config");
+        getConfig();
         binding.setFeedbackFragment(this);
         return binding.getRoot();
     }
@@ -60,6 +70,25 @@ public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthState
         } catch (Exception e) {
             return new Intent(Intent.ACTION_VIEW, Uri.parse(FACEBOOKLINK));
         }
+    }
+
+    private void getConfig() {
+        vListener = configRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Config config = dataSnapshot.getValue(Config.class);
+                FACEBOOKAPPLINK = config.getPage_id();
+                FACEBOOKLINK = config.getPage_link();
+                MAILADDRESS = config.getMail_id();
+                MAILSUBJECT = config.getMail_subject();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void giveFeedback() {
@@ -84,10 +113,17 @@ public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthState
         firebaseAuth.addAuthStateListener(this);
     }
 
+
     @Override
     public void onStop() {
         super.onStop();
         firebaseAuth.removeAuthStateListener(this);
+    }
+
+    public void onDestroyView() {
+        super.onDestroyView();
+        configRef.removeEventListener(vListener);
+
     }
 
     @Override

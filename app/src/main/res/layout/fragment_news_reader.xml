@@ -18,9 +18,9 @@
         <ImageView
             android:id="@+id/ic_logo"
             android:layout_width="wrap_content"
-            android:layout_height="150dp"
-            android:layout_marginTop="100dp"
-            android:padding="20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50sp"
+            android:padding="0sp"
             android:src="@drawable/ic_logo"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.497"
@@ -51,7 +51,6 @@
             android:textSize="23sp"
             android:fontFamily="@font/kollektif_bold"
             app:layout_constraintBottom_toTopOf="@id/txt_news"
-            app:layout_constraintHorizontal_bias="0.473"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
@@ -82,7 +81,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:foregroundGravity="center_horizontal"
-            android:padding="20dp"
+            android:padding="20sp"
             android:src="@drawable/news"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -93,7 +92,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout4"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="1sp"
         android:foregroundGravity="center_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -115,21 +114,20 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="@dimen/button_width"
             android:layout_height="@dimen/button_height"
-            android:layout_margin="10dp"
+            android:layout_margin="10sp"
 
             android:background="@drawable/rounded_button"
             android:drawableLeft="@drawable/play_button"
-            android:drawablePadding="10dp"
+            android:drawablePadding="10sp"
             android:drawableTint="@color/grey700"
             android:foregroundGravity="center_horizontal"
             android:gravity="left|center_vertical"
-            android:paddingLeft="10dp"
+            android:paddingLeft="10sp"
 
-            android:text="Read me the mews"
+            android:text="@string/now_playing"
             android:textAllCaps="false"
             android:textColor="@color/grey700"
             android:fontFamily="@font/kollektif"
-
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -140,7 +138,7 @@
         android:id="@+id/constraintLayout6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginTop="40sp"
         android:foregroundGravity="center_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -151,7 +149,9 @@
             android:id="@+id/tv_currently_reading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginLeft="5sp"
+            android:layout_marginTop="20sp"
+            android:layout_marginRight="5sp"
             android:text="Currently Reading : "
             android:textColor="@color/grey700"
             android:textSize="15sp"
@@ -163,7 +163,7 @@
             android:id="@+id/tv_BBC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="5sp"
             android:text="BBC News"
             android:textColor="@color/grey700"
             android:textSize="12sp"
@@ -171,15 +171,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_currently_reading" />
+
         <ImageView
             android:id="@+id/line_reading"
-            android:layout_width="58dp"
-            android:layout_height="10dp"
+            android:layout_width="58sp"
+            android:layout_height="10sp"
             android:src="@drawable/line_contributors"
             app:layout_constraintTop_toBottomOf="@+id/tv_BBC"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-             />
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

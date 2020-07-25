@@ -9,10 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
@@ -55,87 +58,88 @@ public class NewsReaderFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_news_reader, container, false);
         bPlay = rootView.findViewById(R.id.button_play);
         unbinder = ButterKnife.bind(this, rootView);
         isPlaying = false;
-        bPlay.setOnClickListener(view -> {
-            if (!isPlaying && exoPlayer.getPlayWhenReady()) { // should stop
-                Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
-                exoPlayer.setPlayWhenReady(false);
-                exoPlayer.getPlaybackState();
-                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-                bPlay.setText(R.string.now_paused);
-            } else if (isPlaying && !exoPlayer.getPlayWhenReady()) { //should play
-                Log.i("CASE => ", "PLAY" + isPlaying + " " + exoPlayer.getPlayWhenReady());
-                exoPlayer.setPlayWhenReady(true);
-                exoPlayer.getPlaybackState();
-                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-                bPlay.setText(R.string.now_playing);
-            } else if (exoPlayer.getPlayWhenReady() && isPlaying) {  //restart
-                Log.i("CASE => ", "RESTART" + isPlaying + " " + exoPlayer.getPlayWhenReady());
-                exoPlayer.release();
-                exoPlayer.stop();
-                exoPlayer.setPlayWhenReady(true);
-
-            }
-
-            isPlaying = !isPlaying;
-        });
-
-        getPlayer();
+        setButton();
+        if (exoPlayer == null) {
+            getPlayer();
+        }
         return rootView;
     }
 
     private void getPlayer() {
         // URL of the video to stream
         String newsURL = getString(R.string.bbc_news);
-
-	/* A TrackSelector that selects tracks provided by the MediaSource to be consumed by each of the available Renderers.
-	  A TrackSelector is injected when the player is created. */
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        // Produces Extractor instances for parsing the media data.
         final ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
 
         TrackSelection.Factory trackSelectionFactory =
                 new AdaptiveTrackSelection.Factory(bandwidthMeter);
         TrackSelector defaultTrackSelector =
                 new DefaultTrackSelector(trackSelectionFactory);
-
-        // Produces DataSource instances through which media data is loaded.
-        // Measures bandwidth during playback. Can be null if not required.
         DefaultBandwidthMeter defaultBandwidthMeter = new DefaultBandwidthMeter();
 
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
                 getContext(),
                 Util.getUserAgent(getContext(), "SUSTCast"),
                 defaultBandwidthMeter);
-
-        // This is the MediaSource representing the media to be played.
         MediaSource mediaSource = new ExtractorMediaSource(
                 Uri.parse(newsURL),
                 dataSourceFactory,
                 extractorsFactory,
-                new Handler(), Throwable::printStackTrace);
-        // Create the player with previously created TrackSelector
+                new Handler(), null);
         exoPlayer = ExoPlayerFactory.newSimpleInstance(getContext(), defaultTrackSelector);
+        exoPlayer.addListener(new Player.EventListener() {
+            @Override
+            public void onPlayerError(ExoPlaybackException error) {
+                Toast.makeText(getContext(), "BBC is taking a break :( Check back after a while or try our other features!!", Toast.LENGTH_SHORT).show();
 
-        // Prepare the player with the source.
+            }
+        });
         exoPlayer.prepare(mediaSource);
-
-        // Autoplay the video when the player is ready
         exoPlayer.setPlayWhenReady(true);
+    }
+
+    private void setButton() {
+        bPlay.setOnClickListener(view -> {
+            if (isPlaying == false && exoPlayer.getPlayWhenReady() == true) { // should stop
+                Log.i("CASE => ", "STOP " + isPlaying + " " + exoPlayer.getPlayWhenReady());
+                if (exoPlayer != null) {
+                    exoPlayer.stop();
+                    exoPlayer.release();
+                    exoPlayer = null;
+                }
+                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
+                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+                bPlay.setText(R.string.now_paused);
+                isPlaying = !isPlaying;
+
+            } else {
+                isPlaying = !isPlaying;
+
+                if (exoPlayer == null) {
+                    getPlayer();
+                }
+                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
+                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+                bPlay.setText(R.string.now_playing);
+            }
+
+
+        });
+
     }
 
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-
         // Release the player when it is not needed
-        exoPlayer.release();
+        if (exoPlayer != null) {
+            exoPlayer.stop();
+            exoPlayer.release();
+        }
     }
 
 

@@ -1,4 +1,4 @@
-package com.sust.sustcast;
+package com.sust.sustcast.data;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -16,12 +16,8 @@ public class IceUrl {
     }
 
     public IceUrl() {
-    }
 
-//    // Default constructor required for calls to
-//    // DataSnapshot.getValue(User.class)
-//    public IceUrl(Object value) {
-//    }
+    }
 
     public int getLimit() {
         return limit;

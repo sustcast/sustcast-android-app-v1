@@ -37,4 +37,10 @@
     <string name="reset_your">Reset Your</string>
     <string name="forgetPasstext">Please enter your mail, press the reset button and check your mail to follow further instructions.</string>
     <string name="reset_password">Reset Password</string>
+    <string name="news_button">Read me the news</string>
+    <string name="channel_name">some_channel</string>
+    <string name="playback_channel_name">playback_channel_name</string>
+    <string name="plaza">some_string</string>
+    <string name="server_off">Mr. Meow is taking a nap :( Check back after a while or try our other features!!</string>
+    <string name="server_full">ALL SERVERS ARE CURRENTLY FULL!!</string>
 </resources>
