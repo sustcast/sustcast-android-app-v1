@@ -127,7 +127,6 @@
         android:id="@+id/constraintLayout5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20sp"
         android:foregroundGravity="center_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -139,13 +138,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5sp"
-            android:layout_marginTop="20sp"
+            android:layout_marginTop="15sp"
             android:layout_marginRight="5sp"
+            android:fontFamily="@font/kollektif"
+            android:gravity="center_horizontal"
             android:text="Currently Playing : "
             android:textColor="@color/grey700"
-            android:gravity="center_horizontal"
             android:textSize="15sp"
-            android:fontFamily="@font/kollektif"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -155,13 +154,13 @@
             android:layout_width="270sp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5sp"
+            android:layout_marginBottom="1dp"
             android:fontFamily="@font/kollektif"
             android:gravity="center_horizontal"
             android:text="lorem ipsum dolor est - muchacha"
-            android:textAlignment="center"
             android:textColor="@color/grey700"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/line_reading"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_currently_playing" />
@@ -171,9 +170,9 @@
             android:layout_width="58sp"
             android:layout_height="10sp"
             android:src="@drawable/line_contributors"
-            app:layout_constraintTop_toBottomOf="@+id/tv_track"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_track" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -104,7 +104,7 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="@dimen/button_width"
             android:layout_height="@dimen/button_height"
-            android:layout_margin="10sp"
+            android:layout_margin="11sp"
 
             android:background="@drawable/rounded_button"
             android:drawableLeft="@drawable/play_button"
@@ -141,6 +141,7 @@
             android:layout_marginLeft="5sp"
             android:layout_marginTop="15sp"
             android:layout_marginRight="5sp"
+            android:gravity="center_horizontal"
             android:fontFamily="@font/kollektif"
             android:text="Currently Reading : "
             android:textColor="@color/grey700"
@@ -151,13 +152,16 @@
 
         <TextView
             android:id="@+id/tv_BBC"
-            android:layout_width="wrap_content"
+            android:layout_width="270sp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5sp"
+            android:layout_marginBottom="1dp"
             android:fontFamily="@font/kollektif"
+            android:gravity="center_horizontal"
             android:text="BBC News"
             android:textColor="@color/grey700"
             android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/line_reading"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_currently_reading" />
