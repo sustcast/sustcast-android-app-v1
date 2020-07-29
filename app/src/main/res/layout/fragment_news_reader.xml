@@ -90,24 +90,14 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout4"
-        android:layout_width="match_parent"
-        android:layout_height="1sp"
-        android:foregroundGravity="center_horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:foregroundGravity="center_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
 
         <Button
             android:id="@+id/button_play"
@@ -120,14 +110,14 @@
             android:drawableLeft="@drawable/play_button"
             android:drawablePadding="10sp"
             android:drawableTint="@color/grey700"
+            android:fontFamily="@font/kollektif"
             android:foregroundGravity="center_horizontal"
             android:gravity="left|center_vertical"
-            android:paddingLeft="10sp"
 
+            android:paddingLeft="10sp"
             android:text="@string/now_playing"
             android:textAllCaps="false"
             android:textColor="@color/grey700"
-            android:fontFamily="@font/kollektif"
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -138,7 +128,6 @@
         android:id="@+id/constraintLayout6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40sp"
         android:foregroundGravity="center_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -150,24 +139,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5sp"
-            android:layout_marginTop="20sp"
+            android:layout_marginTop="15sp"
             android:layout_marginRight="5sp"
+            android:fontFamily="@font/kollektif"
             android:text="Currently Reading : "
             android:textColor="@color/grey700"
             android:textSize="15sp"
-            android:fontFamily="@font/kollektif"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/tv_BBC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5sp"
+            android:fontFamily="@font/kollektif"
             android:text="BBC News"
             android:textColor="@color/grey700"
             android:textSize="12sp"
-            android:fontFamily="@font/kollektif"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_currently_reading" />
@@ -177,9 +167,9 @@
             android:layout_width="58sp"
             android:layout_height="10sp"
             android:src="@drawable/line_contributors"
-            app:layout_constraintTop_toBottomOf="@+id/tv_BBC"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_BBC" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
