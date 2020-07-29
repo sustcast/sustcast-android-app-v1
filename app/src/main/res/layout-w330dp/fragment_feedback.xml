@@ -193,7 +193,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
-            app:layout_constraintVertical_bias="0.116">
+            app:layout_constraintVertical_bias="0.012">
 
             <TextView
                 android:id="@+id/tv_contributors"
