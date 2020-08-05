@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -16,17 +17,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-
             android:orientation="vertical"
+            android:layout_marginTop="20sp"
             tools:context=".fragment.FeedbackFragment">
 
             <ImageView
                 android:id="@+id/ic_logo"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_gravity="center_horizontal"
                 android:layout_weight="0.5"
+                android:layout_gravity="center_horizontal"
                 android:src="@drawable/ic_logo" />
 
             <LinearLayout
@@ -113,10 +113,10 @@
                 android:id="@+id/layoutLogos"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginHorizontal="20sp"
-                android:layout_marginVertical="15sp"
                 android:layout_weight="0.3"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="20sp"
+                android:layout_marginVertical="15sp">
 
                 <ImageView
                     android:id="@+id/ic_robosust"
@@ -134,17 +134,17 @@
                         android:id="@+id/tv_dept"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentBottom="true"
                         android:fontFamily="@font/kollektif_family"
-                        android:gravity="center"
                         android:padding="15sp"
                         android:text="Dept. of \nCSE, SUST"
                         android:textAlignment="center"
+                        android:gravity="center"
                         android:textColor="@color/grey700"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentBottom="true"/>
 
                 </RelativeLayout>
 
@@ -165,16 +165,16 @@
                     android:id="@+id/tv_contributors"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentBottom="true"
                     android:fontFamily="@font/kollektif"
-                    android:gravity="center"
                     android:text="@string/about_the_contributors"
                     android:textAlignment="center"
+                    android:gravity="center"
                     android:textColor="@color/grey700"
-                    android:textSize="15sp" />
+                    android:textSize="15sp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentBottom="true"/>
 
             </RelativeLayout>
 
