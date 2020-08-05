@@ -12,7 +12,6 @@ import androidx.annotation.RequiresApi;
 import static android.content.Context.WINDOW_SERVICE;
 
 public class FontHelper {
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public static void adjustFontScale(Context context, Configuration configuration) {
         if (configuration.fontScale != 1.00) {
             Log.w("FONT", "fontScale=" + configuration.fontScale);
