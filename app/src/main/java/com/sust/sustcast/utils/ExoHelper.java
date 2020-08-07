@@ -55,7 +55,7 @@ public class ExoHelper {
 
     public SimpleExoPlayer startExo(String newUrl) {
         if (newUrl.isEmpty()) {
-            Toast.makeText(context, R.string.server_full, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.link_empty, Toast.LENGTH_SHORT).show();
         }
 
         if (exoPlayer != null) {

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,7 +35,6 @@ import butterknife.Unbinder;
 public class StreamFragment extends Fragment implements Player.EventListener {
 
     boolean isPlaying;
-    String iceURL;
     DatabaseReference rootRef;
     DatabaseReference songReference;
     DatabaseReference urlRef;
@@ -108,7 +108,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         //value listener triggers after child listener ends
         cListener = urlRef.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { // read each child and compute load
                 IceUrl iceUrl = dataSnapshot.getValue(IceUrl.class);
                 int limit = iceUrl.getLimit();
                 String url = iceUrl.getUrl();
@@ -121,6 +121,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                     newList = numList;
 
                 }
+
             }
 
             @Override
@@ -153,21 +154,24 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 System.out.println("final load -> " + newLoad);
                 System.out.println("final key -> " + newKey);
 
-                if (exoPlayer == null && newKey.isEmpty() == false) { // if there is no previous exoplayer instance and we have a load-balanced URL, init exoplayer
-                    System.out.println("Setting ICE url because exoplayer state -> " + (exoPlayer == null) + " & newKey state -> " + (newKey.isEmpty()));
-                    Map<String, Object> updates = new HashMap<String, Object>();
-                    updates.put("numlisteners", newList + 1);
-                    urlRef.child(newKey).updateChildren(updates);
+                if (exoPlayer == null && newUrl.isEmpty() == false) { // if there is no previous exoplayer instance and we have a load-balanced URL, init exoplayer
+                    System.out.println("Trying to set ICE url because exoplayer state -> " + (exoPlayer == null) + " newURL : " + newUrl);
                     if (isPlaying == true) {
+                        Map<String, Object> updates = new HashMap<String, Object>();
+                        updates.put("numlisteners", newList + 1);
+                        urlRef.child(newKey).updateChildren(updates);
                         exoPlayer = exoHelper.startExo(newUrl);
 //                        getPlayer();
                     } else {
                         System.out.println("can't start player because button state -> " + isPlaying + " paused state");
                     }
+                } else if (newUrl.isEmpty() == true) {
+                    Toast.makeText(getContext(), R.string.server_full, Toast.LENGTH_SHORT).show();
+                    System.out.println("can't set ICE URL because newUrl -> " + newUrl);
                 } else {
-                    System.out.println("can't set ICE URL because exoplayer state -> " + (exoPlayer == null) + "f inal key" + newKey);
-                }
+                    System.out.println("can't set ICE URL because exoplayer state -> " + (exoPlayer == null));
 
+                }
 
             }
 
