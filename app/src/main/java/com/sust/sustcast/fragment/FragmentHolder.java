@@ -56,9 +56,10 @@ public class FragmentHolder extends AppCompatActivity {
 
     }
 
+
     @Override
     public void onBackPressed() {
-        moveTaskToBack(true);
+        FragmentHolder.this.moveTaskToBack(true);
         FragmentHolder.this.finish();
     }
 }
