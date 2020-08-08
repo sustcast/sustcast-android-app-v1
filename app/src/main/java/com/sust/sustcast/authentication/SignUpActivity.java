@@ -35,6 +35,8 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        FontHelper.adjustFontScale(this, getResources().getConfiguration());
+
         ActivitySignUpBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up);
         ArrayAdapter<String> departmentAdapter = new ArrayAdapter<>(getApplicationContext(), R.layout.dropdown_department_items, DEPARTMENTS);
 
@@ -118,9 +120,6 @@ public class SignUpActivity extends AppCompatActivity {
             startActivity(new Intent(SignUpActivity.this, FragmentHolder.class).putExtra(USERS, authenticatedUser));
             finish();
         });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            FontHelper.adjustFontScale(this, getResources().getConfiguration());
-        }
     }
 
     public void signUp(String userName, String emailAddress, String password, String phoneNumber, String department) {

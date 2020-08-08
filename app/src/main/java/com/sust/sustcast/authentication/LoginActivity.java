@@ -29,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FontHelper.adjustFontScale(this, getResources().getConfiguration());
 
         ActivityLoginBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         binding.setLoginActivity(this);
@@ -70,9 +71,6 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, FragmentHolder.class).putExtra(USERS, authenticatedUser));
             finish();
         });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            FontHelper.adjustFontScale(this, getResources().getConfiguration());
-        }
 
     }
 

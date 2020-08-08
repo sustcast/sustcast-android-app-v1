@@ -27,6 +27,8 @@ public class ForgetPasswordActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        FontHelper.adjustFontScale(this, getResources().getConfiguration());
+
         ActivityForgetPasswordBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_forget_password);
         binding.setForgetPassActivity(this);
 
@@ -46,9 +48,6 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                 }
             }
         });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            FontHelper.adjustFontScale(this, getResources().getConfiguration());
-        }
     }
 
     public void resetPassword(String email) {

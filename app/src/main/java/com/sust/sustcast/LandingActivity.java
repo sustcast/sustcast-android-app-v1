@@ -22,6 +22,8 @@ public class LandingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        FontHelper.adjustFontScale(this, getResources().getConfiguration());
+
         ActivityLandingBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_landing);
         binding.setLandingActivity(this);
 
@@ -35,10 +37,6 @@ public class LandingActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), CHECKNET, Toast.LENGTH_LONG).show();
             }
         }).execute();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            FontHelper.adjustFontScale(this, getResources().getConfiguration());
-        }
     }
 
     public void startSignUp() {

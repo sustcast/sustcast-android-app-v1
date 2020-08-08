@@ -18,12 +18,10 @@ public class TocActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        FontHelper.adjustFontScale(this, getResources().getConfiguration());
+
         ActivityTocBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_toc);
         binding.setTocActivity(this);
         binding.tvToc.setText(TOC);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            FontHelper.adjustFontScale(this, getResources().getConfiguration());
-        }
-
     }
 }
