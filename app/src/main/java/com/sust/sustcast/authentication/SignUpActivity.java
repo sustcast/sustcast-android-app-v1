@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -29,6 +28,7 @@ import static com.sust.sustcast.utils.Constants.INVALIDNAME;
 import static com.sust.sustcast.utils.Constants.INVALIDPASSWORD;
 import static com.sust.sustcast.utils.Constants.INVALIDPHONE;
 import static com.sust.sustcast.utils.Constants.SIGNUPERROR;
+import static com.sust.sustcast.utils.Constants.SIGNUPSUCCESS;
 import static com.sust.sustcast.utils.Constants.USERS;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -123,11 +123,16 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
         authViewModel.getSignError().observe(this, errorObserver -> {
-            if (errorObserver == true) {
+            if (errorObserver) {
                 visibility.set(false);
-                Toast.makeText(SignUpActivity.this, SIGNUPERROR, Toast.LENGTH_SHORT).show();
-            } else if (errorObserver == false) {
-                Log.d("TAG", "onCreate: SUCCESS");
+                Toast.makeText(SignUpActivity.this, SIGNUPERROR, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        authViewModel.getVerificationStats().observe(this, signUpObserver -> {
+            if (signUpObserver) {
+                visibility.set(false);
+                Toast.makeText(SignUpActivity.this, SIGNUPSUCCESS, Toast.LENGTH_LONG).show();
             }
         });
 

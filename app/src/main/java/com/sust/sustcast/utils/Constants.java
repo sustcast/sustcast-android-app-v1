@@ -4,8 +4,9 @@ public interface Constants {
     String TAG = "SUSTCast";
     String USERS = "sustcast_user";
     String DATAERROR = "Check if you have filled every field necessary";
-    String SIGNUPERROR = "Unknown Error. Try again later.";
-    String LOGINERROR = "";
+    String SIGNUPERROR = "Account Already exists or Unknown Error Occured.";
+    String SIGNUPSUCCESS = "Check your Email for Verification.";
+    String LOGINERROR = "Wrong or Unverified Email or Wrong Password.";
     String FACEBOOKAPP = "com.facebook.katana";
     String MAILBODY = "My email's body";
     String MAILERROR = "No email clients installed.";

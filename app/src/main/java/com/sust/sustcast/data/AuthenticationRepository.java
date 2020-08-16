@@ -17,28 +17,34 @@ public abstract class AuthenticationRepository {
     private CollectionReference collectionReference = firebaseFirestore.collection(USERS);
 
     abstract void setUser(User user);
-
     abstract void setSignError(Boolean status);
+
+    abstract void setVerificationStatus(Boolean status);
 
     void firebaseSignIn(String emailAddress, String password) {
         firebaseAuth.signInWithEmailAndPassword(emailAddress, password).addOnCompleteListener(authTask -> {
             if (authTask.isSuccessful()) {
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                if (firebaseUser != null) {
-                    String uid = firebaseUser.getUid();
-                    collectionReference.document(uid).get().addOnCompleteListener(dataTask -> {
-                        if (dataTask.isSuccessful()) {
-                            DocumentSnapshot documentSnapshot = dataTask.getResult();
-                            assert documentSnapshot != null;
-                            if (documentSnapshot.exists()) {
-                                setSignError(false);
-                                User user = documentSnapshot.toObject(User.class);
-                                assert user != null;
-                                user.setAuthenticated(true);
-                                setUser(user);
+                if (firebaseUser.isEmailVerified()) {
+                    if (firebaseUser != null) {
+                        String uid = firebaseUser.getUid();
+                        collectionReference.document(uid).get().addOnCompleteListener(dataTask -> {
+                            if (dataTask.isSuccessful()) {
+                                DocumentSnapshot documentSnapshot = dataTask.getResult();
+                                assert documentSnapshot != null;
+                                if (documentSnapshot.exists()) {
+                                    setSignError(false);
+                                    User user = documentSnapshot.toObject(User.class);
+                                    assert user != null;
+                                    user.setAuthenticated(true);
+                                    setUser(user);
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
+                } else {
+                    setSignError(true);
+                    firebaseAuth.signOut();
                 }
             } else
                 setSignError(true);
@@ -58,16 +64,15 @@ public abstract class AuthenticationRepository {
                         if (!documentSnapshot.exists()) {
                             documentReference.set(user).addOnCompleteListener(userCreationTask -> {
                                 if (userCreationTask.isSuccessful()) {
-                                    setSignError(false);
-                                    user.setAuthenticated(true);
-                                    setUser(user);
+                                    setVerificationStatus(true);
+                                    Objects.requireNonNull(firebaseAuth.getCurrentUser()).sendEmailVerification();
+                                    firebaseAuth.signOut();
                                 }
                             });
                         }
                     }
                 });
-            } else
-                setSignError(true);
+            } else setSignError(true);
         });
     }
 }

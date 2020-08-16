@@ -10,12 +10,14 @@ import androidx.lifecycle.MutableLiveData;
 public class AuthenticationViewModel extends AndroidViewModel {
     public MutableLiveData<User> authenticatedUserLiveData;
     public MutableLiveData<Boolean> authenticationError;
+    public MutableLiveData<Boolean> verificationStatus;
     private AuthenticationRepository authRepo;
 
     public AuthenticationViewModel(@NonNull Application application) {
         super(application);
         authenticatedUserLiveData = new MutableLiveData<>();
         authenticationError = new MutableLiveData<>();
+        verificationStatus = new MutableLiveData<>();
         authRepo = new AuthenticationRepository() {
             @Override
             void setUser(User user) {
@@ -25,6 +27,11 @@ public class AuthenticationViewModel extends AndroidViewModel {
             @Override
             void setSignError(Boolean status) {
                 authenticationError.setValue(status);
+            }
+
+            @Override
+            void setVerificationStatus(Boolean status) {
+                verificationStatus.setValue(status);
             }
         };
     }
@@ -39,6 +46,10 @@ public class AuthenticationViewModel extends AndroidViewModel {
 
     public LiveData<Boolean> getSignError() {
         return authenticationError;
+    }
+
+    public LiveData<Boolean> getVerificationStats() {
+        return verificationStatus;
     }
 
     public LiveData<User> getAuthenticatedUser() {
