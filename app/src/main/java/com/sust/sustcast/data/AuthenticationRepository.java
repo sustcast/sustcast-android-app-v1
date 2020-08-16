@@ -18,6 +18,8 @@ public abstract class AuthenticationRepository {
 
     abstract void setUser(User user);
 
+    abstract void setSignError(Boolean status);
+
     void firebaseSignIn(String emailAddress, String password) {
         firebaseAuth.signInWithEmailAndPassword(emailAddress, password).addOnCompleteListener(authTask -> {
             if (authTask.isSuccessful()) {
@@ -29,6 +31,7 @@ public abstract class AuthenticationRepository {
                             DocumentSnapshot documentSnapshot = dataTask.getResult();
                             assert documentSnapshot != null;
                             if (documentSnapshot.exists()) {
+                                setSignError(false);
                                 User user = documentSnapshot.toObject(User.class);
                                 assert user != null;
                                 user.setAuthenticated(true);
@@ -37,7 +40,8 @@ public abstract class AuthenticationRepository {
                         }
                     });
                 }
-            }
+            } else
+                setSignError(true);
         });
     }
 
@@ -54,6 +58,7 @@ public abstract class AuthenticationRepository {
                         if (!documentSnapshot.exists()) {
                             documentReference.set(user).addOnCompleteListener(userCreationTask -> {
                                 if (userCreationTask.isSuccessful()) {
+                                    setSignError(false);
                                     user.setAuthenticated(true);
                                     setUser(user);
                                 }
@@ -61,7 +66,8 @@ public abstract class AuthenticationRepository {
                         }
                     }
                 });
-            }
+            } else
+                setSignError(true);
         });
     }
 }

@@ -22,6 +22,7 @@ import com.sust.sustcast.utils.StringValidationRules;
 import static com.sust.sustcast.utils.Constants.DATAERROR;
 import static com.sust.sustcast.utils.Constants.INVALIDEMAIL;
 import static com.sust.sustcast.utils.Constants.INVALIDPASSWORD;
+import static com.sust.sustcast.utils.Constants.LOGINERROR;
 import static com.sust.sustcast.utils.Constants.USERS;
 
 public class LoginActivity extends AppCompatActivity {
@@ -71,6 +72,14 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, FragmentHolder.class).putExtra(USERS, authenticatedUser));
             finish();
         });
+
+        authViewModel.getSignError().observe(this, errorObserver -> {
+            if (errorObserver) {
+                visibilty.set(false);
+                Toast.makeText(LoginActivity.this, LOGINERROR, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             FontHelper.adjustFontScale(this, getResources().getConfiguration());
         }
@@ -81,7 +90,6 @@ public class LoginActivity extends AppCompatActivity {
         if (email.length() != 0 && password.length() != 0) {
             authViewModel.signIn(email, password);
         } else {
-            visibilty.set(false);
             Toast.makeText(LoginActivity.this, DATAERROR, Toast.LENGTH_SHORT).show();
         }
     }

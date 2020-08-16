@@ -6,11 +6,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ObservableBoolean;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.sust.sustcast.R;
@@ -26,11 +28,12 @@ import static com.sust.sustcast.utils.Constants.INVALIDEMAIL;
 import static com.sust.sustcast.utils.Constants.INVALIDNAME;
 import static com.sust.sustcast.utils.Constants.INVALIDPASSWORD;
 import static com.sust.sustcast.utils.Constants.INVALIDPHONE;
+import static com.sust.sustcast.utils.Constants.SIGNUPERROR;
 import static com.sust.sustcast.utils.Constants.USERS;
 
 public class SignUpActivity extends AppCompatActivity {
     private AuthenticationViewModel authViewModel;
-
+    public ObservableBoolean visibility = new ObservableBoolean(false);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,12 +121,23 @@ public class SignUpActivity extends AppCompatActivity {
             startActivity(new Intent(SignUpActivity.this, FragmentHolder.class).putExtra(USERS, authenticatedUser));
             finish();
         });
+
+        authViewModel.getSignError().observe(this, errorObserver -> {
+            if (errorObserver == true) {
+                visibility.set(false);
+                Toast.makeText(SignUpActivity.this, SIGNUPERROR, Toast.LENGTH_SHORT).show();
+            } else if (errorObserver == false) {
+                Log.d("TAG", "onCreate: SUCCESS");
+            }
+        });
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             FontHelper.adjustFontScale(this, getResources().getConfiguration());
         }
     }
 
     public void signUp(String userName, String emailAddress, String password, String phoneNumber, String department) {
+        visibility.set(true);
         if (userName.length() != 0 && password.length() != 0 && emailAddress.length() != 0 && phoneNumber.length() != 0 && department.length() != 0)
             authViewModel.signUp(userName, emailAddress, password, phoneNumber, department);
         else
