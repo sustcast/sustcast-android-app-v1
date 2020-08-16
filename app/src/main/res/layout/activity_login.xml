@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="loginActivity"
             type="com.sust.sustcast.authentication.LoginActivity" />
@@ -15,6 +14,28 @@
         android:layout_height="match_parent"
         android:background="@drawable/ic_login_rectangle"
         tools:context=".authentication.LoginActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.4"
+            android:animateLayoutChanges="true"
+            android:animatedVisibility="@{loginActivity.visibilty}"
+            android:background="@color/Black"
+            android:clickable="true"
+            android:elevation="2dp"
+            android:focusable="true">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
@@ -127,6 +148,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
+                android:id="@+id/btLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_rounded"

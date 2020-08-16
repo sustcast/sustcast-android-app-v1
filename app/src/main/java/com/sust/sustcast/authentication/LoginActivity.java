@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ObservableBoolean;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.sust.sustcast.R;
@@ -25,13 +26,14 @@ import static com.sust.sustcast.utils.Constants.USERS;
 
 public class LoginActivity extends AppCompatActivity {
     private AuthenticationViewModel authViewModel;
-
+    public ObservableBoolean visibilty = new ObservableBoolean(false);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         ActivityLoginBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         binding.setLoginActivity(this);
+
         binding.etEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -64,7 +66,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
         authViewModel = new ViewModelProvider(this).get(AuthenticationViewModel.class);
         authViewModel.getAuthenticatedUser().observe(this, authenticatedUser -> {
             startActivity(new Intent(LoginActivity.this, FragmentHolder.class).putExtra(USERS, authenticatedUser));
@@ -75,12 +76,14 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
-
     public void signIn(String email, String password) {
-        if (email.length() != 0 && password.length() != 0)
+        visibilty.set(true);
+        if (email.length() != 0 && password.length() != 0) {
             authViewModel.signIn(email, password);
-        else
+        } else {
+            visibilty.set(false);
             Toast.makeText(LoginActivity.this, DATAERROR, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void startForget() {

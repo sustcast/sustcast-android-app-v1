@@ -5,10 +5,6 @@ public interface Constants {
     String USERS = "sustcast_user";
     String DATAERROR = "Check if you have filled every field necessary";
     String FACEBOOKAPP = "com.facebook.katana";
-    String FACEBOOKAPPLINK = "fb://page/426253597411506";
-    String FACEBOOKLINK = "https://www.facebook.com/appetizerandroid";
-    String MAILADDRESS = "sustcast@gmail.com";
-    String MAILSUBJECT = "My email's subject";
     String MAILBODY = "My email's body";
     String MAILERROR = "No email clients installed.";
     String INVALIDEMAIL = "Invalid Email";
@@ -19,7 +15,7 @@ public interface Constants {
     String FAILMAIL = "Fail to send reset password email!";
     String CHECKNET = "Cannot connect to internet. Please check your connection";
 
-    String[] DEPARTMENTS = new String[]{"CSE", "EEE", "ME", "IPE", "ARC", "CEP", "CEE", "FET", "PME", "BMB", "GEB", "BBA", "GEE", "MAT", "PHY", "STA", "CHE", "OCG", "ANP", "BNG", "ENG", "PSS", "PAD", "SCW", "SOC"};
+    String[] DEPARTMENTS = new String[]{"ANP", "ARC", "BBA", "BMB", "BNG", "CEE", "CEP", "CHE", "CSE", "EEE", "ENG", "FET", "GEB", "GEE", "IPE", "MAT", "MEE", "OCG", "PAD", "PHY", "PME", "PSS", "SCW", "SOC", "STA"};
 
     String TOC = "Hello, and welcome to our Terms and Conditions of Use. This is significant for your legal rights and so carries great value that you read it carefully. Here we go…\n" +
             "\n" +
