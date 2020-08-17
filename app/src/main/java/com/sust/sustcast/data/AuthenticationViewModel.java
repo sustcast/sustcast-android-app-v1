@@ -28,11 +28,11 @@ public class AuthenticationViewModel extends AndroidViewModel {
             void setSignError(Boolean status) {
                 authenticationError.setValue(status);
             }
-
-            @Override
-            void setVerificationStatus(Boolean status) {
-                verificationStatus.setValue(status);
-            }
+//
+//            @Override
+//            void setVerificationStatus(Boolean status) {
+//                verificationStatus.setValue(status);
+//            }
         };
     }
 
@@ -48,9 +48,9 @@ public class AuthenticationViewModel extends AndroidViewModel {
         return authenticationError;
     }
 
-    public LiveData<Boolean> getVerificationStats() {
-        return verificationStatus;
-    }
+//    public LiveData<Boolean> getVerificationStats() {
+//        return verificationStatus;
+//    }
 
     public LiveData<User> getAuthenticatedUser() {
         return authenticatedUserLiveData;

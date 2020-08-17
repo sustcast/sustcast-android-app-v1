@@ -19,13 +19,13 @@ public abstract class AuthenticationRepository {
     abstract void setUser(User user);
     abstract void setSignError(Boolean status);
 
-    abstract void setVerificationStatus(Boolean status);
+//    abstract void setVerificationStatus(Boolean status);
 
     void firebaseSignIn(String emailAddress, String password) {
         firebaseAuth.signInWithEmailAndPassword(emailAddress, password).addOnCompleteListener(authTask -> {
             if (authTask.isSuccessful()) {
                 FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-                if (firebaseUser.isEmailVerified()) {
+//                if (firebaseUser.isEmailVerified()) {
                     if (firebaseUser != null) {
                         String uid = firebaseUser.getUid();
                         collectionReference.document(uid).get().addOnCompleteListener(dataTask -> {
@@ -42,10 +42,10 @@ public abstract class AuthenticationRepository {
                             }
                         });
                     }
-                } else {
-                    setSignError(true);
-                    firebaseAuth.signOut();
-                }
+//                } else {
+//                    setSignError(true);
+//                    firebaseAuth.signOut();
+//                }
             } else
                 setSignError(true);
         });
@@ -64,9 +64,11 @@ public abstract class AuthenticationRepository {
                         if (!documentSnapshot.exists()) {
                             documentReference.set(user).addOnCompleteListener(userCreationTask -> {
                                 if (userCreationTask.isSuccessful()) {
-                                    setVerificationStatus(true);
-                                    Objects.requireNonNull(firebaseAuth.getCurrentUser()).sendEmailVerification();
-                                    firebaseAuth.signOut();
+//                                    setVerificationStatus(true);
+//                                    Objects.requireNonNull(firebaseAuth.getCurrentUser()).sendEmailVerification();
+//                                    firebaseAuth.signOut();
+                                    user.setAuthenticated(true);
+                                    setUser(user);
                                 }
                             });
                         }
