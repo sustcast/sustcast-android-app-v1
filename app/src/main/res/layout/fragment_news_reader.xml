@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.NewsReaderFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -44,12 +44,12 @@
             android:id="@+id/txt_news"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left"
+            android:fontFamily="@font/kollektif_bold"
 
+            android:gravity="left"
             android:text="News"
             android:textColor="@color/Black"
             android:textSize="23sp"
-            android:fontFamily="@font/kollektif_bold"
             app:layout_constraintBottom_toTopOf="@id/txt_news"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
@@ -58,10 +58,10 @@
             android:id="@+id/txt_reader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/kollektif_bold"
             android:text="Reader!"
             android:textColor="@color/Black"
             android:textSize="23sp"
-            android:fontFamily="@font/kollektif_bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txt_news" />
@@ -141,8 +141,8 @@
             android:layout_marginLeft="5sp"
             android:layout_marginTop="15sp"
             android:layout_marginRight="5sp"
-            android:gravity="center_horizontal"
             android:fontFamily="@font/kollektif"
+            android:gravity="center_horizontal"
             android:text="Currently Reading : "
             android:textColor="@color/grey700"
             android:textSize="15sp"
@@ -175,10 +175,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_BBC" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.StreamFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -109,14 +109,14 @@
             android:drawableLeft="@drawable/play_button"
             android:drawablePadding="10sp"
             android:drawableTint="@color/grey700"
+            android:fontFamily="@font/kollektif"
             android:foregroundGravity="center_horizontal"
             android:gravity="left|center_vertical"
-            android:paddingLeft="10sp"
 
+            android:paddingLeft="10sp"
             android:text="@string/now_playing"
             android:textAllCaps="false"
             android:textColor="@color/grey700"
-            android:fontFamily="@font/kollektif"
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -174,10 +174,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_track" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

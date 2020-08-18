@@ -189,19 +189,20 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
             if (isPlaying == false) { //isPlaying : false -> button should stop exoPlayer
                 isPlaying = !isPlaying;
-                System.out.println(" Stop button \n exoState :  " + (exoPlayer == null)); // exoState : True -> can't stop player
+                System.out.println(" Stop button \n exoState :  " + (exoPlayer == null)); // exoState : False -> can stop player
                 exoPlayer = exoHelper.stopExo(bPlay);
 //                stopExo();
             } else {
                 isPlaying = !isPlaying;
                 System.out.println("Play button \n exoState :  " + (exoPlayer == null)); // exoState : True -> can start player
-                if (exoPlayer == null) {
+                if (exoPlayer == null && newUrl.isEmpty() == false) {
                     exoPlayer = exoHelper.startExo(newUrl);
+                    Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
+                    bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+                    bPlay.setText(R.string.now_playing);
 //                    getPlayer();
                 }
-                Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-                bPlay.setText(R.string.now_playing);
+
             }
 
         });

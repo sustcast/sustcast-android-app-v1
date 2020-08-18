@@ -1,9 +1,7 @@
 package com.sust.sustcast.fragment;
 
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -43,7 +41,7 @@ public class FragmentHolder extends AppCompatActivity {
         transaction.commit();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    //    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

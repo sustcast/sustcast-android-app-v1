@@ -17,6 +17,7 @@ public abstract class AuthenticationRepository {
     private CollectionReference collectionReference = firebaseFirestore.collection(USERS);
 
     abstract void setUser(User user);
+
     abstract void setSignError(Boolean status);
 
     abstract void setVerificationStatus(Boolean status);

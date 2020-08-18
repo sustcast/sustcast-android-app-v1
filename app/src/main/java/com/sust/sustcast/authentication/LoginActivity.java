@@ -26,8 +26,9 @@ import static com.sust.sustcast.utils.Constants.LOGINERROR;
 import static com.sust.sustcast.utils.Constants.USERS;
 
 public class LoginActivity extends AppCompatActivity {
-    private AuthenticationViewModel authViewModel;
     public ObservableBoolean visibilty = new ObservableBoolean(false);
+    private AuthenticationViewModel authViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
     }
+
     public void signIn(String email, String password) {
         visibilty.set(true);
         if (email.length() != 0 && password.length() != 0) {

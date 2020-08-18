@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="loginActivity"
             type="com.sust.sustcast.authentication.LoginActivity" />
@@ -137,10 +138,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/kollektif"
+                    android:onClick="@{()-> loginActivity.startForget()}"
                     android:text="@string/forgot_password"
                     android:textColor="@color/grey500"
                     android:textSize="15sp"
-                    android:onClick="@{()-> loginActivity.startForget()}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
@@ -152,16 +153,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_rounded"
+                android:fontFamily="@font/kollektif_bold"
+                android:onClick="@{()-> loginActivity.signIn(etEmail.getText().toString(),etPassword.getText().toString())}"
                 android:paddingHorizontal="70dp"
                 android:stateListAnimator="@null"
                 android:text="@string/tvLoginText"
-                android:fontFamily="@font/kollektif_bold"
                 android:textAllCaps="false"
                 android:textColor="@color/grey700"
                 android:textSize="25sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                android:onClick="@{()-> loginActivity.signIn(etEmail.getText().toString(),etPassword.getText().toString())}"
                 app:layout_constraintTop_toBottomOf="@id/remember_layout" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

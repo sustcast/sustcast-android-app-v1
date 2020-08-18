@@ -32,8 +32,9 @@ import static com.sust.sustcast.utils.Constants.SIGNUPSUCCESS;
 import static com.sust.sustcast.utils.Constants.USERS;
 
 public class SignUpActivity extends AppCompatActivity {
-    private AuthenticationViewModel authViewModel;
     public ObservableBoolean visibility = new ObservableBoolean(false);
+    private AuthenticationViewModel authViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
