@@ -21,6 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
+        app:elevation="16dp"
+
         android:background="@drawable/bottom_navigation_background"
         android:verticalScrollbarPosition="left"
         app:itemIconSize="45dp"
