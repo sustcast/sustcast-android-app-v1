@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "903833784828",
+    "firebase_url": "https://sustcast-18565.firebaseio.com",
+    "project_id": "sustcast-18565",
+    "storage_bucket": "sustcast-18565.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:903833784828:android:f11a70249d4bc3241ba279",
+        "android_client_info": {
+          "package_name": "com.sust.sustcast"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "903833784828-kqb3dg09jt609k426m3kdq1pqju9gc0t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkcOmpX8OakVhioyCtRqospAyj7eIIshk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "903833784828-kqb3dg09jt609k426m3kdq1pqju9gc0t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
