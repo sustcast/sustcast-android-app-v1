@@ -109,14 +109,14 @@
             android:drawableLeft="@drawable/play_button"
             android:drawablePadding="10sp"
             android:drawableTint="@color/grey700"
+            android:fontFamily="@font/kollektif"
             android:foregroundGravity="center_horizontal"
             android:gravity="left|center_vertical"
-            android:paddingLeft="10sp"
 
+            android:paddingLeft="10sp"
             android:text="@string/now_playing"
             android:textAllCaps="false"
             android:textColor="@color/grey700"
-            android:fontFamily="@font/kollektif"
 
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
