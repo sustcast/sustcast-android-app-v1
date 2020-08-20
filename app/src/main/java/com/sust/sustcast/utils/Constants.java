@@ -6,7 +6,7 @@ public interface Constants {
     String DATAERROR = "Check if you have filled every field necessary";
     String SIGNUPERROR = "Account Already exists or Unknown Error Occurred.";
     String SIGNUPSUCCESS = "Check your Email for Verification.";
-    String LOGINERROR = "Wrong Email or Password.";
+    String LOGINERROR = "Wrong Email or Password or Account doesn't exist.";
     String FACEBOOKAPP = "com.facebook.katana";
     String MAILBODY = "My email's body";
     String MAILERROR = "No email clients installed.";
