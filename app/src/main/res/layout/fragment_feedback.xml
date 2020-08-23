@@ -17,7 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-
             android:orientation="vertical"
             tools:context=".fragment.FeedbackFragment">
 
@@ -32,8 +31,7 @@
             <LinearLayout
                 android:id="@+id/layoutButtons"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.8"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <Button
@@ -97,12 +95,10 @@
                     android:layout_marginVertical="10sp"
                     android:background="@drawable/rounded_button"
                     android:drawableLeft="@drawable/log_out"
-                    android:drawablePadding="10sp"
                     android:drawableTint="@color/grey700"
                     android:fontFamily="@font/kollektif"
                     android:gravity="left|center_vertical"
                     android:onClick="@{()->feedbackFragment.logOut()}"
-                    android:paddingLeft="10sp"
                     android:text="Log Out"
                     android:textAllCaps="false"
                     android:textColor="@color/grey700" />
@@ -186,6 +182,7 @@
 
                 <include layout="@layout/layout_contributors_list" />
             </RelativeLayout>
+
         </LinearLayout>
 
     </ScrollView>
