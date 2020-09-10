@@ -18,7 +18,7 @@ public interface Constants {
     String FAILMAIL = "Fail to send reset password email!";
     String CHECKNET = "Cannot connect to internet. Please check your connection";
 
-    String[] DEPARTMENTS = new String[]{"ANP", "ARC", "BBA", "BMB", "BNG", "CEE", "CEP", "CHE", "CSE", "EEE", "ENG", "FET", "GEB", "GEE", "IPE", "MAT", "MEE", "OCG", "PAD", "PHY", "PME", "PSS", "SCW", "SOC", "STA"};
+    String[] DEPARTMENTS = new String[]{"ANP", "ARC", "BMB", "BNG", "BUS", "CEE", "CEP", "CHE", "CSE", "ECO", "EEE", "ENG", "FES", "FET", "GEB", "GEE", "IPE", "MAT", "MEE", "OCG", "PAD", "PHY", "PME", "PSS", "SCW", "SOC", "STA", "SWE"};
 
     String TOC = "Hello, and welcome to our Terms and Conditions of Use. This is significant for your legal rights and so carries great value that you read it carefully. Here we go…\n" +
             "\n" +
