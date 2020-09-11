@@ -47,12 +47,12 @@ dependencies {
     implementation 'com.rm:rmswitch:1.2.2'
     implementation 'com.google.android.exoplayer:exoplayer:2.11.2'
     implementation 'com.jakewharton:butterknife:10.2.1'
-
     implementation 'com.google.firebase:firebase-analytics:17.4.4'
     implementation 'com.google.firebase:firebase-crashlytics:17.1.1'
     implementation 'com.google.firebase:firebase-database:19.3.0'
     implementation 'com.google.firebase:firebase-auth:19.3.1'
     implementation 'com.google.firebase:firebase-firestore:21.4.3'
+
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

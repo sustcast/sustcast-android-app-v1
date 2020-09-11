@@ -61,6 +61,8 @@ public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthState
     }
 
     public void giveRate() {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.sust.sustcast")));
+
     }
 
     public Intent visitFacebook() {
