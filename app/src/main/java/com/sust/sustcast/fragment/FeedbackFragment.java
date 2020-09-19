@@ -1,6 +1,7 @@
 package com.sust.sustcast.fragment;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,7 +25,6 @@ import com.sust.sustcast.R;
 import com.sust.sustcast.data.Config;
 import com.sust.sustcast.databinding.FragmentFeedbackBinding;
 
-import static com.sust.sustcast.utils.Constants.FACEBOOKAPP;
 import static com.sust.sustcast.utils.Constants.MAILBODY;
 import static com.sust.sustcast.utils.Constants.MAILERROR;
 
@@ -33,8 +33,8 @@ public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthState
     private FirebaseAuth firebaseAuth;
     private DatabaseReference configRef;
     private ValueEventListener vListener;
-    private String FACEBOOKAPPLINK;
-    private String FACEBOOKLINK;
+    private String FACEBOOK_PAGE_ID;
+    private String FACEBOOK_PAGE_LINK;
     private String MAILADDRESS;
     private String MAILSUBJECT;
 
@@ -67,11 +67,25 @@ public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthState
 
     public Intent visitFacebook() {
         try {
-            getContext().getPackageManager().getPackageInfo(FACEBOOKAPP, 0);
-            return new Intent(Intent.ACTION_VIEW, Uri.parse(FACEBOOKAPPLINK));
-        } catch (Exception e) {
-            return new Intent(Intent.ACTION_VIEW, Uri.parse(FACEBOOKLINK));
+
+            int versionCode = getContext().getPackageManager().getPackageInfo("com.facebook.katana", 0).versionCode;
+            if (versionCode >= 3002850) {
+                //newer versions of fb app
+                return new Intent(Intent.ACTION_VIEW, Uri.parse("fb://facewebmodal/f?href=" + FACEBOOK_PAGE_LINK));
+            } else { //older versions of fb app
+                return new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/" + FACEBOOK_PAGE_ID));
+            }
+
+        } catch (PackageManager.NameNotFoundException e) {
+            return new Intent(Intent.ACTION_VIEW, Uri.parse(FACEBOOK_PAGE_LINK));
         }
+
+
+//            getContext().getPackageManager().getPackageInfo(FACEBOOKAPP, 0);
+//            return new Intent(Intent.ACTION_VIEW, Uri.parse(FACEBOOKAPPLINK));
+//        } catch (Exception e) {
+//            return new Intent(Intent.ACTION_VIEW, Uri.parse(FACEBOOKLINK));
+//        }
     }
 
     private void getConfig() {
@@ -79,8 +93,8 @@ public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthState
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Config config = dataSnapshot.getValue(Config.class);
-                FACEBOOKAPPLINK = config.getPage_id();
-                FACEBOOKLINK = config.getPage_link();
+                FACEBOOK_PAGE_ID = config.getPage_id();
+                FACEBOOK_PAGE_LINK = config.getPage_link();
                 MAILADDRESS = config.getMail_id();
                 MAILSUBJECT = config.getMail_subject();
 
