@@ -31,6 +31,12 @@
 
     </style>
 
+    <style name="AppButtonWhiteYellow">
+        <item name="android:background">@drawable/bg_button_white_yellow_active_pressed</item>
+        <item name="android:textColor">@drawable/bg_button_text_white_yellow_active_pressed</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="ButtonOverlay">
         <item name="colorPrimary">@color/grey200</item>
     </style>
