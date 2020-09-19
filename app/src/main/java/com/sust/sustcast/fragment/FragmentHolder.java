@@ -167,7 +167,7 @@ public class FragmentHolder extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        IsFinish("Want to close app?");
+        IsFinish("Want to close app?\nYou can put in on background pressing the Home Button!");
 
 //        FragmentHolder.this.moveTaskToBack(true);
 //        FragmentHolder.this.finish();

@@ -48,5 +48,6 @@
 
     <style name="PositiveButtonStyle.textColor" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/Black</item>
+        <item name="fontFamily">@font/kollektif_bold</item>
     </style>
 </resources>
