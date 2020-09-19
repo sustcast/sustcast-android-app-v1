@@ -1,11 +1,13 @@
 package com.sust.sustcast.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -165,7 +167,32 @@ public class FragmentHolder extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        FragmentHolder.this.moveTaskToBack(true);
-        FragmentHolder.this.finish();
+        IsFinish("Want to close app?");
+
+//        FragmentHolder.this.moveTaskToBack(true);
+//        FragmentHolder.this.finish();
+    }
+
+    public void IsFinish(String alertmessage) {
+
+        DialogInterface.OnClickListener dialogClickListener = (dialog, which) -> {
+
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                    // This above line close correctly
+                    //finish();
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    break;
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.MaterialAlertDialog_OK_color);
+        builder.setMessage(alertmessage)
+                .setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+
     }
 }

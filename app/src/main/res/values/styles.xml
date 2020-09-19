@@ -40,4 +40,13 @@
     <style name="ButtonOverlay">
         <item name="colorPrimary">@color/grey200</item>
     </style>
+
+    <style name="MaterialAlertDialog_OK_color" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle.textColor</item>
+        <item name="buttonBarNegativeButtonStyle">@style/PositiveButtonStyle.textColor</item>
+    </style>
+
+    <style name="PositiveButtonStyle.textColor" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/Black</item>
+    </style>
 </resources>
