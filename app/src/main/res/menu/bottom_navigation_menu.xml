@@ -3,16 +3,16 @@
     <item
         android:id="@+id/nav_stream_frag"
         android:icon="@drawable/stream_bottom_button"
-        android:title="Search" />
+        android:title="Stream" />
 
     <item
         android:id="@+id/nav_news_frag"
         android:icon="@drawable/news_bottom_button"
-        android:title="Comment" />
+        android:title="News" />
 
 
     <item
         android:id="@+id/nav_feedback_frag"
         android:icon="@drawable/extras"
-        android:title="Stats" />
+        android:title="Feedback" />
 </menu>
