@@ -41,7 +41,7 @@
     <string name="channel_name">some_channel</string>
     <string name="playback_channel_name">playback_channel_name</string>
     <string name="plaza">some_string</string>
-    <string name="server_off">Mr. Meow is taking a nap :( Check back after a while or try our other features!!</string>
+    <string name="server_off">Broadcasting Paused</string>
     <string name="server_full">ALL SERVERS ARE CURRENTLY FULL!!</string>
     <string name="bbc_down">BBC is taking a break :( Check back after a while or try our other features!!</string>
     <string name="link_empty">Server link is empty</string>
