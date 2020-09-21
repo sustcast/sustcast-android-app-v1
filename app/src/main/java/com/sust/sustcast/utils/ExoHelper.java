@@ -4,9 +4,11 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
@@ -27,42 +29,49 @@ import com.google.android.exoplayer2.util.Util;
 import com.sust.sustcast.R;
 
 public class ExoHelper {
-    String iceURL;
-    Context context;
+    private static final String TAG = "ExoHelper";
+    private String iceURL;
+    private Context context;
+
     private SimpleExoPlayer exoPlayer;
+
+    private Player.EventListener eventListener;
 
     public ExoHelper(Context context) {
         this.context = context;
     }
 
+    public ExoHelper(Context context, Player.EventListener eventListener) {
+        this.context = context;
+        this.eventListener = eventListener;
+    }
 
-    public SimpleExoPlayer stopExo(Button bPlay) {
+
+    public void stopExo() {
         if (exoPlayer != null) { //if exo is running
-            System.out.println("Stopping exo....");
+            Log.d(TAG, "Stopping exo....");
             exoPlayer.stop();
             exoPlayer.release();
             exoPlayer = null;
-            Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
-            bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-            bPlay.setText(R.string.now_paused);
         } else {
-            System.out.println("Can't stop because No exoplayer is running");
+            Log.d(TAG, "Can't stop because No exoplayer is running");
         }
-
-        return exoPlayer;
-
     }
 
-    public SimpleExoPlayer startExo(String newUrl) {
-        if (newUrl.isEmpty()) {
-            Toast.makeText(context, R.string.link_empty, Toast.LENGTH_SHORT).show();
+    public void startExo(String newUrl) {
+        if (newUrl == null || newUrl.isEmpty()) {
+            Log.d(TAG, "startExo: empty url");
+            Toast.makeText(context, R.string.server_off, Toast.LENGTH_SHORT).show();
+            return;
         }
 
         if (exoPlayer != null) {
-            System.out.println("Exo is already running now");
-            return null;
+            Log.d(TAG, "startExo: Exo is already running now");
+            return;
         }
+
         iceURL = newUrl;
+
         BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
         final ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
 
@@ -73,7 +82,7 @@ public class ExoHelper {
         DefaultBandwidthMeter defaultBandwidthMeter = new DefaultBandwidthMeter();
         DataSource.Factory dataSourceFactory = new DefaultDataSourceFactory(
                 context,
-                Util.getUserAgent(context, "SUSTcast"),
+                Util.getUserAgent(context, context.getApplicationInfo().name),
                 defaultBandwidthMeter);
 
         MediaSource mediaSource = new ExtractorMediaSource(
@@ -81,25 +90,22 @@ public class ExoHelper {
                 dataSourceFactory,
                 extractorsFactory,
                 new Handler(), error -> {
-
-        }
-
-        );
+        });
 
         exoPlayer = ExoPlayerFactory.newSimpleInstance(context, defaultTrackSelector);
-        exoPlayer.addListener(new Player.EventListener() {
-            @Override
-            public void onPlayerError(ExoPlaybackException error) {
-                System.out.println("ERROR ERROR ERRROOOOOOOR");
-                Toast.makeText(context, R.string.server_off, Toast.LENGTH_SHORT).show();
-            }
-        });
+
+        if(eventListener != null){
+            exoPlayer.addListener(eventListener);
+        }
 
         exoPlayer.prepare(mediaSource);
         exoPlayer.setPlayWhenReady(true);
 
-        return exoPlayer;
-
     }
+
+    public SimpleExoPlayer getPlayer(){
+        return exoPlayer;
+    }
+
 
 }
