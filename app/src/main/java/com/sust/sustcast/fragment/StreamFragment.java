@@ -88,6 +88,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             public void onPlayerError(ExoPlaybackException error) {
                 tvPlaying.setText(getString(R.string.server_off));
                 Crashlytics.logException(error);
+                stopStream();
             }
         });
 
@@ -169,6 +170,39 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
     }
 
+    private void toggleButtonState() {
+        Log.d(TAG, "setButton: isplaying -> " + isPlaying);
+
+        if (isPlaying) {
+            stopStream();
+        } else {
+            startStream();
+        }
+    }
+
+    private void startStream() {
+
+        Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
+        bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+        bPlay.setText(R.string.now_playing);
+
+        exoHelper.startExo(LoadBalancingUtil.selectIceCastSource(iceUrlList).getUrl());
+
+        isPlaying = true;
+
+    }
+
+    private void stopStream() {
+
+        Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
+        bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+        bPlay.setText(R.string.now_paused);
+
+        exoHelper.stopExo();
+
+        isPlaying = false;
+    }
+
     private void setButton() {
 
         Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
@@ -176,23 +210,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         bPlay.setText(R.string.now_playing);
 
         bPlay.setOnClickListener(view -> {
-            Log.d(TAG, "setButton: isplaying -> " + isPlaying);
-
-            if (isPlaying) {
-                Drawable img1 = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img1, null, null, null);
-                bPlay.setText(R.string.now_paused);
-
-                exoHelper.stopExo();
-            } else {
-                Drawable img1 = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img1, null, null, null);
-                bPlay.setText(R.string.now_playing);
-
-                exoHelper.startExo(LoadBalancingUtil.selectIceCastSource(iceUrlList).getUrl());
-            }
-
-            isPlaying = !isPlaying;
+            toggleButtonState();
         });
 
 
