@@ -19,7 +19,7 @@ In future versions we will be hosting the live programs of different on-campus c
 
 ## System Architecture
 
-* App Front-end follows the MVVM architecture and created with ![badge-java](https://img.shields.io/badge/java-red?style=for-the-badge&logo=java) on ![badge-android](https://img.shields.io/badge/androidstudio-brightgreen?style=for-the-badge&logo=android)
+* App Front-end follows the MVVM architecture and created with ![badge-java](https://img.shields.io/badge/java-yellow?style=for-the-badge&logo=java&logoColor=black) on ![badge-android](https://img.shields.io/badge/androidstudio-yellow?style=for-the-badge&logo=android&logoColor=black)
 
 * For back-end the below tools and frameworks were used :
 ```
