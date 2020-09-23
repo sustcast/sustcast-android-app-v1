@@ -19,7 +19,7 @@ In future versions we will be hosting the live programs of different on-campus c
 
 ## System Architecture
 
-* App Front-end follows the MVVM architecture and created with ![badge-java](https://img.shields.io/badge/java-yellow?style=for-the-badge&logo=java&logoColor=black) on ![badge-android](https://img.shields.io/badge/androidstudio-yellow?style=for-the-badge&logo=android&logoColor=black)
+* App Front-end follows the MVVM architecture and created with ![badge-java](https://img.shields.io/badge/java-FFD700?style=for-the-badge&logo=java&logoColor=white) on ![badge-android](https://img.shields.io/badge/androidstudio-FFD700?style=for-the-badge&logo=android&logoColor=white)
 
 * For back-end the below tools and frameworks were used :
 ```
@@ -48,9 +48,9 @@ In future versions we will be hosting the live programs of different on-campus c
 ## Demo
 ## Future Plans
 
-[![badge-play](https://img.shields.io/badge/Download-playstore-yellow?style=for-the-badge&logo=google-play&logoColor=white&labelColor=black)](https://play.google.com/store/apps/details?id=com.sust.sustcast)
+[![badge-play](https://img.shields.io/badge/Download-playstore-FFD700?style=for-the-badge&logo=google-play&logoColor=white&labelColor=black)](https://play.google.com/store/apps/details?id=com.sust.sustcast)
 <br/>
-[![badge-facebook](https://img.shields.io/badge/Visit-facebook-yellow?style=for-the-badge&logo=facebook&logoColor=white&labelColor=black)](https://www.facebook.com/sustcasr)
+[![badge-facebook](https://img.shields.io/badge/Visit-facebook-FFD700?style=for-the-badge&logo=facebook&logoColor=white&labelColor=black)](https://www.facebook.com/sustcasr)
 
 
 <a href="https://trackgit.com">
