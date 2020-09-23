@@ -37,10 +37,10 @@ In future versions we will be hosting the live programs of different on-campus c
 
 ## Showcase
 <p align="center">
-  <img  src="auth-ss.jpg">
+  <img width=800 height=500 src="auth-ss.jpg">
 </p>
 <p align="center">
-  <img  src="frag-ss.jpg">
+  <img width=800 height=500 src="frag-ss.jpg">
 </p>
 
 
