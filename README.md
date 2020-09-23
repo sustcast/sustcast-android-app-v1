@@ -48,6 +48,6 @@ In future versions we will be hosting the live programs of different on-campus c
 ## Demo
 ## Future Plans
 
-[![badge-play](https://img.shields.io/badge/Download-playstore-cyan?style=for-the-badge&logo=google-play)](https://play.google.com/store/apps/details?id=com.sust.sustcast)
+[![badge-play](https://img.shields.io/badge/Download-playstore-yellow?style=for-the-badge&logo=google-play&logoColor=white&labelColor=black)](https://play.google.com/store/apps/details?id=com.sust.sustcast)
 <br/>
-[![badge-facebook](https://img.shields.io/badge/Visit-facebook-lightblue?style=for-the-badge&logo=facebook)](https://www.facebook.com/sustcasr)
+[![badge-facebook](https://img.shields.io/badge/Visit-facebook-yellow?style=for-the-badge&logo=facebook&logoColor=white&labelColor=black)](https://www.facebook.com/sustcasr)
