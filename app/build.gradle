@@ -8,10 +8,10 @@ android {
 
     defaultConfig {
         applicationId "com.sust.sustcast"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 29
-        versionCode 4
-        versionName "In App Test"
+        versionCode 6
+        versionName "Apollo v1.1.1"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
