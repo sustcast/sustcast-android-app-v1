@@ -53,8 +53,13 @@ In future versions we will be hosting the live programs of different on-campus c
 [![badge-play](https://img.shields.io/badge/Download-playstore-FFD700?style=for-the-badge&logo=google-play&logoColor=white&labelColor=black)](https://play.google.com/store/apps/details?id=com.sust.sustcast)
 <br/>
 [![badge-facebook](https://img.shields.io/badge/Visit-facebook-FFD700?style=for-the-badge&logo=facebook&logoColor=white&labelColor=black)](https://www.facebook.com/sustcast)
+ ## Contributors
+<a href="https://github.com/sustcast/sustcast-android-app-v1/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=sustcast/sustcast-android-app-v1" />
+</a>
 
-
+Made with [contributors-img](https://contributors-img.web.app).
+<br/>
 <a href="https://trackgit.com">
 <img src="https://sfy.cx/u/o7t" alt="trackgit-views" />
 </a>
