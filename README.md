@@ -4,6 +4,7 @@
 [![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/contains-tasty-spaghetti-code.svg)](https://forthebadge.com)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/sustcast/sustcast-android-app-v1?color=FFD700&style=for-the-badge&labelColor=black)
 
 # SUSTCast
 ## Your Pocket-portal to SUST
