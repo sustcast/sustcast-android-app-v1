@@ -16,9 +16,9 @@ import com.sust.sustcast.databinding.ActivityForgetPasswordBinding;
 import com.sust.sustcast.utils.FontHelper;
 import com.sust.sustcast.utils.StringValidationRules;
 
-import static com.sust.sustcast.utils.Constants.CHECKMAIL;
-import static com.sust.sustcast.utils.Constants.FAILMAIL;
-import static com.sust.sustcast.utils.Constants.INVALIDEMAIL;
+import static com.sust.sustcast.data.Constants.CHECKMAIL;
+import static com.sust.sustcast.data.Constants.FAILMAIL;
+import static com.sust.sustcast.data.Constants.INVALIDEMAIL;
 
 public class ForgetPasswordActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;

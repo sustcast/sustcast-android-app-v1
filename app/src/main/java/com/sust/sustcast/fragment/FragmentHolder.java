@@ -23,6 +23,7 @@ import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.sust.sustcast.R;
 import com.sust.sustcast.dialogs.SimpleAlertDialog;
 import com.sust.sustcast.utils.FontHelper;
@@ -36,6 +37,7 @@ public class FragmentHolder extends AppCompatActivity {
     BottomNavigationView bottomNavigation;
     private static int RC_APP_UPDATE = 999;
     private Context context;
+    private String token;
 
     BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
             item -> {
@@ -80,6 +82,17 @@ public class FragmentHolder extends AppCompatActivity {
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+
+        //monitor token generation
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                token = task.getException().getMessage();
+                Log.w("FCM TOKEN Fail ", task.getException());
+            } else {
+                token = task.getResult().getToken();
+                Log.i("FCM TOKEN ", token);
+            }
+        });
         openFragment(StreamFragment.newInstance());
 
     }
@@ -195,4 +208,6 @@ public class FragmentHolder extends AppCompatActivity {
                 .setNegativeButton("No", dialogClickListener).show();
 
     }
+
+
 }

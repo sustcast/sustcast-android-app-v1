@@ -14,7 +14,7 @@ import com.sust.sustcast.databinding.ActivityLandingBinding;
 import com.sust.sustcast.utils.CheckNetworkConnection;
 import com.sust.sustcast.utils.FontHelper;
 
-import static com.sust.sustcast.utils.Constants.CHECKNET;
+import static com.sust.sustcast.data.Constants.CHECKNET;
 
 public class LandingActivity extends AppCompatActivity {
 

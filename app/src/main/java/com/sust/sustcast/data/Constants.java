@@ -1,4 +1,4 @@
-package com.sust.sustcast.utils;
+package com.sust.sustcast.data;
 
 public interface Constants {
     String TAG = "SUSTCast";

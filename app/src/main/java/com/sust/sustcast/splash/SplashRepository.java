@@ -9,7 +9,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.sust.sustcast.data.User;
 
-import static com.sust.sustcast.utils.Constants.USERS;
+import static com.sust.sustcast.data.Constants.USERS;
 
 public class SplashRepository {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();

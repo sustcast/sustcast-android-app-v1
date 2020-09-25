@@ -9,7 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Objects;
 
-import static com.sust.sustcast.utils.Constants.USERS;
+import static com.sust.sustcast.data.Constants.USERS;
 
 public abstract class AuthenticationRepository {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
