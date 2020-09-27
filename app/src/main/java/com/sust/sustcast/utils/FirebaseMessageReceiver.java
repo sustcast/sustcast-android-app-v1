@@ -15,6 +15,8 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.sust.sustcast.R;
 import com.sust.sustcast.fragment.FragmentHolder;
 
+import static com.sust.sustcast.R.drawable.sustcast_logo_circle_only;
+
 public class FirebaseMessageReceiver
         extends FirebaseMessagingService {
 
@@ -86,7 +88,7 @@ public class FirebaseMessageReceiver
                 = new NotificationCompat
                 .Builder(getApplicationContext(),
                 channel_id)
-                .setSmallIcon(R.drawable.ic_logo)
+                .setSmallIcon(sustcast_logo_circle_only)
                 .setAutoCancel(true)
                 .setVibrate(new long[]{400, 400, 300,
                         400, 300})
@@ -96,6 +98,7 @@ public class FirebaseMessageReceiver
         // A customized design for the notification can be
         // set only for Android versions 4.1 and above. Thus
         // condition for the same is checked here.
+        System.out.println("BuildVersion : " + Build.VERSION.SDK_INT);
         if (Build.VERSION.SDK_INT
                 >= Build.VERSION_CODES.JELLY_BEAN) {
             builder = builder.setContent(
@@ -106,7 +109,8 @@ public class FirebaseMessageReceiver
         else {
             builder = builder.setContentTitle(title)
                     .setContentText(message)
-                    .setSmallIcon(R.drawable.sustcast_logo_circle_only);
+                    .setSmallIcon(sustcast_logo_circle_only)
+                    .setPriority(2);
         }
         // Create an object of NotificationManager class to
         // notify the
