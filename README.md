@@ -24,19 +24,6 @@ In future versions we will be hosting the live programs of different on-campus c
 
 * App Front-end follows the MVVM architecture and created with ![badge-java](https://img.shields.io/badge/java-FFD700?style=for-the-badge&logo=java&logoColor=white) on ![badge-android](https://img.shields.io/badge/androidstudio-FFD700?style=for-the-badge&logo=android&logoColor=white)
 
-* For back-end the below tools and frameworks were used :
-```
- - FireBase [Authentication, Configuration, Metadata Storage and Server Stats]
- - IceCast2 and Ices2 [Streaming]
- - Docker [For running Ices2]
- - Python [For Scheduling Programs]
- - Sqlite3 [Storing Information Regarding Music]
-```
-## System Diagram
-
-<p align="center">
-  <img width="570" height="580" src="sustcast-architecture (1)-1.png">
-</p>
 
 ## Showcase
 <p align="center">
@@ -49,7 +36,7 @@ In future versions we will be hosting the live programs of different on-campus c
 
 
 ## Demo
-## Future Plans
+
 
 [![badge-play](https://img.shields.io/badge/Download-playstore-FFD700?style=for-the-badge&logo=google-play&logoColor=white&labelColor=black)](https://play.google.com/store/apps/details?id=com.sust.sustcast)
 <br/>
