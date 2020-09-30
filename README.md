@@ -1,13 +1,11 @@
-# sustcast-android-app-v1
+# SUSTCast App-end
+## Your Pocket-portal to SUST
 
 [![forthebadge](https://forthebadge.com/images/badges/open-source.svg)](https://forthebadge.com)
-[![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com)
-[![forthebadge](https://forthebadge.com/images/badges/contains-tasty-spaghetti-code.svg)](https://forthebadge.com)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/sustcast/sustcast-android-app-v1?color=FFD700&style=for-the-badge&labelColor=black)
 
-# SUSTCast
-## Your Pocket-portal to SUST
+
 
 SUSTCast is an AI-enhanced online radio app built for the SUSTians, by the SUSTians!!<br/>
 The fully-automated system is first of it's kind and runs on most low to high-end android phones, seemlessly.<br/>
@@ -18,12 +16,11 @@ Currently our features include :
  - Broadcasts from BBC news
  - Weekly podcasts from special guests
 ```
-In future versions we will be hosting the live programs of different on-campus cultural organizations.
 
-## System Architecture
+## App Structure and Tools
 
-* App Front-end follows the MVVM architecture and created with ![badge-java](https://img.shields.io/badge/java-FFD700?style=for-the-badge&logo=java&logoColor=white) on ![badge-android](https://img.shields.io/badge/androidstudio-FFD700?style=for-the-badge&logo=android&logoColor=white)
-
+* App Front-end follows the MVVM architecture and created with ![badge-java](https://img.shields.io/badge/java-FFD700?style=for-the-badge&logo=java&logoColor=white) on ![badge-android](https://img.shields.io/badge/androidstudio-FFD700?style=for-the-badge&logo=android&logoColor=white) . 
+App is integrated with ![badge-firebase](https://img.shields.io/badge/firebase-FFD700?style=for-the-badge&logo=firebase&logoColor=white). Supports a minimum SDK *16* and above.  
 
 ## Showcase
 <p align="center">
