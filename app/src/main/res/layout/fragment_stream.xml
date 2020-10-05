@@ -16,12 +16,14 @@
             android:src="@drawable/ic_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/static_constraints_muse"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/static_constraints_muse"
+            app:layout_constraintBottom_toTopOf="@id/muse_dynamic"
             app:layout_constraintTop_toBottomOf="@id/top_logo">
 
             <TextView
@@ -48,11 +50,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/muse_dynamic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/static_constraints_muse">
-
             <Button
                 android:id="@+id/button_stream"
                 style="?android:attr/borderlessButtonStyle"
