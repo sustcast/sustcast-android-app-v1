@@ -25,8 +25,8 @@ import com.sust.sustcast.R;
 import com.sust.sustcast.data.Config;
 import com.sust.sustcast.databinding.FragmentFeedbackBinding;
 
-import static com.sust.sustcast.utils.Constants.MAILBODY;
-import static com.sust.sustcast.utils.Constants.MAILERROR;
+import static com.sust.sustcast.data.Constants.MAILBODY;
+import static com.sust.sustcast.data.Constants.MAILERROR;
 
 
 public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthStateListener {

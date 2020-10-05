@@ -10,7 +10,7 @@ import com.sust.sustcast.R;
 import com.sust.sustcast.databinding.ActivityTocBinding;
 import com.sust.sustcast.utils.FontHelper;
 
-import static com.sust.sustcast.utils.Constants.TOC;
+import static com.sust.sustcast.data.Constants.TOC;
 
 public class TocActivity extends AppCompatActivity {
 

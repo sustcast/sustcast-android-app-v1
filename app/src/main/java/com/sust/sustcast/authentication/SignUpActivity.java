@@ -21,14 +21,14 @@ import com.sust.sustcast.fragment.FragmentHolder;
 import com.sust.sustcast.utils.FontHelper;
 import com.sust.sustcast.utils.StringValidationRules;
 
-import static com.sust.sustcast.utils.Constants.DATAERROR;
-import static com.sust.sustcast.utils.Constants.DEPARTMENTS;
-import static com.sust.sustcast.utils.Constants.INVALIDEMAIL;
-import static com.sust.sustcast.utils.Constants.INVALIDNAME;
-import static com.sust.sustcast.utils.Constants.INVALIDPASSWORD;
-import static com.sust.sustcast.utils.Constants.INVALIDPHONE;
-import static com.sust.sustcast.utils.Constants.SIGNUPERROR;
-import static com.sust.sustcast.utils.Constants.USERS;
+import static com.sust.sustcast.data.Constants.DATAERROR;
+import static com.sust.sustcast.data.Constants.DEPARTMENTS;
+import static com.sust.sustcast.data.Constants.INVALIDEMAIL;
+import static com.sust.sustcast.data.Constants.INVALIDNAME;
+import static com.sust.sustcast.data.Constants.INVALIDPASSWORD;
+import static com.sust.sustcast.data.Constants.INVALIDPHONE;
+import static com.sust.sustcast.data.Constants.SIGNUPERROR;
+import static com.sust.sustcast.data.Constants.USERS;
 
 public class SignUpActivity extends AppCompatActivity {
     public ObservableBoolean visibility = new ObservableBoolean(false);

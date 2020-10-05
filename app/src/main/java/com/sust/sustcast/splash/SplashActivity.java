@@ -16,6 +16,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         splashViewModel = new ViewModelProvider(this).get(SplashViewModel.class);
+
         splashViewModel.checkAuthentication();
         splashViewModel.checkAuthenticationLiveData.observe(this, user -> {
             if (!user.getAuthenticated()) {

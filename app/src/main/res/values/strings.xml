@@ -56,4 +56,5 @@
     <string name="bbc_news_tv">BBC News</string>
     <string name="currently_playing">Currently Playing :</string>
     <string name="no_music_playing">No Music Playing</string>
+    <string name="payload_log_format">%1$s --> %2$s</string>
 </resources>

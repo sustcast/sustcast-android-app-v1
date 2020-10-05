@@ -19,11 +19,11 @@ import com.sust.sustcast.fragment.FragmentHolder;
 import com.sust.sustcast.utils.FontHelper;
 import com.sust.sustcast.utils.StringValidationRules;
 
-import static com.sust.sustcast.utils.Constants.DATAERROR;
-import static com.sust.sustcast.utils.Constants.INVALIDEMAIL;
-import static com.sust.sustcast.utils.Constants.INVALIDPASSWORD;
-import static com.sust.sustcast.utils.Constants.LOGINERROR;
-import static com.sust.sustcast.utils.Constants.USERS;
+import static com.sust.sustcast.data.Constants.DATAERROR;
+import static com.sust.sustcast.data.Constants.INVALIDEMAIL;
+import static com.sust.sustcast.data.Constants.INVALIDPASSWORD;
+import static com.sust.sustcast.data.Constants.LOGINERROR;
+import static com.sust.sustcast.data.Constants.USERS;
 
 public class LoginActivity extends AppCompatActivity {
     public ObservableBoolean visibilty = new ObservableBoolean(false);
