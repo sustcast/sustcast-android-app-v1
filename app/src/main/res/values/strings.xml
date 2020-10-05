@@ -46,4 +46,14 @@
     <string name="server_full">ALL SERVERS ARE CURRENTLY FULL!!</string>
     <string name="bbc_down">BBC is taking a break :( Check back after a while or try our other features!!</string>
     <string name="link_empty">Server link is empty</string>
+    <string name="feedback">Feedback</string>
+    <string name="facebook_page">Facebook Page</string>
+    <string name="rate_the_app">Rate the App</string>
+    <string name="log_out">Log Out</string>
+    <string name="dept_of_ncse_sust">Dept. of \nCSE, SUST</string>
+    <string name="news_nreader">News\nReader!</string>
+    <string name="currently_reading">Currently Reading :</string>
+    <string name="bbc_news_tv">BBC News</string>
+    <string name="currently_playing">Currently Playing :</string>
+    <string name="no_music_playing">No Music Playing</string>
 </resources>
