@@ -28,12 +28,15 @@ import com.sust.sustcast.R;
 import com.sust.sustcast.data.IceUrl;
 import com.sust.sustcast.utils.ExoHelper;
 import com.sust.sustcast.utils.LoadBalancingUtil;
+import com.sust.sustcast.utils.NetworkInfoUtility;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static com.sust.sustcast.data.Constants.CHECKNET;
 
 
 public class StreamFragment extends Fragment implements Player.EventListener {
@@ -51,7 +54,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     private List<IceUrl> iceUrlList;
     private String title;
     private String token;
-
     public StreamFragment() {
     }
 
@@ -74,6 +76,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         View rootView = inflater.inflate(R.layout.fragment_stream, container, false);
         tvPlaying = rootView.findViewById(R.id.tv_track);
         tvPlaying.setText(getString(R.string.metadata_loading));
+        NetworkInfoUtility networkInfoUtility = new NetworkInfoUtility();
+        boolean net = networkInfoUtility.isNetWorkAvailableNow(getContext());
 
         bPlay = rootView.findViewById(R.id.button_stream);
         unbinder = ButterKnife.bind(this, rootView);
@@ -92,6 +96,11 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
         isPlaying = true;
         setButton();
+        if (net == false) {
+            exoHelper.ToggleButton(false);
+            Toast.makeText(getContext(), CHECKNET, Toast.LENGTH_LONG).show();
+            tvPlaying.setText(R.string.server_off);
+        }
         rootRef = FirebaseDatabase.getInstance().getReference(); //root database reference
         setServerUrlListners();
         setMetaDataListeners();

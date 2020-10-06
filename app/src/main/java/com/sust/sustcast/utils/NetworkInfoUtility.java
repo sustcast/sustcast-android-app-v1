@@ -6,7 +6,7 @@ import android.net.ConnectivityManager;
 import java.io.IOException;
 import java.util.Calendar;
 
-class NetworkInfoUtility {
+public class NetworkInfoUtility {
 
     private boolean isWifiEnable = false;
     private boolean isMobileNetworkAvailable = false;
