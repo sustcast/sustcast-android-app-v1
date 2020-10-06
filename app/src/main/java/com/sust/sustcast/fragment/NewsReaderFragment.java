@@ -1,6 +1,5 @@
 package com.sust.sustcast.fragment;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,9 +51,10 @@ public class NewsReaderFragment extends Fragment {
             @Override
             public void onPlayerError(ExoPlaybackException error) {
                 Crashlytics.logException(error);
-                Toast.makeText(getContext(),getString(R.string.server_off),Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getString(R.string.server_off), Toast.LENGTH_LONG).show();
+                exoHelper.ToggleButton(false);
             }
-        });
+        }, bPlay);
 
         isPlaying = true;
         setButton();
@@ -64,28 +64,12 @@ public class NewsReaderFragment extends Fragment {
     }
 
     private void setButton() {
-
-        Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
-        bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-        bPlay.setText(R.string.now_playing);
-
         bPlay.setOnClickListener(view -> {
 
             if (!isPlaying) {
                 exoHelper.startExo(getString(R.string.bbc_news));
-
-                Drawable img1 = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img1, null, null, null);
-                bPlay.setText(R.string.now_playing);
-
             } else {
-
                 exoHelper.stopExo();
-
-                Drawable img1 = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img1, null, null, null);
-                bPlay.setText(R.string.now_paused);
-
             }
 
             isPlaying = !isPlaying;

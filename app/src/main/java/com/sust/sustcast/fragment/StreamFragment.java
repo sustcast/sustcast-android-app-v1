@@ -1,6 +1,5 @@
 package com.sust.sustcast.fragment;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,19 +39,15 @@ import butterknife.Unbinder;
 public class StreamFragment extends Fragment implements Player.EventListener {
 
     private static final String TAG = "StreamFragment";
-    private boolean isPlaying;
-
-    private DatabaseReference rootRef;
-    private DatabaseReference songReference;
-    private DatabaseReference urlRef;
     ChildEventListener cListener;
-
     Unbinder unbinder;
     Button bPlay;
     TextView tvPlaying;
-
     ExoHelper exoHelper;
-
+    private boolean isPlaying;
+    private DatabaseReference rootRef;
+    private DatabaseReference songReference;
+    private DatabaseReference urlRef;
     private List<IceUrl> iceUrlList;
     private String title;
     private String token;
@@ -76,29 +72,29 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_stream, container, false);
-
         tvPlaying = rootView.findViewById(R.id.tv_track);
-        bPlay = rootView.findViewById(R.id.button_stream);
-
-        setButton();
         tvPlaying.setText(getString(R.string.metadata_loading));
+
+        bPlay = rootView.findViewById(R.id.button_stream);
+        unbinder = ButterKnife.bind(this, rootView);
 
         exoHelper = new ExoHelper(getContext(), new Player.EventListener() {
             @Override
             public void onPlayerError(ExoPlaybackException error) {
-                tvPlaying.setText(getString(R.string.server_off));
+                Log.i(TAG, "NETWORKERROR");
+                Toast.makeText(getContext(), getString(R.string.server_off), Toast.LENGTH_LONG).show();
+                exoHelper.ToggleButton(false);
                 Crashlytics.logException(error);
+
             }
-        });
+
+        }, bPlay);
 
         isPlaying = true;
-
+        setButton();
         rootRef = FirebaseDatabase.getInstance().getReference(); //root database reference
         setServerUrlListners();
         setMetaDataListeners();
-
-        unbinder = ButterKnife.bind(this, rootView);
-
         startRadioOnCreate();
 
         return rootView;
@@ -136,7 +132,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     }
 
     private void setServerUrlListners() {
-        iceUrlList = new ArrayList<IceUrl>();
+        iceUrlList = new ArrayList<>();
 
         urlRef = rootRef.child("IcecastServer");
         cListener = urlRef.addChildEventListener(new ChildEventListener() {
@@ -170,28 +166,14 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     }
 
     private void setButton() {
-
-        Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
-        bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-        bPlay.setText(R.string.now_playing);
-
         bPlay.setOnClickListener(view -> {
             Log.d(TAG, "setButton: isplaying -> " + isPlaying);
 
             if (isPlaying) {
-                Drawable img1 = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img1, null, null, null);
-                bPlay.setText(R.string.now_paused);
-
                 exoHelper.stopExo();
             } else {
-                Drawable img1 = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img1, null, null, null);
-                bPlay.setText(R.string.now_playing);
-
                 exoHelper.startExo(LoadBalancingUtil.selectIceCastSource(iceUrlList).getUrl());
             }
-
             isPlaying = !isPlaying;
         });
 

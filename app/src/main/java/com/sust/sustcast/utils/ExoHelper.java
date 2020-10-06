@@ -8,8 +8,6 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
-import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -34,16 +32,16 @@ public class ExoHelper {
     private Context context;
 
     private SimpleExoPlayer exoPlayer;
-
     private Player.EventListener eventListener;
-
+    private Button button;
     public ExoHelper(Context context) {
         this.context = context;
     }
 
-    public ExoHelper(Context context, Player.EventListener eventListener) {
+    public ExoHelper(Context context, Player.EventListener eventListener, Button button) {
         this.context = context;
         this.eventListener = eventListener;
+        this.button = button;
     }
 
 
@@ -53,6 +51,7 @@ public class ExoHelper {
             exoPlayer.stop();
             exoPlayer.release();
             exoPlayer = null;
+            ToggleButton(false);
         } else {
             Log.d(TAG, "Can't stop because No exoplayer is running");
         }
@@ -62,6 +61,7 @@ public class ExoHelper {
         if (newUrl == null || newUrl.isEmpty()) {
             Log.d(TAG, "startExo: empty url");
             Toast.makeText(context, R.string.server_off, Toast.LENGTH_SHORT).show();
+            ToggleButton(false); // show pause button
             return;
         }
 
@@ -97,15 +97,26 @@ public class ExoHelper {
         if(eventListener != null){
             exoPlayer.addListener(eventListener);
         }
-
         exoPlayer.prepare(mediaSource);
         exoPlayer.setPlayWhenReady(true);
+        ToggleButton(true);
 
     }
 
-    public SimpleExoPlayer getPlayer(){
+    public SimpleExoPlayer getPlayer() {
         return exoPlayer;
     }
 
 
+    public void ToggleButton(boolean state) {
+        if (state == true) {
+            Drawable img = button.getContext().getResources().getDrawable(R.drawable.play_button);
+            button.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+            button.setText(R.string.now_playing);
+        } else {
+            Drawable img1 = button.getContext().getResources().getDrawable(R.drawable.pause_button);
+            button.setCompoundDrawablesWithIntrinsicBounds(img1, null, null, null);
+            button.setText(R.string.server_off);
+        }
+    }
 }
