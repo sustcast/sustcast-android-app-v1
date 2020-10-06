@@ -95,7 +95,7 @@ public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthState
                 Config config = dataSnapshot.getValue(Config.class);
                 FACEBOOK_PAGE_ID = config.getPage_id();
                 FACEBOOK_PAGE_LINK = config.getPage_link();
-                MAILADDRESS = config.getMail_id();
+                MAILADDRESS = getString(R.string.mail_address);
                 MAILSUBJECT = config.getMail_subject();
 
             }

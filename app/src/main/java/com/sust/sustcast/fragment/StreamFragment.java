@@ -18,16 +18,12 @@ import androidx.fragment.app.Fragment;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Player;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.sust.sustcast.R;
 import com.sust.sustcast.data.IceUrl;
 import com.sust.sustcast.utils.ExoHelper;
@@ -74,18 +70,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         if (getArguments() != null) {
 
         }
-        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-            @Override
-            public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                if (!task.isSuccessful()) {
-                    token = task.getException().getMessage();
-                    Log.w("FCM TOKEN Fail stream", task.getException());
-                } else {
-                    token = task.getResult().getToken();
-                    Log.i("FCM TOKEN stream", token);
-                }
-            }
-        });
     }
 
     @Override

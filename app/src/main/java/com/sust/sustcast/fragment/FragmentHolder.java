@@ -35,6 +35,8 @@ public class FragmentHolder extends AppCompatActivity {
     private static final String TAG = "FragmentHolder";
 
     BottomNavigationView bottomNavigation;
+
+
     private static int RC_APP_UPDATE = 999;
     private Context context;
     private String token;
@@ -82,7 +84,6 @@ public class FragmentHolder extends AppCompatActivity {
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
         bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
-
         //monitor token generation
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
