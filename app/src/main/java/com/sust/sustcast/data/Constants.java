@@ -118,6 +118,5 @@ public interface Constants {
             "You and SUSTcast agree that (a) any claims seeking to enforce, protect, or determine the validity or ownership of any intellectual property rights, and (b) any claims related to allegations of theft, piracy or unauthorized use of the SUSTcast Service are NOT subject to mandatory arbitration. Instead, you and SUSTcast agree that these claims (including but not limited to claims for injunctive or equitable relief) shall be exclusively decided by courts of competent jurisdiction in Bangladesh.\n" +
             "YOU AND SUSTcast AGREE THAT EACH MAY BRING CLAIMS AGAINST THE OTHER ONLY IN YOUR OR ITS INDIVIDUAL CAPACITY, AND NOT AS A CLASS MEMBER OR IN ANY REPRESENTATIVE CAPACITY OR PROCEEDING. Further, no arbitrator shall consolidate any other person’s claims with your claims, and may not otherwise preside over any form of a multi-party or class proceeding. If this specific provision is found to be unenforceable in any way, then the entirety of this arbitration section shall be null and void. The arbitrator may not award declaratory or injunctive relief.\n" +
             "\n";
-    String PLAYBACK_CHANNEL_ID = "playback_channel";
-    int PLAYBACK_NOTIFICATION_ID = 1;
+
 }
