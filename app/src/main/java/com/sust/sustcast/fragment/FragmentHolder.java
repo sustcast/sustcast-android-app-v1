@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,11 +26,9 @@ import com.google.android.play.core.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.sust.sustcast.R;
 import com.sust.sustcast.dialogs.SimpleAlertDialog;
-import com.sust.sustcast.utils.CheckNetworkConnection;
 import com.sust.sustcast.utils.FontHelper;
 
 import static com.google.android.play.core.install.model.ActivityResult.RESULT_IN_APP_UPDATE_FAILED;
-import static com.sust.sustcast.data.Constants.CHECKNET;
 
 public class FragmentHolder extends AppCompatActivity {
 
@@ -74,18 +71,8 @@ public class FragmentHolder extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_holder);
-        FontHelper.adjustFontScale(this, getResources().getConfiguration());
         context = this;
-        new CheckNetworkConnection(this, new CheckNetworkConnection.OnConnectionCallback() {
-            @Override
-            public void onConnectionSuccess() {
-            }
-
-            @Override
-            public void onConnectionFail(String errorMsg) {
-                Toast.makeText(getApplicationContext(), CHECKNET, Toast.LENGTH_LONG).show();
-            }
-        }).execute();
+        FontHelper.adjustFontScale(context, getResources().getConfiguration());
 
 
         try {

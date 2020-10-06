@@ -15,9 +15,12 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.sust.sustcast.R;
 import com.sust.sustcast.utils.ExoHelper;
+import com.sust.sustcast.utils.NetworkInfoUtility;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static com.sust.sustcast.data.Constants.CHECKNET;
 
 
 public class NewsReaderFragment extends Fragment {
@@ -46,7 +49,11 @@ public class NewsReaderFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_news_reader, container, false);
         bPlay = rootView.findViewById(R.id.button_play);
         unbinder = ButterKnife.bind(this, rootView);
-
+        NetworkInfoUtility networkInfoUtility = new NetworkInfoUtility();
+        boolean net = networkInfoUtility.isNetWorkAvailableNow(getContext());
+        if (net == false) {
+            Toast.makeText(getContext(), CHECKNET, Toast.LENGTH_LONG).show();
+        }
         exoHelper = new ExoHelper(getContext(), new Player.EventListener() {
             @Override
             public void onPlayerError(ExoPlaybackException error) {
