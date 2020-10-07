@@ -39,6 +39,9 @@ public class ExoHelper {
     }
 
     public ExoHelper(Context context, Player.EventListener eventListener, Button button) {
+        if (exoPlayer != null) {
+            return;
+        }
         this.context = context;
         this.eventListener = eventListener;
         this.button = button;
