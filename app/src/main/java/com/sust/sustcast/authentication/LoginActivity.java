@@ -88,8 +88,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void signIn(String email, String password) {
-        visibilty.set(true);
-        if (email.length() != 0 && password.length() != 0) {
+
+        if (email.length() != 0 && password.length() != 0 && password.length() > 5) {
+            visibilty.set(true);
             authViewModel.signIn(email, password);
         } else {
             Toast.makeText(LoginActivity.this, DATAERROR, Toast.LENGTH_SHORT).show();

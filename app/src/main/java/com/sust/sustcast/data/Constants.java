@@ -3,7 +3,7 @@ package com.sust.sustcast.data;
 public interface Constants {
     String TAG = "SUSTCast";
     String USERS = "sustcast_user";
-    String DATAERROR = "Check if you have filled every necessary fields";
+    String DATAERROR = "Please make sure all fields are filled in correctly.";
     String SIGNUPERROR = "Account Already exists or Unknown Error Occurred.";
     String SIGNUPSUCCESS = "Check your Email for Verification.";
     String LOGINERROR = "Wrong Email or Password or Account doesn't exist.";
@@ -25,11 +25,11 @@ public interface Constants {
     String TOC = "Hello, and welcome to our Terms and Conditions of Use. This is significant for your legal rights and so carries great value that you read it carefully. Here we go…\n" +
             "\n" +
             "1. Introductions\n" +
-            "Thanks for being an honouorable user of SUSTcast. By using the SUSTcast service and  application, including by subscribing to new services or receiving Codes or Limited Offers (if applicable), you are entering into a binding agreement with the SUSTcast team in your country of residence if applicable. Your agreement with us includes these Terms and Conditions of Use (“Terms”). If you don’t agree with these Terms, then please don’t use the Service.\n" +
+            "Thanks for being an honourable user of SUSTcast. By using the SUSTcast service and  application, including by subscribing to new services or receiving Codes or Limited Offers (if applicable), you are entering into a binding agreement with the SUSTcast team in your country of residence if applicable. Your agreement with us includes these Terms and Conditions of Use (“Terms”). If you don’t agree with these Terms, then please don’t use the Service.\n" +
             "\n" +
             "We’re pleased and also honored to make our Service available to you. The SUSTcast service includes social and interactive features.\n" +
             "\n" +
-            "In order to use the SUSTcast app, you need to (a) be above 17, or be above 12 and have your parent or guardian’s consent to these Terms, (b) have to be legally authorized to be in a binding contract of any sort under all the applicable laws, and (c) be resident in the Local Country. You also warrant that you submit to SUSTcast during any registration process is varifiable, accurate and complete, and you agree to keep it that way at all times.\n" +
+            "In order to use the SUSTcast app, you need to (a) be above 17, or be above 12 and have your parent or guardian’s consent to these Terms, (b) have to be legally authorized to be in a binding contract of any sort under all the applicable laws, and (c) be resident in the Local Country. You also warrant that you submit to SUSTcast during any registration process is verifiable, accurate and complete, and you agree to keep it that way at all times.\n" +
             "\n" +
             "2. Changes to the Agreements\n" +
             "Occasionally we may, in our discretion, make changes to the SUSTcast Service and Agreements as it seems fit for the SUSTcast platform and its users. When we make changes to the Agreements that we consider material, you are entitled to be notified throught the Service. By carrying on after those changes are made, you are expressing and acknowledging your acceptance of the changes.\n" +
