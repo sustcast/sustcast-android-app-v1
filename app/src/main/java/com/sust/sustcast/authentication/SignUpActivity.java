@@ -14,7 +14,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ObservableBoolean;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.rm.rmswitch.RMSwitch;
 import com.sust.sustcast.R;
 import com.sust.sustcast.data.AuthenticationViewModel;
 import com.sust.sustcast.databinding.ActivitySignUpBinding;
@@ -22,7 +21,6 @@ import com.sust.sustcast.fragment.FragmentHolder;
 import com.sust.sustcast.utils.FontHelper;
 import com.sust.sustcast.utils.StringValidationRules;
 
-import static com.sust.sustcast.data.Constants.AGREETOC;
 import static com.sust.sustcast.data.Constants.DATAERROR;
 import static com.sust.sustcast.data.Constants.DEPARTMENTS;
 import static com.sust.sustcast.data.Constants.INVALIDEMAIL;
@@ -116,15 +114,6 @@ public class SignUpActivity extends AppCompatActivity {
         });
         binding.Department.setAdapter(departmentAdapter);
         binding.tocText.setMovementMethod(LinkMovementMethod.getInstance());
-        binding.tocSwitch.addSwitchObserver((switchView, isChecked) -> {
-            if (isChecked){
-            binding.btnSignup.setEnabled(true);
-            }
-            else {
-                binding.btnSignup.setEnabled(false);
-                Toast.makeText(SignUpActivity.this, AGREETOC, Toast.LENGTH_SHORT).show();
-            }
-        });
 
         authViewModel = new ViewModelProvider(this).get(AuthenticationViewModel.class);
 
