@@ -3,7 +3,7 @@ package com.sust.sustcast.data;
 public interface Constants {
     String TAG = "SUSTCast";
     String USERS = "sustcast_user";
-    String DATAERROR = "Check if you have filled every field necessary";
+    String DATAERROR = "Check if you have filled every necessary fields";
     String SIGNUPERROR = "Account Already exists or Unknown Error Occurred.";
     String SIGNUPSUCCESS = "Check your Email for Verification.";
     String LOGINERROR = "Wrong Email or Password or Account doesn't exist.";
@@ -15,8 +15,10 @@ public interface Constants {
     String INVALIDNAME = "Please Fill in with your name";
     String INVALIDPHONE = "Invalid Phone Number";
     String CHECKMAIL = "Check email to reset your password.";
-    String FAILMAIL = "Fail to send reset password email!";
+    String FAILMAIL = "Failed to send reset password email!";
     String CHECKNET = "Cannot connect to internet. Please check your connection";
+    String EMPTYMAIL = "Please enter your email!";
+    String AGREETOC = "Please agree to our policy & terms!";
 
     String[] DEPARTMENTS = new String[]{"ANP", "ARC", "BMB", "BNG", "BUS", "CEE", "CEP", "CHE", "CSE", "ECO", "EEE", "ENG", "FES", "FET", "GEB", "GEE", "IPE", "MAT", "MEE", "OCG", "PAD", "PHY", "PME", "PSS", "SCW", "SOC", "STA", "SWE"};
 

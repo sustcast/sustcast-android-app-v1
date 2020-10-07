@@ -21,8 +21,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="n">
-        <activity android:name=".authentication.ForgetPasswordActivity" />
-        <activity android:name=".authentication.TocActivity">
+        <activity android:name=".authentication.ForgetPasswordActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".authentication.TocActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -37,15 +41,25 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".authentication.SignUpActivity" />
-        <activity android:name=".authentication.LoginActivity" />
-        <activity android:name=".fragment.FragmentHolder" />
+        <activity android:name=".authentication.SignUpActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity android:name=".authentication.LoginActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".fragment.FragmentHolder"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".LandingActivity"
-            android:theme="@style/LandingTheme" />
+            android:theme="@style/LandingTheme"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".splash.SplashActivity"
-            android:theme="@style/SplashActivity">
+            android:theme="@style/SplashActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

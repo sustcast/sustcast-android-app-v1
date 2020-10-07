@@ -17,6 +17,7 @@ import com.sust.sustcast.utils.FontHelper;
 import com.sust.sustcast.utils.StringValidationRules;
 
 import static com.sust.sustcast.data.Constants.CHECKMAIL;
+import static com.sust.sustcast.data.Constants.EMPTYMAIL;
 import static com.sust.sustcast.data.Constants.FAILMAIL;
 import static com.sust.sustcast.data.Constants.INVALIDEMAIL;
 
@@ -62,6 +63,9 @@ public class ForgetPasswordActivity extends AppCompatActivity {
                         }
                     }
             );
+        }
+        else{
+            Toast.makeText(ForgetPasswordActivity.this, EMPTYMAIL, Toast.LENGTH_SHORT).show();
         }
     }
 }
