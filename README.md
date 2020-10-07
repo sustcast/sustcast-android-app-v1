@@ -33,7 +33,9 @@ App is integrated with ![badge-firebase](https://img.shields.io/badge/firebase-F
 
 
 ## Demo
-
+<p align="center">
+  <img  height="500" width="280" src="bhungbhang.gif">
+</p>
 
 [![badge-play](https://img.shields.io/badge/Download-playstore-FFD700?style=for-the-badge&logo=google-play&logoColor=white&labelColor=black)](https://play.google.com/store/apps/details?id=com.sust.sustcast)
 <br/>
