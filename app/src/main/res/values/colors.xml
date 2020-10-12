@@ -3,10 +3,8 @@
     <color name="colorPrimary">#FED500</color>
     <color name="colorPrimaryDark">#CBAA00</color>
     <color name="colorAccent">#A6A6A6</color>
-    <color name="colorAccentLight">#B5B5B5</color>
     <color name="grey200">#EEEEEE</color>
     <color name="grey300">#E0E0E0</color>
-    <color name="grey400">#BDBDBD</color>
     <color name="grey500">#9E9E9E</color>
     <color name="grey600">#757575</color>
     <color name="grey700">#616161</color>
