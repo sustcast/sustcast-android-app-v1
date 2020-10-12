@@ -75,7 +75,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_stream, container, false);
         tvPlaying = rootView.findViewById(R.id.tv_track);
-        tvPlaying.setText(getString(R.string.metadata_loading));
+        tvPlaying.setText(rootView.getContext().getString(R.string.metadata_loading));
         NetworkInfoUtility networkInfoUtility = new NetworkInfoUtility();
         boolean net = networkInfoUtility.isNetWorkAvailableNow(getContext());
 
@@ -86,7 +86,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             @Override
             public void onPlayerError(ExoPlaybackException error) {
                 Log.i(TAG, "NETWORKERROR");
-                Toast.makeText(getContext(), getString(R.string.server_off), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), rootView.getContext().getString(R.string.server_off), Toast.LENGTH_LONG).show();
                 exoHelper.ToggleButton(false);
                 Crashlytics.logException(error);
 
@@ -98,7 +98,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         setButton();
         if (net == false) {
             exoHelper.ToggleButton(false);
-            Toast.makeText(getContext(), CHECKNET, Toast.LENGTH_LONG).show();
+            Toast.makeText(rootView.getContext(), CHECKNET, Toast.LENGTH_LONG).show();
             tvPlaying.setText(R.string.server_off);
         }
         rootRef = FirebaseDatabase.getInstance().getReference(); //root database reference

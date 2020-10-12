@@ -154,6 +154,7 @@ public class FragmentHolder extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //FragmentHolder.this.finish();
     }
 
     @Override
@@ -180,7 +181,7 @@ public class FragmentHolder extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        IsFinish("Want to close app?\nYou can put in on background pressing the Home Button!");
+        IsFinish(getString(R.string.backpress_dialogue));
 
 //        FragmentHolder.this.moveTaskToBack(true);
 //        FragmentHolder.this.finish();
