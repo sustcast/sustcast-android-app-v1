@@ -25,6 +25,8 @@ import com.sust.sustcast.R;
 import com.sust.sustcast.data.Config;
 import com.sust.sustcast.databinding.FragmentFeedbackBinding;
 
+import java.util.Objects;
+
 import static com.sust.sustcast.data.Constants.MAILBODY;
 import static com.sust.sustcast.data.Constants.MAILERROR;
 
@@ -56,6 +58,8 @@ public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthState
         firebaseAuth = FirebaseAuth.getInstance();
         configRef = FirebaseDatabase.getInstance().getReference().child("config");
         getConfig();
+
+        MAILADDRESS = Objects.requireNonNull(getActivity()).getString(R.string.mail_address);
         binding.setFeedbackFragment(this);
         return binding.getRoot();
     }
@@ -68,7 +72,7 @@ public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthState
     public Intent visitFacebook() {
         try {
 
-            int versionCode = getContext().getPackageManager().getPackageInfo("com.facebook.katana", 0).versionCode;
+            int versionCode = Objects.requireNonNull(getContext()).getPackageManager().getPackageInfo("com.facebook.katana", 0).versionCode;
             if (versionCode >= 3002850) {
                 //newer versions of fb app
                 return new Intent(Intent.ACTION_VIEW, Uri.parse("fb://facewebmodal/f?href=" + FACEBOOK_PAGE_LINK));
@@ -95,7 +99,6 @@ public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthState
                 Config config = dataSnapshot.getValue(Config.class);
                 FACEBOOK_PAGE_ID = config.getPage_id();
                 FACEBOOK_PAGE_LINK = config.getPage_link();
-                MAILADDRESS = getActivity().getString(R.string.mail_address);
                 MAILSUBJECT = config.getMail_subject();
 
             }
