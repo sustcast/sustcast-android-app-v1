@@ -21,7 +21,7 @@
             android:layout_height="match_parent"
             android:alpha="0.4"
             android:animateLayoutChanges="true"
-            android:animatedVisibility="@{loginActivity.visibilty}"
+            android:animatedVisibility="@{loginActivity.visibility}"
             android:background="@color/Black"
             android:clickable="true"
             android:elevation="2dp"

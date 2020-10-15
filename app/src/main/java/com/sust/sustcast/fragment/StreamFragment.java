@@ -54,6 +54,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     private List<IceUrl> iceUrlList;
     private String title;
     private String token;
+
     public StreamFragment() {
     }
 
@@ -92,11 +93,11 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
             }
 
-        }, bPlay);
+        }, bPlay, "Streaming");
 
         isPlaying = true;
         setButton();
-        if (net == false) {
+        if (!net) {
             exoHelper.ToggleButton(false);
             Toast.makeText(rootView.getContext(), CHECKNET, Toast.LENGTH_LONG).show();
             tvPlaying.setText(R.string.server_off);

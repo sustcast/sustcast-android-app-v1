@@ -31,6 +31,7 @@ public class NewsReaderFragment extends Fragment {
     private Unbinder unbinder;
     private Button bPlay;
     View rootView;
+
     public NewsReaderFragment() {
     }
 
@@ -51,7 +52,7 @@ public class NewsReaderFragment extends Fragment {
         unbinder = ButterKnife.bind(this, rootView);
         NetworkInfoUtility networkInfoUtility = new NetworkInfoUtility();
         boolean net = networkInfoUtility.isNetWorkAvailableNow(getContext());
-        if (net == false) {
+        if (!net) {
             Toast.makeText(getContext(), CHECKNET, Toast.LENGTH_LONG).show();
         }
         exoHelper = new ExoHelper(getContext(), new Player.EventListener() {
@@ -61,7 +62,7 @@ public class NewsReaderFragment extends Fragment {
                 Toast.makeText(getContext(), rootView.getContext().getString(R.string.server_off), Toast.LENGTH_LONG).show();
                 exoHelper.ToggleButton(false);
             }
-        }, bPlay);
+        }, bPlay, "NewsReader");
 
         isPlaying = true;
         setButton();

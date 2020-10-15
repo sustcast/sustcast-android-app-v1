@@ -153,9 +153,12 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void signUp(String userName, String emailAddress, String password, String phoneNumber, String department) {
-        visibility.set(true);
-        if (userName.length() != 0 && password.length() != 0 && emailAddress.length() != 0 && phoneNumber.length() != 0 && department.length() != 0)
+
+        if (userName.length() != 0 && password.length() != 0 && emailAddress.length() != 0 && phoneNumber.length() != 0 && department.length() != 0) {
+            visibility.set(true);  // Fix for a similar issue like the login screen
+
             authViewModel.signUp(userName, emailAddress, password, phoneNumber, department);
+        }
         else
             Toast.makeText(SignUpActivity.this, DATAERROR, Toast.LENGTH_SHORT).show();
     }

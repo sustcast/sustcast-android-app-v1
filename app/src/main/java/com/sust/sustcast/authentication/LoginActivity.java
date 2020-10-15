@@ -26,7 +26,7 @@ import static com.sust.sustcast.data.Constants.LOGINERROR;
 import static com.sust.sustcast.data.Constants.USERS;
 
 public class LoginActivity extends AppCompatActivity {
-    public ObservableBoolean visibilty = new ObservableBoolean(false);
+    public ObservableBoolean visibility = new ObservableBoolean(false);
     private AuthenticationViewModel authViewModel;
 
     @Override
@@ -76,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
 
         authViewModel.getSignError().observe(this, errorObserver -> {
             if (errorObserver) {
-                visibilty.set(false);
+                visibility.set(false);
                 Toast.makeText(LoginActivity.this, LOGINERROR, Toast.LENGTH_SHORT).show();
             }
         });
@@ -88,8 +88,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void signIn(String email, String password) {
-        visibilty.set(true);
-        if (email.length() != 0 && password.length() != 0) {
+
+        if (email.length() != 0 && password.length() != 0 && password.length() > 5) {
+            visibility.set(true);
             authViewModel.signIn(email, password);
         } else {
             Toast.makeText(LoginActivity.this, DATAERROR, Toast.LENGTH_SHORT).show();

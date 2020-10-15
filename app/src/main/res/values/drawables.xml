@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="exo_notification_pause">@drawable/play_button</drawable>
+    <drawable name="exo_notification_play">@drawable/pause_button</drawable>
+</resources>
