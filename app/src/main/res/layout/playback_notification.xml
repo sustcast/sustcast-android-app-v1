@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="0dp">
+
+    <!-- Customize on your own -->
+    <!-- Warning!!!  Custom view can look differ from device to device -->
+    <!-- Parent Layout of ImageView -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <!-- For some reason image above 56dp is cut in half on some devices!!  -->
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/sustcast_logo_circle_only" />
+    </LinearLayout>
+
+    <!-- Parent layout for holding the Title and the Body-->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <!-- TextView for Title -->
+        <TextView
+            android:id="@+id/notification_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/kollektif_bold"
+            android:text="@string/playback_paused"
+            android:textAllCaps="false"
+            android:textSize="18sp"
+            android:textColor="#000" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

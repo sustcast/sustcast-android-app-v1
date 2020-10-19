@@ -72,7 +72,7 @@ public class FeedbackFragment extends Fragment implements FirebaseAuth.AuthState
     public Intent visitFacebook() {
         try {
 
-            int versionCode = Objects.requireNonNull(getContext()).getPackageManager().getPackageInfo("com.facebook.katana", 0).versionCode;
+            int versionCode = getContext().getPackageManager().getPackageInfo("com.facebook.katana", 0).versionCode;
             if (versionCode >= 3002850) {
                 //newer versions of fb app
                 return new Intent(Intent.ACTION_VIEW, Uri.parse("fb://facewebmodal/f?href=" + FACEBOOK_PAGE_LINK));
