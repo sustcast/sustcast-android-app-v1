@@ -79,7 +79,7 @@ public class ExoHelper {
             Log.d(TAG, "Stopping exo....");
             exoPlayer.stop();
             //playerNotificationManager.setPlayer(null);
-            createCustomPlayerNotificationManger(null);
+            customPlayerNotificationManager.setPlayer(null);
             exoPlayer.release();
             exoPlayer = null;
             ToggleButton(false);
