@@ -25,10 +25,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sust.sustcast.R;
+import com.sust.sustcast.data.ButtonEvent;
 import com.sust.sustcast.data.IceUrl;
 import com.sust.sustcast.utils.ExoHelper;
 import com.sust.sustcast.utils.LoadBalancingUtil;
 import com.sust.sustcast.utils.NetworkInfoUtility;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -195,6 +200,29 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         unbinder.unbind();
         urlRef.removeEventListener(cListener);
         exoHelper.stopExo();
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(ButtonEvent event)
+    {
+        exoHelper.ToggleButton(event.isState());
+        // eventBusState = event.isState();
     }
 
 

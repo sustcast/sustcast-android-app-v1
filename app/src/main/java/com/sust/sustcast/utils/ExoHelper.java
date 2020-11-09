@@ -1,7 +1,6 @@
 package com.sust.sustcast.utils;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
+
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
+
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Button;
@@ -37,7 +36,10 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.sust.sustcast.R;
+import com.sust.sustcast.data.ButtonEvent;
 import com.sust.sustcast.fragment.FragmentHolder;
+
+import org.greenrobot.eventbus.EventBus;
 
 import static com.sust.sustcast.data.Constants.PAUSED;
 import static com.sust.sustcast.data.Constants.PLAYING;
@@ -52,7 +54,7 @@ public class ExoHelper {
     private Player.EventListener eventListener;
     private Button button;
     private PlayerNotificationManager playerNotificationManager;
-    private com.sust.sustcast.utils.PlayerNotificationManager customPlayerNotificationManager;
+    private com.sust.sustcast.utils.PlayerNotificationManager customPlayerNotificationManager; 
 
 
     public ExoHelper(Context context) {
@@ -70,9 +72,19 @@ public class ExoHelper {
         this.eventListener = eventListener;
         this.button = button;
 
-        createNotificationChannel();  // For creating notification channels.
+
     }
 
+
+    public ExoHelper(Context context, Player.EventListener eventListener, String fragmentName) {
+        if (exoPlayer != null) {
+            return;
+        }
+
+        this.context = context;
+        this.fragmentName = fragmentName;
+        this.eventListener = eventListener;
+    }
 
     public void stopExo() {
         if (exoPlayer != null) { //if exo is running
@@ -131,7 +143,9 @@ public class ExoHelper {
         }
         exoPlayer.prepare(mediaSource);
         exoPlayer.setPlayWhenReady(true);
-        ToggleButton(true);
+
+        //EventStatus(true);
+         ToggleButton(true);
         //setPlayerNotificationManager(exoPlayer);
         createCustomPlayerNotificationManger(exoPlayer);
 
@@ -150,6 +164,13 @@ public class ExoHelper {
             return PAUSED;
 
         }
+    }
+
+
+    public void EventStatus(boolean b)
+    {
+        EventBus.getDefault().post(new ButtonEvent(b));
+        Log.d(TAG, "ButtonEvent:" + b);
     }
 
 
@@ -191,25 +212,6 @@ public class ExoHelper {
 
 
 
-    private void createNotificationChannel() {
-
-
-        Log.d("In create channel: ", "yes");
-
-        String channel_id = "123";
-        NotificationManager notificationManager
-                = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT
-                >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel
-                    = new NotificationChannel(
-                    channel_id, "SUSTcast",
-                    NotificationManager.IMPORTANCE_LOW);
-            notificationManager.createNotificationChannel(
-                    notificationChannel);
-        }
-    }
-
 
     // Below is the normal PlayerNotificationManager. We are not using it.
 
@@ -217,7 +219,7 @@ public class ExoHelper {
     private void setPlayerNotificationManager(Player player) {
 
 
-        Log.d("Starting notification: ", "Yes");
+        Log.d(TAG, "Starting notification");
 
         playerNotificationManager = new PlayerNotificationManager(context, "123", 1234, mediaDescriptionAdapter);
         playerNotificationManager.setUseNavigationActions(false);
@@ -271,7 +273,6 @@ public class ExoHelper {
     };
 
 
-
     // CustomPlayerNotificationManager
 
 
@@ -282,7 +283,6 @@ public class ExoHelper {
         customPlayerNotificationManager.setSmallIcon(R.drawable.sustcast_logo_circle_only);
         customPlayerNotificationManager.setUseChronometer(false);
         customPlayerNotificationManager.setPlayer(player);
-
 
 
     }

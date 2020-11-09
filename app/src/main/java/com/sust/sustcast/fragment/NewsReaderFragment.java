@@ -1,6 +1,7 @@
 package com.sust.sustcast.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,13 @@ import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.sust.sustcast.R;
+import com.sust.sustcast.data.ButtonEvent;
 import com.sust.sustcast.utils.ExoHelper;
 import com.sust.sustcast.utils.NetworkInfoUtility;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -31,6 +37,7 @@ public class NewsReaderFragment extends Fragment {
     private Unbinder unbinder;
     private Button bPlay;
     View rootView;
+    private static final String TAG = "NewsReader";
 
     public NewsReaderFragment() {
     }
@@ -74,6 +81,9 @@ public class NewsReaderFragment extends Fragment {
     private void setButton() {
         bPlay.setOnClickListener(view -> {
 
+            Log.d(TAG, "setButton: " + isPlaying );
+
+
             if (!isPlaying) {
                 exoHelper.startExo(rootView.getContext().getString(R.string.bbc_news));
             } else {
@@ -92,4 +102,25 @@ public class NewsReaderFragment extends Fragment {
     }
 
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(ButtonEvent event)
+    {
+        exoHelper.ToggleButton(event.isState());
+
+    }
 }

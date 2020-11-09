@@ -21,6 +21,8 @@ public interface Constants {
     String AGREETOC = "Please agree to our policy & terms!";
     String PAUSED = "SUSTcast is paused";
     String PLAYING = "SUSTcast is playing";
+    String CHANNEL_ID = "123";
+    String CHANNEL_NAME = "SUSTcast";
 
     String[] DEPARTMENTS = new String[]{"ANP", "ARC", "BMB", "BNG", "BUS", "CEE", "CEP", "CHE", "CSE", "ECO", "EEE", "ENG", "FES", "FET", "GEB", "GEE", "IPE", "MAT", "MEE", "OCG", "PAD", "PHY", "PME", "PSS", "SCW", "SOC", "STA", "SWE"};
 

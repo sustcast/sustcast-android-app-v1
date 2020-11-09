@@ -1,9 +1,12 @@
 package com.sust.sustcast.fragment;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -29,6 +32,8 @@ import com.sust.sustcast.dialogs.SimpleAlertDialog;
 import com.sust.sustcast.utils.FontHelper;
 
 import static com.google.android.play.core.install.model.ActivityResult.RESULT_IN_APP_UPDATE_FAILED;
+import static com.sust.sustcast.data.Constants.CHANNEL_ID;
+import static com.sust.sustcast.data.Constants.CHANNEL_NAME;
 
 public class FragmentHolder extends AppCompatActivity {
 
@@ -67,6 +72,7 @@ public class FragmentHolder extends AppCompatActivity {
         //transaction.addToBackStack(null);
         transaction.commit();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +80,7 @@ public class FragmentHolder extends AppCompatActivity {
         context = this;
         FontHelper.adjustFontScale(context, getResources().getConfiguration());
 
+        createNotificationChannel();
 
         try {
             checkForUpdate();
@@ -208,6 +215,24 @@ public class FragmentHolder extends AppCompatActivity {
                 .setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
 
+    }
+
+    private void createNotificationChannel() {
+
+
+        Log.d(TAG, "In create channel");
+
+        NotificationManager notificationManager
+                = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT
+                >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel
+                    = new NotificationChannel(
+                    CHANNEL_ID, CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_LOW);
+            notificationManager.createNotificationChannel(
+                    notificationChannel);
+        }
     }
 
 

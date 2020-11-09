@@ -28,6 +28,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.DrawableRes;
@@ -49,6 +50,9 @@ import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.NotificationUtil;
 import com.google.android.exoplayer2.util.Util;
 import com.sust.sustcast.R;
+import com.sust.sustcast.data.ButtonEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -144,6 +148,8 @@ public class PlayerNotificationManager {
             }
         }
     }
+
+    private static final String TAG = "PlayerNotificationMgr";
 
     /**
      * The action which starts playback.
@@ -305,6 +311,7 @@ public class PlayerNotificationManager {
                 mediaDescriptionAdapter,
                 notificationListener);
     }
+
 
     public static PlayerNotificationManager createWithNotificationChannel(
             Context context,
@@ -962,8 +969,21 @@ public class PlayerNotificationManager {
                     controlDispatcher.dispatchSeekTo(player, player.getCurrentWindowIndex(), C.TIME_UNSET);
                 }
                 controlDispatcher.dispatchSetPlayWhenReady(player, /* playWhenReady= */ true);
+
+                EventBus.getDefault().post(new ButtonEvent(true));
+                Log.d(TAG, "ButtonEvent: True");
+
+
             } else if (ACTION_PAUSE.equals(action)) {
                 controlDispatcher.dispatchSetPlayWhenReady(player, /* playWhenReady= */ false);
+
+                if (player.getPlaybackState() == Player.STATE_READY)
+                {
+                    EventBus.getDefault().post(new ButtonEvent(false));
+                    Log.d(TAG, "ButtonEvent: False");
+                }
+
+
             } else if (ACTION_STOP.equals(action)) {
                 controlDispatcher.dispatchStop(player, /* reset= */ true);
             } else if (ACTION_DISMISS.equals(action)) {
