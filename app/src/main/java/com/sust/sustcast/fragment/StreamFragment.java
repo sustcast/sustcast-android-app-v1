@@ -94,6 +94,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 Log.i(TAG, "NETWORKERROR");
                 Toast.makeText(getContext(), rootView.getContext().getString(R.string.server_off), Toast.LENGTH_LONG).show();
                 exoHelper.ToggleButton(false);
+                exoHelper.StopNotification();
                 Crashlytics.logException(error);
 
             }
@@ -200,29 +201,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         unbinder.unbind();
         urlRef.removeEventListener(cListener);
         exoHelper.stopExo();
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-
-        EventBus.getDefault().unregister(this);
-        super.onStop();
-    }
-
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onEvent(ButtonEvent event)
-    {
-        exoHelper.ToggleButton(event.isState());
-        // eventBusState = event.isState();
     }
 
 

@@ -6,40 +6,56 @@
     android:orientation="horizontal"
     android:padding="0dp">
 
-    <!-- Customize on your own -->
-    <!-- Warning!!!  Custom view can look differ from device to device -->
-    <!-- Parent Layout of ImageView -->
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <!-- For some reason image above 56dp is cut in half on some devices!!  -->
         <ImageView
-            android:id="@+id/icon"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:id="@+id/notification_icon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:src="@drawable/sustcast_logo_circle_only" />
     </LinearLayout>
 
-    <!-- Parent layout for holding the Title and the Body-->
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:padding="5dp">
+        android:padding="6dp">
 
-        <!-- TextView for Title -->
+        <!-- For the color: https://stackoverflow.com/a/52016259/13296516 -->
         <TextView
             android:id="@+id/notification_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/kollektif_bold"
             android:text="@string/playback_paused"
             android:textAllCaps="false"
             android:textSize="18sp"
-            android:textColor="#000" />
+            style="@style/TextAppearance.Compat.Notification.Title"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:padding="12dp">
+        <ImageButton
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/notification_button"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:src="@drawable/exo_notification_play"
+            />
+
 
     </LinearLayout>
 

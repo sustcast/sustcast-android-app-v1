@@ -12,6 +12,7 @@ import android.net.Uri;
 
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -36,10 +37,8 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.sust.sustcast.R;
-import com.sust.sustcast.data.ButtonEvent;
 import com.sust.sustcast.fragment.FragmentHolder;
 
-import org.greenrobot.eventbus.EventBus;
 
 import static com.sust.sustcast.data.Constants.PAUSED;
 import static com.sust.sustcast.data.Constants.PLAYING;
@@ -54,7 +53,8 @@ public class ExoHelper {
     private Player.EventListener eventListener;
     private Button button;
     private PlayerNotificationManager playerNotificationManager;
-    private com.sust.sustcast.utils.PlayerNotificationManager customPlayerNotificationManager; 
+    private com.sust.sustcast.utils.PlayerNotificationManager customPlayerNotificationManager;
+    public boolean playBackState;
 
 
     public ExoHelper(Context context) {
@@ -75,16 +75,6 @@ public class ExoHelper {
 
     }
 
-
-    public ExoHelper(Context context, Player.EventListener eventListener, String fragmentName) {
-        if (exoPlayer != null) {
-            return;
-        }
-
-        this.context = context;
-        this.fragmentName = fragmentName;
-        this.eventListener = eventListener;
-    }
 
     public void stopExo() {
         if (exoPlayer != null) { //if exo is running
@@ -144,13 +134,24 @@ public class ExoHelper {
         exoPlayer.prepare(mediaSource);
         exoPlayer.setPlayWhenReady(true);
 
-        //EventStatus(true);
-         ToggleButton(true);
+        ToggleButton(true);
         //setPlayerNotificationManager(exoPlayer);
         createCustomPlayerNotificationManger(exoPlayer);
 
 
+         /*
+
+        exoPlayer.addListener(new Player.EventListener() {
+            @Override
+            public void onIsPlayingChanged(boolean isPlaying) {
+                playBackState = isPlaying;
+            }
+        });
+
+         */
+
     }
+
 
     public SimpleExoPlayer getPlayer() {
         return exoPlayer;
@@ -162,38 +163,12 @@ public class ExoHelper {
             return PLAYING;
         } else {
             return PAUSED;
-
         }
     }
 
 
-    public void EventStatus(boolean b)
-    {
-        EventBus.getDefault().post(new ButtonEvent(b));
-        Log.d(TAG, "ButtonEvent:" + b);
-    }
-
-
-    public static Bitmap drawableToBitmap(Drawable drawable) {  //Not needed if createCustomPlayerNotificationManger is used
-        Bitmap bitmap = null;
-
-        if (drawable instanceof BitmapDrawable) {
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            if (bitmapDrawable.getBitmap() != null) {
-                return bitmapDrawable.getBitmap();
-            }
-        }
-
-        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
-            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
-        } else {
-            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth() + 50, drawable.getIntrinsicHeight() + 50, Bitmap.Config.ARGB_8888);
-        }
-
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-        return bitmap;
+    public void StopNotification() {
+        customPlayerNotificationManager.setPlayer(null);
     }
 
 
@@ -210,71 +185,7 @@ public class ExoHelper {
     }
 
 
-
-
-
-    // Below is the normal PlayerNotificationManager. We are not using it.
-
-
-    private void setPlayerNotificationManager(Player player) {
-
-
-        Log.d(TAG, "Starting notification");
-
-        playerNotificationManager = new PlayerNotificationManager(context, "123", 1234, mediaDescriptionAdapter);
-        playerNotificationManager.setUseNavigationActions(false);
-        playerNotificationManager.setUsePlayPauseActions(true);
-        playerNotificationManager.setRewindIncrementMs(0);
-        playerNotificationManager.setFastForwardIncrementMs(0);
-        //playerNotificationManager.setColor(Color.rgb(254, 213, 0)); // Yellow Color from the logo & UI
-        playerNotificationManager.setUseChronometer(false);
-        playerNotificationManager.setSmallIcon(R.drawable.sustcast_logo_circle_only);
-        playerNotificationManager.setPlayer(player);
-
-    }
-
-    private PlayerNotificationManager.MediaDescriptionAdapter mediaDescriptionAdapter = new PlayerNotificationManager.MediaDescriptionAdapter() {
-        @Override
-        public String getCurrentSubText(Player player) {
-            return null;
-        }
-
-        @Override
-        public String getCurrentContentTitle(Player player) {
-            return NotificationContent();
-        }
-
-        @Override
-        public PendingIntent createCurrentContentIntent(Player player) {
-
-            Intent intent
-                    = new Intent(context, FragmentHolder.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP); // For opening current content
-            PendingIntent pendingIntent
-                    = PendingIntent.getActivity(
-                    context, 0, intent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-
-
-            return pendingIntent;
-        }
-
-
-        @Override
-        public String getCurrentContentText(Player player) {
-            return null;
-        }
-
-
-        @Override
-        public Bitmap getCurrentLargeIcon(Player player, PlayerNotificationManager.BitmapCallback callback) {
-            return drawableToBitmap(context.getDrawable(R.drawable.ic_logo));
-        }
-    };
-
-
     // CustomPlayerNotificationManager
-
 
     public void createCustomPlayerNotificationManger(Player player) {
 
@@ -283,7 +194,6 @@ public class ExoHelper {
         customPlayerNotificationManager.setSmallIcon(R.drawable.sustcast_logo_circle_only);
         customPlayerNotificationManager.setUseChronometer(false);
         customPlayerNotificationManager.setPlayer(player);
-
 
     }
 
@@ -328,5 +238,109 @@ public class ExoHelper {
 
 
     };
+
+
+    /*
+
+    public boolean isRunning()
+    {
+        return playBackState;
+    }
+
+       */
+
+    /*
+
+    public static Bitmap drawableToBitmap(Drawable drawable) {  //Not needed if createCustomPlayerNotificationManger is used
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if (bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+
+        if (drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth() + 50, drawable.getIntrinsicHeight() + 50, Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+     */
+
+
+    /*
+
+
+    // Below is the normal PlayerNotificationManager. We are not using it.
+
+
+    private void setPlayerNotificationManager(Player player) {
+
+
+        Log.d(TAG, "Starting notification");
+
+        playerNotificationManager = new PlayerNotificationManager(context, "123", 1234, mediaDescriptionAdapter);
+        playerNotificationManager.setUseNavigationActions(false);
+        playerNotificationManager.setUsePlayPauseActions(true);
+        playerNotificationManager.setRewindIncrementMs(0);
+        playerNotificationManager.setFastForwardIncrementMs(0);
+        //playerNotificationManager.setColor(Color.rgb(254, 213, 0)); // Yellow Color from the logo & UI
+        playerNotificationManager.setUseChronometer(false);
+        playerNotificationManager.setSmallIcon(R.drawable.sustcast_logo_circle_only);
+        playerNotificationManager.setPlayer(player);
+
+    }
+
+
+
+    private PlayerNotificationManager.MediaDescriptionAdapter mediaDescriptionAdapter = new PlayerNotificationManager.MediaDescriptionAdapter() {
+        @Override
+        public String getCurrentSubText(Player player) {
+            return null;
+        }
+
+        @Override
+        public String getCurrentContentTitle(Player player) {
+            return NotificationContent();
+        }
+
+        @Override
+        public PendingIntent createCurrentContentIntent(Player player) {
+
+            Intent intent
+                    = new Intent(context, FragmentHolder.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP); // For opening current content
+            PendingIntent pendingIntent
+                    = PendingIntent.getActivity(
+                    context, 0, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+            return pendingIntent;
+        }
+
+
+        @Override
+        public String getCurrentContentText(Player player) {
+            return null;
+        }
+
+
+        @Override
+        public Bitmap getCurrentLargeIcon(Player player, PlayerNotificationManager.BitmapCallback callback) {
+            return drawableToBitmap(context.getDrawable(R.drawable.ic_logo));
+        }
+    };
+
+ */
+
 
 }

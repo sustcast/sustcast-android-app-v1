@@ -50,9 +50,6 @@ import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.NotificationUtil;
 import com.google.android.exoplayer2.util.Util;
 import com.sust.sustcast.R;
-import com.sust.sustcast.data.ButtonEvent;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -63,6 +60,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.sust.sustcast.data.Constants.PAUSED;
 
 
 public class PlayerNotificationManager {
@@ -613,6 +612,8 @@ public class PlayerNotificationManager {
             stopNotification(/* dismissedByUser= */ false);
             return;
         }
+
+
         Notification notification = builder.build();
         notificationManager.notify(notificationId, notification);
         if (!isNotificationStarted) {
@@ -692,15 +693,19 @@ public class PlayerNotificationManager {
         // Configure dismiss action prior to API 21 ('x' button).
         mediaStyle.setShowCancelButton(!ongoing);
         mediaStyle.setCancelButtonIntent(dismissPendingIntent);
-        builder.setStyle(mediaStyle);
+        //builder.setStyle(mediaStyle);
 
         // Set intent which is sent if the user selects 'clear all'
         builder.setDeleteIntent(dismissPendingIntent);
 
-        builder.setCustomContentView(getCustomDesign()); //Custom Design.
 
-
-        //builder.setCustomBigContentView(getCustomDesign());  // Maybe somebody can use it :)
+        if (shouldShowPauseButton(player)) {
+            builder.setCustomContentView(getCustomPlayDesign()); //Custom Design.
+            builder.setCustomBigContentView(getCustomPlayDesign()); // For expanded state
+        } else {
+            builder.setCustomContentView(getCustomPauseDesign());
+            builder.setCustomBigContentView(getCustomPauseDesign());
+        }
 
 
         // Set notification properties from getters.
@@ -744,12 +749,58 @@ public class PlayerNotificationManager {
         return builder;
     }
 
-    private RemoteViews getCustomDesign() {
+    /*
+
+    private int isDarkMode()
+    {
+
+        return context.getResources().getConfiguration().uiMode & ( Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES);
+
+    }
+
+     */
+
+
+    private RemoteViews getCustomPlayDesign() {
+        RemoteViews remoteViews = new RemoteViews(
+                context.getPackageName(),
+                R.layout.playback_notification);
+        remoteViews.setImageViewResource(R.id.notification_icon, R.drawable.sustcast_logo_circle_only);
+
+        Intent playIntent = new Intent(ACTION_PAUSE).setPackage(context.getPackageName());
+
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        remoteViews.setImageViewResource(R.id.notification_button, R.drawable.exo_notification_pause);
+
+        remoteViews.setOnClickPendingIntent(R.id.notification_button, pendingIntent);
+
+        remoteViews.setTextViewText(R.id.notification_title, mediaDescriptionAdapter.getCurrentContentTitle(player));  // Notification Title
+
+        return remoteViews;
+    }
+
+
+    private RemoteViews getCustomPauseDesign() {
         RemoteViews remoteViews = new RemoteViews(
                 context.getPackageName(),
                 R.layout.playback_notification);
 
+        remoteViews.setImageViewResource(R.id.notification_icon, R.drawable.sustcast_logo_circle_only);
+
+        Intent playIntent = new Intent(ACTION_PLAY).setPackage(context.getPackageName());
+
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, playIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        remoteViews.setImageViewResource(R.id.notification_button, R.drawable.exo_notification_play);
+
+        remoteViews.setOnClickPendingIntent(R.id.notification_button, pendingIntent);
+
         remoteViews.setTextViewText(R.id.notification_title, mediaDescriptionAdapter.getCurrentContentTitle(player));  // Notification Title
+
+        //remoteViews.setTextViewText(R.id.notification_title, PAUSED);
 
         return remoteViews;
     }
@@ -953,6 +1004,8 @@ public class PlayerNotificationManager {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+
+            Log.d(TAG, "onReceive: " + "Yes");
             Player player = PlayerNotificationManager.this.player;
             if (player == null
                     || !isNotificationStarted
@@ -970,19 +1023,19 @@ public class PlayerNotificationManager {
                 }
                 controlDispatcher.dispatchSetPlayWhenReady(player, /* playWhenReady= */ true);
 
-                EventBus.getDefault().post(new ButtonEvent(true));
-                Log.d(TAG, "ButtonEvent: True");
-
 
             } else if (ACTION_PAUSE.equals(action)) {
                 controlDispatcher.dispatchSetPlayWhenReady(player, /* playWhenReady= */ false);
 
+
+                /*
+
                 if (player.getPlaybackState() == Player.STATE_READY)
                 {
-                    EventBus.getDefault().post(new ButtonEvent(false));
-                    Log.d(TAG, "ButtonEvent: False");
+
                 }
 
+                 */
 
             } else if (ACTION_STOP.equals(action)) {
                 controlDispatcher.dispatchStop(player, /* reset= */ true);
