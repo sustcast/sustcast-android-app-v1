@@ -1,5 +1,9 @@
 package com.sust.sustcast.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +38,7 @@ public class NewsReaderFragment extends Fragment {
     private Button bPlay;
     View rootView;
     private static final String TAG = "NewsReader";
+    private BroadcastReceiver receiver;
 
     public NewsReaderFragment() {
     }
@@ -75,10 +80,46 @@ public class NewsReaderFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("Paused");
+        intentFilter.addAction("Playing");
+
+        if (receiver == null) {
+            receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+
+                    if (intent.getAction().equals("Paused")) {
+                        Log.d(TAG, "onReceive: " + "Paused");
+                        exoHelper.ToggleButton(false);
+
+                    } else if (intent.getAction().equals("Playing")) {
+                        Log.d(TAG, "onReceive: " + "Playing");
+                        exoHelper.ToggleButton(true);
+                    } else {
+                        Log.d(TAG, "onReceive: " + "Nothing received!");
+                    }
+
+
+                }
+            };
+
+        } else {
+            Log.d(TAG, "onStart: " + "Receiver already registered");
+        }
+
+
+        getActivity().registerReceiver(receiver, intentFilter);
+    }
+
     private void setButton() {
         bPlay.setOnClickListener(view -> {
 
-            Log.d(TAG, "setButton: " + isPlaying );
+            Log.d(TAG, "setButton: " + isPlaying);
 
 
             if (!isPlaying) {
@@ -96,6 +137,19 @@ public class NewsReaderFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
         exoHelper.stopExo();
+
+
+        try {
+            if (receiver != null) {
+                Log.d(TAG, "onDestroyView");
+                getActivity().unregisterReceiver(receiver);
+            }
+        } catch (Exception exception) {
+            Log.d(TAG, "onDestroyView: " + "Exception!!");
+            Crashlytics.logException(exception);
+        }
+
+
     }
 
 

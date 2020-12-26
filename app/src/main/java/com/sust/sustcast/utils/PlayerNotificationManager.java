@@ -693,7 +693,7 @@ public class PlayerNotificationManager {
         // Configure dismiss action prior to API 21 ('x' button).
         mediaStyle.setShowCancelButton(!ongoing);
         mediaStyle.setCancelButtonIntent(dismissPendingIntent);
-        //builder.setStyle(mediaStyle);
+        //builder.setStyle(mediaStyle);  // We are not using it now!
 
         // Set intent which is sent if the user selects 'clear all'
         builder.setDeleteIntent(dismissPendingIntent);
@@ -758,6 +758,16 @@ public class PlayerNotificationManager {
 
     }
 
+     */
+
+
+
+    /*
+     *
+     * Below are the layouts for playing & paused states. You can customize these layouts to add more actions.
+     * If an action is added, add it inside the NotificationBroadcastReceiver class.
+     * You may need to receive the action via Broadcast Receivers found in the fragments.
+     *
      */
 
 
@@ -1005,7 +1015,7 @@ public class PlayerNotificationManager {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.d(TAG, "onReceive: " + "Yes");
+            Log.d(TAG, "onReceive");
             Player player = PlayerNotificationManager.this.player;
             if (player == null
                     || !isNotificationStarted
@@ -1023,19 +1033,21 @@ public class PlayerNotificationManager {
                 }
                 controlDispatcher.dispatchSetPlayWhenReady(player, /* playWhenReady= */ true);
 
+                Intent playIntent = new Intent("Playing").setPackage(context.getPackageName());
+                context.sendBroadcast(playIntent);
+
 
             } else if (ACTION_PAUSE.equals(action)) {
                 controlDispatcher.dispatchSetPlayWhenReady(player, /* playWhenReady= */ false);
 
 
-                /*
+                if (player.getPlaybackState() == Player.STATE_READY) {
 
-                if (player.getPlaybackState() == Player.STATE_READY)
-                {
+                    Intent playIntent = new Intent("Paused").setPackage(context.getPackageName());
+                    context.sendBroadcast(playIntent);
 
                 }
 
-                 */
 
             } else if (ACTION_STOP.equals(action)) {
                 controlDispatcher.dispatchStop(player, /* reset= */ true);

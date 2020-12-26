@@ -240,6 +240,16 @@ public class ExoHelper {
     };
 
 
+
+    /*
+     *
+     * You may need to edit some code in PlayerNotificationManager in order to work with the below methods
+     * As they are not needed for now, I'm commenting them out.
+     *
+     *
+     */
+
+
     /*
 
     public boolean isRunning()

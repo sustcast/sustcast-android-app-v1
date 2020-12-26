@@ -1,5 +1,9 @@
 package com.sust.sustcast.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -54,6 +58,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     private List<IceUrl> iceUrlList;
     private String title;
     private String token;
+    private BroadcastReceiver receiver;
 
     public StreamFragment() {
     }
@@ -191,11 +196,60 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("Paused");
+        intentFilter.addAction("Playing");
+
+        if (receiver == null) {
+            receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+
+                    if (intent.getAction().equals("Paused")) {
+                        Log.d(TAG, "onReceive: " + "Paused");
+                        exoHelper.ToggleButton(false);
+
+                    } else if (intent.getAction().equals("Playing")) {
+                        Log.d(TAG, "onReceive: " + "Playing");
+                        exoHelper.ToggleButton(true);
+                    } else {
+                        Log.d(TAG, "onReceive: " + "Nothing received!");
+                    }
+
+
+                }
+            };
+
+        } else {
+            Log.d(TAG, "onStart: " + "Receiver already registered");
+        }
+
+
+        getActivity().registerReceiver(receiver, intentFilter);
+    }
+
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
         urlRef.removeEventListener(cListener);
         exoHelper.stopExo();
+
+
+        try {
+            if (receiver != null) {
+                Log.d(TAG, "onDestroyView");
+                getActivity().unregisterReceiver(receiver);
+            }
+        } catch (Exception exception) {
+            Log.d(TAG, "onDestroyView: " + "Exception!!");
+            Crashlytics.logException(exception);
+        }
+
     }
 
 
