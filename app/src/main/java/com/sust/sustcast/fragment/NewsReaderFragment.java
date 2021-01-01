@@ -1,7 +1,11 @@
 package com.sust.sustcast.fragment;
 
-import android.graphics.drawable.Drawable;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +20,14 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.sust.sustcast.R;
 import com.sust.sustcast.utils.ExoHelper;
+import com.sust.sustcast.utils.NetworkInfoUtility;
+
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static com.sust.sustcast.data.Constants.CHECKNET;
+import static com.sust.sustcast.data.Constants.SERVEROFF;
 
 
 public class NewsReaderFragment extends Fragment {
@@ -28,6 +37,11 @@ public class NewsReaderFragment extends Fragment {
     private SimpleExoPlayer exoPlayer;
     private Unbinder unbinder;
     private Button bPlay;
+    View rootView;
+    private static final String TAG = "NewsReader";
+    private BroadcastReceiver receiver;
+    public String PLAY = "com.sust.sustcast.PLAY";
+    public String PAUSE = "com.sust.sustcast.PAUSE";
 
     public NewsReaderFragment() {
     }
@@ -44,48 +58,91 @@ public class NewsReaderFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_news_reader, container, false);
+        rootView = inflater.inflate(R.layout.fragment_news_reader, container, false);
         bPlay = rootView.findViewById(R.id.button_play);
         unbinder = ButterKnife.bind(this, rootView);
-
+        NetworkInfoUtility networkInfoUtility = new NetworkInfoUtility();
+        boolean net = networkInfoUtility.isNetWorkAvailableNow(getContext());
+        if (!net) {
+            Toast.makeText(getContext(), CHECKNET, Toast.LENGTH_LONG).show();
+        }
         exoHelper = new ExoHelper(getContext(), new Player.EventListener() {
             @Override
             public void onPlayerError(ExoPlaybackException error) {
                 Crashlytics.logException(error);
-                Toast.makeText(getContext(),getString(R.string.server_off),Toast.LENGTH_LONG).show();
+
+                if (!(getContext() == null))
+                {
+                    Toast.makeText(getContext(), SERVEROFF, Toast.LENGTH_LONG).show();
+                }
+
+                else
+                {
+                    Log.d(TAG, "onPlayerError: " + "Context is null");
+                }
+
+
+                exoHelper.ToggleButton(false);
+                exoHelper.StopNotification();
             }
-        });
+        }, bPlay, "NewsReader");
 
         isPlaying = true;
         setButton();
-        exoHelper.startExo(getString(R.string.bbc_news));
+        exoHelper.startExo(rootView.getContext().getString(R.string.bbc_news));
 
         return rootView;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(PAUSE);
+        intentFilter.addAction(PLAY);
+
+        if (receiver == null) {
+            receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+
+                    if (!(intent.getAction() == null)) {
+                        if (intent.getAction().equals(PAUSE)) {
+                            Log.d(TAG, "onReceive: " + "Paused");
+                            exoHelper.ToggleButton(false);
+
+                        } else if (intent.getAction().equals(PLAY)) {
+                            Log.d(TAG, "onReceive: " + "Playing");
+                            exoHelper.ToggleButton(true);
+                        }
+                    } else {
+                        Log.d(TAG, "onReceive: " + "Nothing received!");
+                    }
+
+
+                }
+            };
+
+            getActivity().registerReceiver(receiver, intentFilter);
+
+        } else {
+            Log.d(TAG, "onStart: " + "Receiver already registered");
+        }
+
+
+    }
+
     private void setButton() {
-
-        Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
-        bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-        bPlay.setText(R.string.now_playing);
-
         bPlay.setOnClickListener(view -> {
 
+            Log.d(TAG, "setButton: " + isPlaying);
+
+
             if (!isPlaying) {
-                exoHelper.startExo(getString(R.string.bbc_news));
-
-                Drawable img1 = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img1, null, null, null);
-                bPlay.setText(R.string.now_playing);
-
+                exoHelper.startExo(rootView.getContext().getString(R.string.bbc_news));
             } else {
-
                 exoHelper.stopExo();
-
-                Drawable img1 = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img1, null, null, null);
-                bPlay.setText(R.string.now_paused);
-
             }
 
             isPlaying = !isPlaying;
@@ -97,6 +154,18 @@ public class NewsReaderFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
         exoHelper.stopExo();
+
+
+        try {
+            if (receiver != null) {
+                getActivity().unregisterReceiver(receiver);
+            }
+        } catch (Exception exception) {
+            Log.d(TAG, "onDestroyView: " + "Exception!!");
+            Crashlytics.logException(exception);
+        }
+
+
     }
 
 

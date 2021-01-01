@@ -8,8 +8,11 @@ import android.content.Intent;
 import android.os.Build;
 import android.widget.RemoteViews;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.sust.sustcast.R;
@@ -23,6 +26,10 @@ public class FirebaseMessageReceiver
     // Override onMessageReceived() method to extract the
     // title and
     // body from the message passed in FCM
+
+    private DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference tokenRef;
+
     @Override
     public void
     onMessageReceived(RemoteMessage remoteMessage) {
@@ -48,6 +55,13 @@ public class FirebaseMessageReceiver
                     remoteMessage.getNotification().getTitle(),
                     remoteMessage.getNotification().getBody());
         }
+    }
+
+    @Override
+    public void onNewToken(@NonNull String token) {
+        tokenRef = rootRef.child("tokens");
+        tokenRef.push().setValue(token);
+
     }
 
     // Method to get the custom Design for the display of
@@ -131,4 +145,6 @@ public class FirebaseMessageReceiver
 
         notificationManager.notify(0, builder.build());
     }
+
+
 }

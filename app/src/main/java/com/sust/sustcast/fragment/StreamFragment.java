@@ -1,6 +1,9 @@
 package com.sust.sustcast.fragment;
 
-import android.graphics.drawable.Drawable;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,20 +22,17 @@ import androidx.fragment.app.Fragment;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Player;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.sust.sustcast.R;
 import com.sust.sustcast.data.IceUrl;
 import com.sust.sustcast.utils.ExoHelper;
 import com.sust.sustcast.utils.LoadBalancingUtil;
+import com.sust.sustcast.utils.NetworkInfoUtility;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,26 +40,28 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.sust.sustcast.data.Constants.CHECKNET;
+import static com.sust.sustcast.data.Constants.SERVEROFF;
+
 
 public class StreamFragment extends Fragment implements Player.EventListener {
 
     private static final String TAG = "StreamFragment";
-    private boolean isPlaying;
-
-    private DatabaseReference rootRef;
-    private DatabaseReference songReference;
-    private DatabaseReference urlRef;
     ChildEventListener cListener;
-
     Unbinder unbinder;
     Button bPlay;
     TextView tvPlaying;
-
     ExoHelper exoHelper;
-
+    private boolean isPlaying;
+    private DatabaseReference rootRef;
+    private DatabaseReference songReference;
+    private DatabaseReference urlRef;
     private List<IceUrl> iceUrlList;
     private String title;
     private String token;
+    private BroadcastReceiver receiver;
+    public String PLAY = "com.sust.sustcast.PLAY";
+    public String PAUSE = "com.sust.sustcast.PAUSE";
 
     public StreamFragment() {
     }
@@ -74,47 +77,54 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         if (getArguments() != null) {
 
         }
-        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-            @Override
-            public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                if (!task.isSuccessful()) {
-                    token = task.getException().getMessage();
-                    Log.w("FCM TOKEN Fail stream", task.getException());
-                } else {
-                    token = task.getResult().getToken();
-                    Log.i("FCM TOKEN stream", token);
-                }
-            }
-        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_stream, container, false);
-
         tvPlaying = rootView.findViewById(R.id.tv_track);
-        bPlay = rootView.findViewById(R.id.button_stream);
+        tvPlaying.setText(rootView.getContext().getString(R.string.metadata_loading));
+        NetworkInfoUtility networkInfoUtility = new NetworkInfoUtility();
+        boolean net = networkInfoUtility.isNetWorkAvailableNow(getContext());
 
-        setButton();
-        tvPlaying.setText(getString(R.string.metadata_loading));
+        bPlay = rootView.findViewById(R.id.button_stream);
+        unbinder = ButterKnife.bind(this, rootView);
 
         exoHelper = new ExoHelper(getContext(), new Player.EventListener() {
             @Override
             public void onPlayerError(ExoPlaybackException error) {
-                tvPlaying.setText(getString(R.string.server_off));
+                Log.i(TAG, "NETWORKERROR");
+
+                if (!(getContext() == null))
+                {
+                    Toast.makeText(getContext(), SERVEROFF, Toast.LENGTH_LONG).show();
+                }
+
+                else
+                {
+                    Log.d(TAG, "onPlayerError: " + "Context is null");
+                }
+
+
+                exoHelper.ToggleButton(false);
+                exoHelper.StopNotification();
                 Crashlytics.logException(error);
+
             }
-        });
+
+        }, bPlay, "Streaming");
 
         isPlaying = true;
-
+        setButton();
+        if (!net) {
+            exoHelper.ToggleButton(false);
+            Toast.makeText(rootView.getContext(), CHECKNET, Toast.LENGTH_LONG).show();
+            tvPlaying.setText(R.string.server_off);
+        }
         rootRef = FirebaseDatabase.getInstance().getReference(); //root database reference
         setServerUrlListners();
         setMetaDataListeners();
-
-        unbinder = ButterKnife.bind(this, rootView);
-
         startRadioOnCreate();
 
         return rootView;
@@ -152,7 +162,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     }
 
     private void setServerUrlListners() {
-        iceUrlList = new ArrayList<IceUrl>();
+        iceUrlList = new ArrayList<>();
 
         urlRef = rootRef.child("IcecastServer");
         cListener = urlRef.addChildEventListener(new ChildEventListener() {
@@ -186,30 +196,56 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     }
 
     private void setButton() {
-
-        Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
-        bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-        bPlay.setText(R.string.now_playing);
-
         bPlay.setOnClickListener(view -> {
             Log.d(TAG, "setButton: isplaying -> " + isPlaying);
 
             if (isPlaying) {
-                Drawable img1 = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img1, null, null, null);
-                bPlay.setText(R.string.now_paused);
-
                 exoHelper.stopExo();
             } else {
-                Drawable img1 = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
-                bPlay.setCompoundDrawablesWithIntrinsicBounds(img1, null, null, null);
-                bPlay.setText(R.string.now_playing);
-
                 exoHelper.startExo(LoadBalancingUtil.selectIceCastSource(iceUrlList).getUrl());
             }
-
             isPlaying = !isPlaying;
         });
+
+
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(PAUSE);
+        intentFilter.addAction(PLAY);
+
+        if (receiver == null) {
+            receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+
+                    if (!(intent.getAction() == null)) {
+                        if (intent.getAction().equals(PAUSE)) {
+                            Log.d(TAG, "onReceive: " + "Paused");
+                            exoHelper.ToggleButton(false);
+
+                        } else if (intent.getAction().equals(PLAY)) {
+                            Log.d(TAG, "onReceive: " + "Playing");
+                            exoHelper.ToggleButton(true);
+                        }
+                    } else {
+                        Log.d(TAG, "onReceive: " + "Nothing received!");
+                    }
+
+
+                }
+            };
+
+            getActivity().registerReceiver(receiver, intentFilter);
+
+        } else {
+            Log.d(TAG, "onStart: " + "Receiver already registered");
+        }
 
 
     }
@@ -219,6 +255,17 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         unbinder.unbind();
         urlRef.removeEventListener(cListener);
         exoHelper.stopExo();
+
+
+        try {
+            if (receiver != null) {
+                getActivity().unregisterReceiver(receiver);
+            }
+        } catch (Exception exception) {
+            Log.d(TAG, "onDestroyView: " + "Exception!!");
+            Crashlytics.logException(exception);
+        }
+
     }
 
 
