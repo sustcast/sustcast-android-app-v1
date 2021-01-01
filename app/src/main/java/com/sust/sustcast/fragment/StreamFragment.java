@@ -41,6 +41,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 import static com.sust.sustcast.data.Constants.CHECKNET;
+import static com.sust.sustcast.data.Constants.SERVEROFF;
 
 
 public class StreamFragment extends Fragment implements Player.EventListener {
@@ -59,6 +60,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     private String title;
     private String token;
     private BroadcastReceiver receiver;
+    public String PLAY = "com.sust.sustcast.PLAY";
+    public String PAUSE = "com.sust.sustcast.PAUSE";
 
     public StreamFragment() {
     }
@@ -92,7 +95,18 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             @Override
             public void onPlayerError(ExoPlaybackException error) {
                 Log.i(TAG, "NETWORKERROR");
-                Toast.makeText(getContext(), rootView.getContext().getString(R.string.server_off), Toast.LENGTH_LONG).show();
+
+                if (!(getContext() == null))
+                {
+                    Toast.makeText(getContext(), SERVEROFF, Toast.LENGTH_LONG).show();
+                }
+
+                else
+                {
+                    Log.d(TAG, "onPlayerError: " + "Context is null");
+                }
+
+
                 exoHelper.ToggleButton(false);
                 exoHelper.StopNotification();
                 Crashlytics.logException(error);
@@ -202,21 +216,23 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         super.onStart();
 
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction("Paused");
-        intentFilter.addAction("Playing");
+        intentFilter.addAction(PAUSE);
+        intentFilter.addAction(PLAY);
 
         if (receiver == null) {
             receiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
 
-                    if (intent.getAction().equals("Paused")) {
-                        Log.d(TAG, "onReceive: " + "Paused");
-                        exoHelper.ToggleButton(false);
+                    if (!(intent.getAction() == null)) {
+                        if (intent.getAction().equals(PAUSE)) {
+                            Log.d(TAG, "onReceive: " + "Paused");
+                            exoHelper.ToggleButton(false);
 
-                    } else if (intent.getAction().equals("Playing")) {
-                        Log.d(TAG, "onReceive: " + "Playing");
-                        exoHelper.ToggleButton(true);
+                        } else if (intent.getAction().equals(PLAY)) {
+                            Log.d(TAG, "onReceive: " + "Playing");
+                            exoHelper.ToggleButton(true);
+                        }
                     } else {
                         Log.d(TAG, "onReceive: " + "Nothing received!");
                     }
@@ -225,12 +241,13 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 }
             };
 
+            getActivity().registerReceiver(receiver, intentFilter);
+
         } else {
             Log.d(TAG, "onStart: " + "Receiver already registered");
         }
 
 
-        getActivity().registerReceiver(receiver, intentFilter);
     }
 
     public void onDestroyView() {
@@ -242,7 +259,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
         try {
             if (receiver != null) {
-                Log.d(TAG, "onDestroyView");
                 getActivity().unregisterReceiver(receiver);
             }
         } catch (Exception exception) {

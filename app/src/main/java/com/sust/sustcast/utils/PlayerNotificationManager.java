@@ -188,6 +188,9 @@ public class PlayerNotificationManager {
      */
     private static final String ACTION_DISMISS = "com.google.android.exoplayer.dismiss";
 
+    public String PLAY = "com.sust.sustcast.PLAY";
+    public String PAUSE = "com.sust.sustcast.PAUSE";
+
     // Internal messages.
 
     private static final int MSG_START_OR_UPDATE_NOTIFICATION = 0;
@@ -1015,7 +1018,7 @@ public class PlayerNotificationManager {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.d(TAG, "onReceive");
+            //Log.d(TAG, "onReceive");
             Player player = PlayerNotificationManager.this.player;
             if (player == null
                     || !isNotificationStarted
@@ -1033,7 +1036,7 @@ public class PlayerNotificationManager {
                 }
                 controlDispatcher.dispatchSetPlayWhenReady(player, /* playWhenReady= */ true);
 
-                Intent playIntent = new Intent("Playing").setPackage(context.getPackageName());
+                Intent playIntent = new Intent(PLAY).setPackage(context.getPackageName());
                 context.sendBroadcast(playIntent);
 
 
@@ -1043,8 +1046,8 @@ public class PlayerNotificationManager {
 
                 if (player.getPlaybackState() == Player.STATE_READY) {
 
-                    Intent playIntent = new Intent("Paused").setPackage(context.getPackageName());
-                    context.sendBroadcast(playIntent);
+                    Intent pauseIntent = new Intent(PAUSE).setPackage(context.getPackageName());
+                    context.sendBroadcast(pauseIntent);
 
                 }
 
