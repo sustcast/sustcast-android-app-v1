@@ -17,10 +17,9 @@ import androidx.fragment.app.Fragment;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.sust.sustcast.R;
 import com.sust.sustcast.utils.ExoHelper;
-import com.sust.sustcast.utils.NetworkInfoUtility;
+import com.sust.sustcast.utils.NetworkUtil;
 
 
 import butterknife.ButterKnife;
@@ -34,7 +33,6 @@ public class NewsReaderFragment extends Fragment {
 
     boolean isPlaying;
     ExoHelper exoHelper;
-    private SimpleExoPlayer exoPlayer;
     private Unbinder unbinder;
     private Button bPlay;
     View rootView;
@@ -42,6 +40,7 @@ public class NewsReaderFragment extends Fragment {
     private BroadcastReceiver receiver;
     public String PLAY = "com.sust.sustcast.PLAY";
     public String PAUSE = "com.sust.sustcast.PAUSE";
+    public String NOINTERNET = "com.sust.sustcast.NOINTERNET";
 
     public NewsReaderFragment() {
     }
@@ -61,29 +60,30 @@ public class NewsReaderFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_news_reader, container, false);
         bPlay = rootView.findViewById(R.id.button_play);
         unbinder = ButterKnife.bind(this, rootView);
-        NetworkInfoUtility networkInfoUtility = new NetworkInfoUtility();
-        boolean net = networkInfoUtility.isNetWorkAvailableNow(getContext());
-        if (!net) {
-            Toast.makeText(getContext(), CHECKNET, Toast.LENGTH_LONG).show();
-        }
+
+        NetworkUtil.checkNetworkInfo(rootView.getContext(), type -> {
+            if (!type) {
+                Log.d(TAG, "onCreateView: " + "No internet");
+                Toast.makeText(rootView.getContext(), CHECKNET, Toast.LENGTH_LONG).show();
+                Intent noInternet = new Intent(NOINTERNET).setPackage(rootView.getContext().getPackageName());
+                rootView.getContext().sendBroadcast(noInternet);
+            }
+        });
+
+
         exoHelper = new ExoHelper(getContext(), new Player.EventListener() {
             @Override
             public void onPlayerError(ExoPlaybackException error) {
-                Crashlytics.logException(error);
+                //Crashlytics.logException(error);
 
-                if (!(getContext() == null))
-                {
+                if (!(getContext() == null)) {
                     Toast.makeText(getContext(), SERVEROFF, Toast.LENGTH_LONG).show();
-                }
-
-                else
-                {
+                    exoHelper.ToggleButton(false);
+                    exoHelper.StopNotification();
+                } else {
                     Log.d(TAG, "onPlayerError: " + "Context is null");
                 }
 
-
-                exoHelper.ToggleButton(false);
-                exoHelper.StopNotification();
             }
         }, bPlay, "NewsReader");
 
@@ -101,6 +101,7 @@ public class NewsReaderFragment extends Fragment {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(PAUSE);
         intentFilter.addAction(PLAY);
+        intentFilter.addAction(NOINTERNET);
 
         if (receiver == null) {
             receiver = new BroadcastReceiver() {
@@ -116,10 +117,13 @@ public class NewsReaderFragment extends Fragment {
                             Log.d(TAG, "onReceive: " + "Playing");
                             exoHelper.ToggleButton(true);
                         }
+                        else if (intent.getAction().equals(NOINTERNET)) {
+                            exoHelper.ToggleButton(false);
+                            exoHelper.stopExo();
+                        }
                     } else {
                         Log.d(TAG, "onReceive: " + "Nothing received!");
                     }
-
 
                 }
             };
@@ -139,7 +143,7 @@ public class NewsReaderFragment extends Fragment {
             Log.d(TAG, "setButton: " + isPlaying);
 
 
-            if (!isPlaying) {
+            if (isPlaying) {
                 exoHelper.startExo(rootView.getContext().getString(R.string.bbc_news));
             } else {
                 exoHelper.stopExo();

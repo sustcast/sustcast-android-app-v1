@@ -116,6 +116,7 @@
                 app:boxStrokeColor="@color/grey300"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
+                app:passwordToggleEnabled="true"
                 app:layout_constraintTop_toBottomOf="@id/outlinedEmailField">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -123,7 +124,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/kollektif"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout

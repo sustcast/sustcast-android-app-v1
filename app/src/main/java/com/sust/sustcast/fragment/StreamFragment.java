@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,7 +21,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Player;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -30,9 +30,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sust.sustcast.R;
 import com.sust.sustcast.data.IceUrl;
+import com.sust.sustcast.services.MusicPlayerService;
 import com.sust.sustcast.utils.ExoHelper;
 import com.sust.sustcast.utils.LoadBalancingUtil;
-import com.sust.sustcast.utils.NetworkInfoUtility;
+import com.sust.sustcast.utils.NetworkUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     Unbinder unbinder;
     Button bPlay;
     TextView tvPlaying;
-    ExoHelper exoHelper;
     private boolean isPlaying;
     private DatabaseReference rootRef;
     private DatabaseReference songReference;
@@ -62,6 +62,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     private BroadcastReceiver receiver;
     public String PLAY = "com.sust.sustcast.PLAY";
     public String PAUSE = "com.sust.sustcast.PAUSE";
+    public String ERROR = "com.sust.sustcast.ERROR";
+    public String NOINTERNET = "com.sust.sustcast.NOINTERNET";
 
     public StreamFragment() {
     }
@@ -85,43 +87,26 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         View rootView = inflater.inflate(R.layout.fragment_stream, container, false);
         tvPlaying = rootView.findViewById(R.id.tv_track);
         tvPlaying.setText(rootView.getContext().getString(R.string.metadata_loading));
-        NetworkInfoUtility networkInfoUtility = new NetworkInfoUtility();
-        boolean net = networkInfoUtility.isNetWorkAvailableNow(getContext());
+
+
+        NetworkUtil.checkNetworkInfo(rootView.getContext(), type -> {
+            if (!type) {
+
+                Log.d(TAG, "onCreateView: " + "No internet");
+                Toast.makeText(rootView.getContext(), CHECKNET, Toast.LENGTH_LONG).show();
+                Intent noInternet = new Intent(NOINTERNET).setPackage(rootView.getContext().getPackageName());
+                rootView.getContext().sendBroadcast(noInternet);
+            }
+        });
+
 
         bPlay = rootView.findViewById(R.id.button_stream);
         unbinder = ButterKnife.bind(this, rootView);
 
-        exoHelper = new ExoHelper(getContext(), new Player.EventListener() {
-            @Override
-            public void onPlayerError(ExoPlaybackException error) {
-                Log.i(TAG, "NETWORKERROR");
-
-                if (!(getContext() == null))
-                {
-                    Toast.makeText(getContext(), SERVEROFF, Toast.LENGTH_LONG).show();
-                }
-
-                else
-                {
-                    Log.d(TAG, "onPlayerError: " + "Context is null");
-                }
-
-
-                exoHelper.ToggleButton(false);
-                exoHelper.StopNotification();
-                Crashlytics.logException(error);
-
-            }
-
-        }, bPlay, "Streaming");
-
         isPlaying = true;
         setButton();
-        if (!net) {
-            exoHelper.ToggleButton(false);
-            Toast.makeText(rootView.getContext(), CHECKNET, Toast.LENGTH_LONG).show();
-            tvPlaying.setText(R.string.server_off);
-        }
+
+
         rootRef = FirebaseDatabase.getInstance().getReference(); //root database reference
         setServerUrlListners();
         setMetaDataListeners();
@@ -130,6 +115,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         return rootView;
     }
 
+
     private void startRadioOnCreate() {
         final Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() {
@@ -137,7 +123,15 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             public void run() {
                 if (iceUrlList.size() > 0) {
                     Log.d(TAG, "start radio on create");
-                    exoHelper.startExo(LoadBalancingUtil.selectIceCastSource(iceUrlList).getUrl());
+
+                    if (getContext() != null) {
+                        Intent intent = new Intent(getContext(), MusicPlayerService.class);
+                        intent.putExtra("url", LoadBalancingUtil.selectIceCastSource(iceUrlList).getUrl());
+                        getContext().startService(intent);
+                    } else {
+                        Log.d(TAG, "run: " + "Context is null");
+                    }
+
                 } else {
                     startRadioOnCreate();
                 }
@@ -199,10 +193,15 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         bPlay.setOnClickListener(view -> {
             Log.d(TAG, "setButton: isplaying -> " + isPlaying);
 
+            Intent intent = new Intent(getContext(), MusicPlayerService.class);
             if (isPlaying) {
-                exoHelper.stopExo();
+                getContext().stopService(intent);
+                ToggleButton(false);
             } else {
-                exoHelper.startExo(LoadBalancingUtil.selectIceCastSource(iceUrlList).getUrl());
+                intent.putExtra("url", LoadBalancingUtil.selectIceCastSource(iceUrlList).getUrl());
+                getContext().startService(intent);
+                ToggleButton(true);
+
             }
             isPlaying = !isPlaying;
         });
@@ -218,6 +217,8 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(PAUSE);
         intentFilter.addAction(PLAY);
+        intentFilter.addAction(ERROR);
+        intentFilter.addAction(NOINTERNET);
 
         if (receiver == null) {
             receiver = new BroadcastReceiver() {
@@ -227,11 +228,17 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                     if (!(intent.getAction() == null)) {
                         if (intent.getAction().equals(PAUSE)) {
                             Log.d(TAG, "onReceive: " + "Paused");
-                            exoHelper.ToggleButton(false);
-
+                            ToggleButton(false);
                         } else if (intent.getAction().equals(PLAY)) {
                             Log.d(TAG, "onReceive: " + "Playing");
-                            exoHelper.ToggleButton(true);
+                            ToggleButton(true);
+                        } else if (intent.getAction().equals(ERROR)) {
+                            ToggleButton(false);
+                            Toast.makeText(context, SERVEROFF, Toast.LENGTH_SHORT).show();
+                            Intent intent1 = new Intent(getContext(), MusicPlayerService.class);
+                            getContext().stopService(intent1);
+                        } else if (intent.getAction().equals(NOINTERNET)) {
+                            ToggleButton(false);
                         }
                     } else {
                         Log.d(TAG, "onReceive: " + "Nothing received!");
@@ -250,11 +257,26 @@ public class StreamFragment extends Fragment implements Player.EventListener {
 
     }
 
+
+    public void ToggleButton(boolean state) {
+        if (state) {
+            Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
+            bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+            bPlay.setText(R.string.now_playing);
+        } else {
+            Drawable img1 = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
+            bPlay.setCompoundDrawablesWithIntrinsicBounds(img1, null, null, null);
+            bPlay.setText(R.string.server_off);
+        }
+    }
+
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
         urlRef.removeEventListener(cListener);
-        exoHelper.stopExo();
+
+        Intent intent = new Intent(getContext(), MusicPlayerService.class);
+        getContext().stopService(intent);
 
 
         try {

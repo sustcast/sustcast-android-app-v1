@@ -36,6 +36,8 @@ public class LoginActivity extends AppCompatActivity {
         ActivityLoginBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         binding.setLoginActivity(this);
 
+        /*
+
         binding.etEmail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -68,6 +70,9 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+         */
+
         authViewModel = new ViewModelProvider(this).get(AuthenticationViewModel.class);
         authViewModel.getAuthenticatedUser().observe(this, authenticatedUser -> {
             startActivity(new Intent(LoginActivity.this, FragmentHolder.class).putExtra(USERS, authenticatedUser));

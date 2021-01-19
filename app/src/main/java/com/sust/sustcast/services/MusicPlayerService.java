@@ -1,22 +1,24 @@
-package com.sust.sustcast.utils;
+package com.sust.sustcast.services;
 
-
+import android.app.Notification;
 import android.app.PendingIntent;
+import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-
 import android.os.Handler;
+import android.os.IBinder;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.Toast;
-
 
 import androidx.annotation.Nullable;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.exoplayer2.C;
+import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -36,70 +38,69 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.sust.sustcast.R;
 import com.sust.sustcast.fragment.FragmentHolder;
+import com.sust.sustcast.utils.PlayerNotificationManager;
 
-
+import static com.sust.sustcast.R.drawable.sustcast_logo_circle_only;
+import static com.sust.sustcast.data.Constants.CHANNEL_ID;
 import static com.sust.sustcast.data.Constants.PAUSED;
 import static com.sust.sustcast.data.Constants.PLAYING;
 
 
-public class ExoHelper {
-    private static final String TAG = "ExoHelper";
-    private String iceURL;
-    private Context context;
-    private String fragmentName;
+public class MusicPlayerService extends Service implements Player.EventListener {
+
+    public static final String TAG = "MusicPlayerService";
+    public String PLAY = "com.sust.sustcast.PLAY";
+    public String PAUSE = "com.sust.sustcast.PAUSE";
+    public String ERROR = "com.sust.sustcast.ERROR";
     private SimpleExoPlayer exoPlayer;
     private Player.EventListener eventListener;
-    private Button button;
     private com.sust.sustcast.utils.PlayerNotificationManager customPlayerNotificationManager;
+    private String iceURL;
+
+    private BroadcastReceiver receiver;
+
+    private Context context;
 
 
-    public ExoHelper(Context context) {
-        this.context = context;
-    }
-
-    public ExoHelper(Context context, Player.EventListener eventListener, Button button, String fragmentName) {
-        if (exoPlayer != null) {
-            return;
-        }
-
-
-        this.fragmentName = fragmentName; // Name of the current fragment. Use in PlayerNotificationManager.MediaDescriptionAdapter
-        this.context = context;
-        this.eventListener = eventListener;
-        this.button = button;
-
-
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        context = this;
     }
 
 
-    public void stopExo() {
-        if (exoPlayer != null) { //if exo is running
-            Log.d(TAG, "Stopping exo....");
-            exoPlayer.stop();
-            exoPlayer.setPlayWhenReady(false);
-            customPlayerNotificationManager.setPlayer(null);
-            exoPlayer.release();
-            exoPlayer = null;
-            ToggleButton(false);
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+        startExo(intent.getStringExtra("url"));
+
+        RegisterReceiver();
+
+        Log.d(TAG, "Starting MusicPlayerService");
 
 
-        } else {
-            Log.d(TAG, "Can't stop because No exoplayer is running");
-        }
+        return START_STICKY;
     }
 
     public void startExo(String newUrl) {
         if (newUrl == null || newUrl.isEmpty()) {
             Log.d(TAG, "startExo: empty url");
             Toast.makeText(context, R.string.server_off, Toast.LENGTH_SHORT).show();
-            ToggleButton(false); // show pause button
             return;
         }
+
 
         if (exoPlayer != null) {
             Log.d(TAG, "startExo: Exo is already running now");
             return;
         }
+
 
         iceURL = newUrl;
 
@@ -138,51 +139,41 @@ public class ExoHelper {
                 .build();
 
         exoPlayer.setAudioAttributes(audioAttributes, true);
+        exoPlayer.addListener(new Player.EventListener() {
+            @Override
+            public void onPlayerError(ExoPlaybackException error) {
 
-        ToggleButton(true);
+                Log.d(TAG, "onPlayerError: ");
+                Intent errorIntent = new Intent(ERROR).setPackage(context.getPackageName());
+                context.sendBroadcast(errorIntent);
+                stopForeground(false);
+            }
+        });
+
         createCustomPlayerNotificationManger(exoPlayer);
 
-
     }
 
-
-    public SimpleExoPlayer getPlayer() {
-        return exoPlayer;
-    }
-
-    public String NotificationContent() {
-
-        if (exoPlayer.getPlayWhenReady()) {  // Better than isPlaying
-            return PLAYING;
-        } else {
-            return PAUSED;
-        }
-    }
-
-
-    public void StopNotification() {
-        customPlayerNotificationManager.setPlayer(null);
-    }
-
-
-    public void ToggleButton(boolean state) {
-        if (state) {
-            Drawable img = button.getContext().getResources().getDrawable(R.drawable.play_button);
-            button.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
-            button.setText(R.string.now_playing);
-        } else {
-            Drawable img1 = button.getContext().getResources().getDrawable(R.drawable.pause_button);
-            button.setCompoundDrawablesWithIntrinsicBounds(img1, null, null, null);
-            button.setText(R.string.server_off);
-        }
-    }
-
-
-    // CustomPlayerNotificationManager
 
     public void createCustomPlayerNotificationManger(Player player) {
 
-        customPlayerNotificationManager = new com.sust.sustcast.utils.PlayerNotificationManager(context, "123", 1234, mediaDescriptionAdapter1);
+        customPlayerNotificationManager = new com.sust.sustcast.utils.PlayerNotificationManager(context, "123", 1234, mediaDescriptionAdapter1, new PlayerNotificationManager.NotificationListener() {
+            @Override
+            public void onNotificationCancelled(int notificationId, boolean dismissedByUser) {
+                stopForeground(true);
+            }
+
+
+            @Override
+            public void onNotificationPosted(int notificationId, Notification notification, boolean ongoing) {
+
+
+                startForeground(notificationId, notification);
+
+                Log.d(TAG, "onNotificationPosted: " + notificationId);
+            }
+        });
+
         customPlayerNotificationManager.setUseNavigationActions(false);
         customPlayerNotificationManager.setSmallIcon(R.drawable.sustcast_logo_circle_only);
         customPlayerNotificationManager.setUseChronometer(false);
@@ -231,5 +222,89 @@ public class ExoHelper {
 
 
     };
+
+    public String NotificationContent() {
+
+        if (exoPlayer.getPlayWhenReady()) {  // Better than isPlaying
+            return PLAYING;
+        } else {
+            return PAUSED;
+        }
+    }
+
+    public void stopExo() {
+        if (exoPlayer != null) { //if exo is running
+            Log.d(TAG, "Stopping exo....");
+            exoPlayer.stop();
+            customPlayerNotificationManager.setPlayer(null);
+            exoPlayer.release();
+            exoPlayer = null;
+
+
+        } else {
+            Log.d(TAG, "Can't stop because No exoplayer is running");
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        stopExo();
+
+        try {
+            if (receiver != null) {
+                context.unregisterReceiver(receiver);
+            }
+        } catch (Exception exception) {
+            Log.d(TAG, "onDestroyView: " + "Exception!!");
+            Crashlytics.logException(exception);
+        }
+
+        Log.d(TAG, "onDestroy: ");
+
+    }
+
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        super.onTaskRemoved(rootIntent);
+        Log.d(TAG, "onTaskRemoved: ");
+    }
+
+
+    public void RegisterReceiver() {
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(PAUSE);
+        intentFilter.addAction(PLAY);
+
+        if (receiver == null) {
+            receiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+
+                    if (!(intent.getAction() == null)) {
+                        if (intent.getAction().equals(PAUSE)) {
+                            Log.d(TAG, "onReceive: " + "Paused");
+                            stopForeground(false);
+                        }
+                    } else {
+                        Log.d(TAG, "onReceive: " + "Nothing received!");
+                    }
+
+
+                }
+            };
+
+            context.registerReceiver(receiver, intentFilter);
+
+        } else {
+            Log.d(TAG, "onStart: " + "Receiver already registered");
+        }
+
+
+    }
 
 }
