@@ -12,17 +12,14 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -40,8 +37,6 @@ import com.sust.sustcast.R;
 import com.sust.sustcast.fragment.FragmentHolder;
 import com.sust.sustcast.utils.PlayerNotificationManager;
 
-import static com.sust.sustcast.R.drawable.sustcast_logo_circle_only;
-import static com.sust.sustcast.data.Constants.CHANNEL_ID;
 import static com.sust.sustcast.data.Constants.PAUSED;
 import static com.sust.sustcast.data.Constants.PLAYING;
 
@@ -49,11 +44,9 @@ import static com.sust.sustcast.data.Constants.PLAYING;
 public class MusicPlayerService extends Service implements Player.EventListener {
 
     public static final String TAG = "MusicPlayerService";
-    public String PLAY = "com.sust.sustcast.PLAY";
     public String PAUSE = "com.sust.sustcast.PAUSE";
     public String ERROR = "com.sust.sustcast.ERROR";
     private SimpleExoPlayer exoPlayer;
-    private Player.EventListener eventListener;
     private com.sust.sustcast.utils.PlayerNotificationManager customPlayerNotificationManager;
     private String iceURL;
 
@@ -91,7 +84,8 @@ public class MusicPlayerService extends Service implements Player.EventListener 
     public void startExo(String newUrl) {
         if (newUrl == null || newUrl.isEmpty()) {
             Log.d(TAG, "startExo: empty url");
-            Toast.makeText(context, R.string.server_off, Toast.LENGTH_SHORT).show();
+            Intent errorIntent = new Intent(ERROR).setPackage(context.getPackageName());
+            context.sendBroadcast(errorIntent);
             return;
         }
 
@@ -125,28 +119,29 @@ public class MusicPlayerService extends Service implements Player.EventListener 
         });
 
         exoPlayer = ExoPlayerFactory.newSimpleInstance(context, defaultTrackSelector);
-
-        if (eventListener != null) {
-            exoPlayer.addListener(eventListener);
-        }
         exoPlayer.prepare(mediaSource);
         exoPlayer.setPlayWhenReady(true);
         exoPlayer.setHandleWakeLock(true);
 
+        /*
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
                 .setUsage(C.USAGE_MEDIA)
                 .setContentType(C.CONTENT_TYPE_MUSIC)
                 .build();
 
         exoPlayer.setAudioAttributes(audioAttributes, true);
+         */
+
         exoPlayer.addListener(new Player.EventListener() {
             @Override
-            public void onPlayerError(ExoPlaybackException error) {
+            public void onPlayerError(ExoPlaybackException exception) {
 
                 Log.d(TAG, "onPlayerError: ");
                 Intent errorIntent = new Intent(ERROR).setPackage(context.getPackageName());
                 context.sendBroadcast(errorIntent);
                 stopForeground(false);
+                Crashlytics.logException(exception);
+
             }
         });
 
@@ -166,11 +161,7 @@ public class MusicPlayerService extends Service implements Player.EventListener 
 
             @Override
             public void onNotificationPosted(int notificationId, Notification notification, boolean ongoing) {
-
-
                 startForeground(notificationId, notification);
-
-                Log.d(TAG, "onNotificationPosted: " + notificationId);
             }
         });
 
@@ -196,7 +187,7 @@ public class MusicPlayerService extends Service implements Player.EventListener 
 
         @Override
         public String getCurrentContentTitle(Player player) {
-            return NotificationContent(); // Title of the notification
+            return NotificationTitle(); // Title of the notification
         }
 
         @Override
@@ -223,7 +214,7 @@ public class MusicPlayerService extends Service implements Player.EventListener 
 
     };
 
-    public String NotificationContent() {
+    public String NotificationTitle() {
 
         if (exoPlayer.getPlayWhenReady()) {  // Better than isPlaying
             return PLAYING;
@@ -267,18 +258,10 @@ public class MusicPlayerService extends Service implements Player.EventListener 
     }
 
 
-    @Override
-    public void onTaskRemoved(Intent rootIntent) {
-        super.onTaskRemoved(rootIntent);
-        Log.d(TAG, "onTaskRemoved: ");
-    }
-
-
     public void RegisterReceiver() {
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(PAUSE);
-        intentFilter.addAction(PLAY);
 
         if (receiver == null) {
             receiver = new BroadcastReceiver() {
@@ -293,8 +276,6 @@ public class MusicPlayerService extends Service implements Player.EventListener 
                     } else {
                         Log.d(TAG, "onReceive: " + "Nothing received!");
                     }
-
-
                 }
             };
 

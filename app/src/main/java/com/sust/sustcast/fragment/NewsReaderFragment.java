@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,11 +16,9 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.Player;
 import com.sust.sustcast.R;
-import com.sust.sustcast.utils.ExoHelper;
-import com.sust.sustcast.utils.NetworkUtil;
+import com.sust.sustcast.services.MusicPlayerService;
+import com.sust.sustcast.utils.ConnectionLiveData;
 
 
 import butterknife.ButterKnife;
@@ -32,7 +31,6 @@ import static com.sust.sustcast.data.Constants.SERVEROFF;
 public class NewsReaderFragment extends Fragment {
 
     boolean isPlaying;
-    ExoHelper exoHelper;
     private Unbinder unbinder;
     private Button bPlay;
     View rootView;
@@ -40,7 +38,7 @@ public class NewsReaderFragment extends Fragment {
     private BroadcastReceiver receiver;
     public String PLAY = "com.sust.sustcast.PLAY";
     public String PAUSE = "com.sust.sustcast.PAUSE";
-    public String NOINTERNET = "com.sust.sustcast.NOINTERNET";
+    public String ERROR = "com.sust.sustcast.ERROR";
 
     public NewsReaderFragment() {
     }
@@ -61,35 +59,22 @@ public class NewsReaderFragment extends Fragment {
         bPlay = rootView.findViewById(R.id.button_play);
         unbinder = ButterKnife.bind(this, rootView);
 
-        NetworkUtil.checkNetworkInfo(rootView.getContext(), type -> {
-            if (!type) {
+
+        ConnectionLiveData connectionLiveData = new ConnectionLiveData(rootView.getContext());
+        connectionLiveData.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (!aBoolean) {
                 Log.d(TAG, "onCreateView: " + "No internet");
                 Toast.makeText(rootView.getContext(), CHECKNET, Toast.LENGTH_LONG).show();
-                Intent noInternet = new Intent(NOINTERNET).setPackage(rootView.getContext().getPackageName());
-                rootView.getContext().sendBroadcast(noInternet);
             }
         });
 
 
-        exoHelper = new ExoHelper(getContext(), new Player.EventListener() {
-            @Override
-            public void onPlayerError(ExoPlaybackException error) {
-                //Crashlytics.logException(error);
-
-                if (!(getContext() == null)) {
-                    Toast.makeText(getContext(), SERVEROFF, Toast.LENGTH_LONG).show();
-                    exoHelper.ToggleButton(false);
-                    exoHelper.StopNotification();
-                } else {
-                    Log.d(TAG, "onPlayerError: " + "Context is null");
-                }
-
-            }
-        }, bPlay, "NewsReader");
-
         isPlaying = true;
         setButton();
-        exoHelper.startExo(rootView.getContext().getString(R.string.bbc_news));
+
+        Intent intent = new Intent(rootView.getContext(), MusicPlayerService.class);
+        intent.putExtra("url", rootView.getContext().getString(R.string.bbc_news));
+        rootView.getContext().startService(intent);
 
         return rootView;
     }
@@ -101,7 +86,7 @@ public class NewsReaderFragment extends Fragment {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(PAUSE);
         intentFilter.addAction(PLAY);
-        intentFilter.addAction(NOINTERNET);
+        intentFilter.addAction(ERROR);
 
         if (receiver == null) {
             receiver = new BroadcastReceiver() {
@@ -111,15 +96,15 @@ public class NewsReaderFragment extends Fragment {
                     if (!(intent.getAction() == null)) {
                         if (intent.getAction().equals(PAUSE)) {
                             Log.d(TAG, "onReceive: " + "Paused");
-                            exoHelper.ToggleButton(false);
-
+                            ToggleButton(false);
                         } else if (intent.getAction().equals(PLAY)) {
                             Log.d(TAG, "onReceive: " + "Playing");
-                            exoHelper.ToggleButton(true);
-                        }
-                        else if (intent.getAction().equals(NOINTERNET)) {
-                            exoHelper.ToggleButton(false);
-                            exoHelper.stopExo();
+                            ToggleButton(true);
+                        } else if (intent.getAction().equals(ERROR)) {
+                            ToggleButton(false);
+                            Toast.makeText(context, SERVEROFF, Toast.LENGTH_SHORT).show();
+                            Intent intent1 = new Intent(getContext(), MusicPlayerService.class);
+                            getContext().stopService(intent1);
                         }
                     } else {
                         Log.d(TAG, "onReceive: " + "Nothing received!");
@@ -137,16 +122,33 @@ public class NewsReaderFragment extends Fragment {
 
     }
 
+
+    public void ToggleButton(boolean state) {
+        if (state) {
+            Drawable img = bPlay.getContext().getResources().getDrawable(R.drawable.play_button);
+            bPlay.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+            bPlay.setText(R.string.now_playing);
+        } else {
+            Drawable img1 = bPlay.getContext().getResources().getDrawable(R.drawable.pause_button);
+            bPlay.setCompoundDrawablesWithIntrinsicBounds(img1, null, null, null);
+            bPlay.setText(R.string.server_off);
+        }
+    }
+
     private void setButton() {
         bPlay.setOnClickListener(view -> {
 
             Log.d(TAG, "setButton: " + isPlaying);
 
 
-            if (isPlaying) {
-                exoHelper.startExo(rootView.getContext().getString(R.string.bbc_news));
+            Intent intent = new Intent(getContext(), MusicPlayerService.class);
+            if (!isPlaying) {
+                intent.putExtra("url", getContext().getString(R.string.bbc_news));
+                getContext().startService(intent);
+                ToggleButton(true);
             } else {
-                exoHelper.stopExo();
+                getContext().stopService(intent);
+                ToggleButton(false);
             }
 
             isPlaying = !isPlaying;
@@ -157,7 +159,9 @@ public class NewsReaderFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        exoHelper.stopExo();
+
+        Intent intent = new Intent(getContext(), MusicPlayerService.class);
+        getContext().stopService(intent);
 
 
         try {

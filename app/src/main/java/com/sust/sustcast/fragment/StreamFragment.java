@@ -21,7 +21,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.android.exoplayer2.Player;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,9 +30,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.sust.sustcast.R;
 import com.sust.sustcast.data.IceUrl;
 import com.sust.sustcast.services.MusicPlayerService;
-import com.sust.sustcast.utils.ExoHelper;
+import com.sust.sustcast.utils.ConnectionLiveData;
 import com.sust.sustcast.utils.LoadBalancingUtil;
-import com.sust.sustcast.utils.NetworkUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +43,7 @@ import static com.sust.sustcast.data.Constants.CHECKNET;
 import static com.sust.sustcast.data.Constants.SERVEROFF;
 
 
-public class StreamFragment extends Fragment implements Player.EventListener {
+public class StreamFragment extends Fragment {
 
     private static final String TAG = "StreamFragment";
     ChildEventListener cListener;
@@ -58,19 +56,16 @@ public class StreamFragment extends Fragment implements Player.EventListener {
     private DatabaseReference urlRef;
     private List<IceUrl> iceUrlList;
     private String title;
-    private String token;
     private BroadcastReceiver receiver;
     public String PLAY = "com.sust.sustcast.PLAY";
     public String PAUSE = "com.sust.sustcast.PAUSE";
     public String ERROR = "com.sust.sustcast.ERROR";
-    public String NOINTERNET = "com.sust.sustcast.NOINTERNET";
 
     public StreamFragment() {
     }
 
     public static StreamFragment newInstance() {
-        StreamFragment fragment = new StreamFragment();
-        return fragment;
+        return new StreamFragment();
     }
 
     @Override
@@ -89,22 +84,19 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         tvPlaying.setText(rootView.getContext().getString(R.string.metadata_loading));
 
 
-        NetworkUtil.checkNetworkInfo(rootView.getContext(), type -> {
-            if (!type) {
-
-                Log.d(TAG, "onCreateView: " + "No internet");
-                Toast.makeText(rootView.getContext(), CHECKNET, Toast.LENGTH_LONG).show();
-                Intent noInternet = new Intent(NOINTERNET).setPackage(rootView.getContext().getPackageName());
-                rootView.getContext().sendBroadcast(noInternet);
-            }
-        });
-
-
         bPlay = rootView.findViewById(R.id.button_stream);
         unbinder = ButterKnife.bind(this, rootView);
+        ConnectionLiveData connectionLiveData = new ConnectionLiveData(rootView.getContext());
 
         isPlaying = true;
         setButton();
+
+        connectionLiveData.observe(getViewLifecycleOwner(), aBoolean -> {
+            if (!aBoolean) {
+                Log.d(TAG, "onCreateView: " + "No internet");
+                Toast.makeText(rootView.getContext(), CHECKNET, Toast.LENGTH_LONG).show();
+            }
+        });
 
 
         rootRef = FirebaseDatabase.getInstance().getReference(); //root database reference
@@ -201,7 +193,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                 intent.putExtra("url", LoadBalancingUtil.selectIceCastSource(iceUrlList).getUrl());
                 getContext().startService(intent);
                 ToggleButton(true);
-
+                //setMetaDataListeners();
             }
             isPlaying = !isPlaying;
         });
@@ -218,7 +210,6 @@ public class StreamFragment extends Fragment implements Player.EventListener {
         intentFilter.addAction(PAUSE);
         intentFilter.addAction(PLAY);
         intentFilter.addAction(ERROR);
-        intentFilter.addAction(NOINTERNET);
 
         if (receiver == null) {
             receiver = new BroadcastReceiver() {
@@ -233,12 +224,12 @@ public class StreamFragment extends Fragment implements Player.EventListener {
                             Log.d(TAG, "onReceive: " + "Playing");
                             ToggleButton(true);
                         } else if (intent.getAction().equals(ERROR)) {
+                            Log.d(TAG, "onReceive: " + "ERROR");
                             ToggleButton(false);
                             Toast.makeText(context, SERVEROFF, Toast.LENGTH_SHORT).show();
                             Intent intent1 = new Intent(getContext(), MusicPlayerService.class);
                             getContext().stopService(intent1);
-                        } else if (intent.getAction().equals(NOINTERNET)) {
-                            ToggleButton(false);
+                            tvPlaying.setText(R.string.server_off);
                         }
                     } else {
                         Log.d(TAG, "onReceive: " + "Nothing received!");
