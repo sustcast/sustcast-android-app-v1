@@ -29,7 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.sust.sustcast.R;
 import com.sust.sustcast.data.IceUrl;
-import com.sust.sustcast.services.MusicPlayerService;
+import com.sust.sustcast.services.RadioService;
 import com.sust.sustcast.utils.ConnectionLiveData;
 import com.sust.sustcast.utils.LoadBalancingUtil;
 
@@ -40,6 +40,9 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 import static com.sust.sustcast.data.Constants.CHECKNET;
+import static com.sust.sustcast.data.Constants.ERROR;
+import static com.sust.sustcast.data.Constants.PAUSE;
+import static com.sust.sustcast.data.Constants.PLAY;
 import static com.sust.sustcast.data.Constants.SERVEROFF;
 
 
@@ -57,9 +60,6 @@ public class StreamFragment extends Fragment {
     private List<IceUrl> iceUrlList;
     private String title;
     private BroadcastReceiver receiver;
-    public String PLAY = "com.sust.sustcast.PLAY";
-    public String PAUSE = "com.sust.sustcast.PAUSE";
-    public String ERROR = "com.sust.sustcast.ERROR";
 
     public StreamFragment() {
     }
@@ -117,7 +117,7 @@ public class StreamFragment extends Fragment {
                     Log.d(TAG, "start radio on create");
 
                     if (getContext() != null) {
-                        Intent intent = new Intent(getContext(), MusicPlayerService.class);
+                        Intent intent = new Intent(getContext(), RadioService.class);
                         intent.putExtra("url", LoadBalancingUtil.selectIceCastSource(iceUrlList).getUrl());
                         getContext().startService(intent);
                     } else {
@@ -185,15 +185,27 @@ public class StreamFragment extends Fragment {
         bPlay.setOnClickListener(view -> {
             Log.d(TAG, "setButton: isplaying -> " + isPlaying);
 
-            Intent intent = new Intent(getContext(), MusicPlayerService.class);
+
+            Intent intent = new Intent(getContext(), RadioService.class);
             if (isPlaying) {
+
+                /*
+                Intent pauseIntent = new Intent(PAUSE).setPackage(getContext().getPackageName());
+                getContext().sendBroadcast(pauseIntent);
+                 */
+
                 getContext().stopService(intent);
                 ToggleButton(false);
             } else {
+
+                /*
+                Intent playIntent = new Intent(PLAY).setPackage(getContext().getPackageName());
+                getContext().sendBroadcast(playIntent);
+                 */
+
                 intent.putExtra("url", LoadBalancingUtil.selectIceCastSource(iceUrlList).getUrl());
                 getContext().startService(intent);
                 ToggleButton(true);
-                //setMetaDataListeners();
             }
             isPlaying = !isPlaying;
         });
@@ -227,9 +239,6 @@ public class StreamFragment extends Fragment {
                             Log.d(TAG, "onReceive: " + "ERROR");
                             ToggleButton(false);
                             Toast.makeText(context, SERVEROFF, Toast.LENGTH_SHORT).show();
-                            Intent intent1 = new Intent(getContext(), MusicPlayerService.class);
-                            getContext().stopService(intent1);
-                            tvPlaying.setText(R.string.server_off);
                         }
                     } else {
                         Log.d(TAG, "onReceive: " + "Nothing received!");
@@ -266,7 +275,7 @@ public class StreamFragment extends Fragment {
         unbinder.unbind();
         urlRef.removeEventListener(cListener);
 
-        Intent intent = new Intent(getContext(), MusicPlayerService.class);
+        Intent intent = new Intent(getContext(), RadioService.class);
         getContext().stopService(intent);
 
 

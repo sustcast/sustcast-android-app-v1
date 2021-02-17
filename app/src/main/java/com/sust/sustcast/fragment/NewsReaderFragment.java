@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import com.crashlytics.android.Crashlytics;
 import com.sust.sustcast.R;
-import com.sust.sustcast.services.MusicPlayerService;
+import com.sust.sustcast.services.RadioService;
 import com.sust.sustcast.utils.ConnectionLiveData;
 
 
@@ -25,6 +25,9 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 import static com.sust.sustcast.data.Constants.CHECKNET;
+import static com.sust.sustcast.data.Constants.ERROR;
+import static com.sust.sustcast.data.Constants.PAUSE;
+import static com.sust.sustcast.data.Constants.PLAY;
 import static com.sust.sustcast.data.Constants.SERVEROFF;
 
 
@@ -36,9 +39,6 @@ public class NewsReaderFragment extends Fragment {
     View rootView;
     private static final String TAG = "NewsReader";
     private BroadcastReceiver receiver;
-    public String PLAY = "com.sust.sustcast.PLAY";
-    public String PAUSE = "com.sust.sustcast.PAUSE";
-    public String ERROR = "com.sust.sustcast.ERROR";
 
     public NewsReaderFragment() {
     }
@@ -72,7 +72,7 @@ public class NewsReaderFragment extends Fragment {
         isPlaying = true;
         setButton();
 
-        Intent intent = new Intent(rootView.getContext(), MusicPlayerService.class);
+        Intent intent = new Intent(rootView.getContext(), RadioService.class);
         intent.putExtra("url", rootView.getContext().getString(R.string.bbc_news));
         rootView.getContext().startService(intent);
 
@@ -95,16 +95,12 @@ public class NewsReaderFragment extends Fragment {
 
                     if (!(intent.getAction() == null)) {
                         if (intent.getAction().equals(PAUSE)) {
-                            Log.d(TAG, "onReceive: " + "Paused");
                             ToggleButton(false);
                         } else if (intent.getAction().equals(PLAY)) {
-                            Log.d(TAG, "onReceive: " + "Playing");
                             ToggleButton(true);
                         } else if (intent.getAction().equals(ERROR)) {
                             ToggleButton(false);
                             Toast.makeText(context, SERVEROFF, Toast.LENGTH_SHORT).show();
-                            Intent intent1 = new Intent(getContext(), MusicPlayerService.class);
-                            getContext().stopService(intent1);
                         }
                     } else {
                         Log.d(TAG, "onReceive: " + "Nothing received!");
@@ -140,13 +136,24 @@ public class NewsReaderFragment extends Fragment {
 
             Log.d(TAG, "setButton: " + isPlaying);
 
-
-            Intent intent = new Intent(getContext(), MusicPlayerService.class);
+            Intent intent = new Intent(getContext(), RadioService.class);
             if (!isPlaying) {
+
+                /*
+                Intent playIntent = new Intent(PLAY).setPackage(getContext().getPackageName());
+                getContext().sendBroadcast(playIntent);
+                 */
+
                 intent.putExtra("url", getContext().getString(R.string.bbc_news));
                 getContext().startService(intent);
                 ToggleButton(true);
             } else {
+
+                /*
+                Intent pauseIntent = new Intent(PAUSE).setPackage(getContext().getPackageName());
+                getContext().sendBroadcast(pauseIntent);
+                 */
+
                 getContext().stopService(intent);
                 ToggleButton(false);
             }
@@ -160,7 +167,7 @@ public class NewsReaderFragment extends Fragment {
         super.onDestroyView();
         unbinder.unbind();
 
-        Intent intent = new Intent(getContext(), MusicPlayerService.class);
+        Intent intent = new Intent(getContext(), RadioService.class);
         getContext().stopService(intent);
 
 

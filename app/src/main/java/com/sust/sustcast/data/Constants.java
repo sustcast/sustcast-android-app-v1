@@ -24,6 +24,9 @@ public interface Constants {
     String CHANNEL_ID = "123";
     String CHANNEL_NAME = "SUSTcast";
     String SERVEROFF = "Broadcasting Paused";
+    String PLAY = "com.sust.sustcast.PLAY";
+    String PAUSE = "com.sust.sustcast.PAUSE";
+    String ERROR = "com.sust.sustcast.ERROR";
 
     String[] DEPARTMENTS = new String[]{"ANP", "ARC", "BMB", "BNG", "BUS", "CEE", "CEP", "CHE", "CSE", "ECO", "EEE", "ENG", "FES", "FET", "GEB", "GEE", "IPE", "MAT", "MEE", "OCG", "PAD", "PHY", "PME", "PSS", "SCW", "SOC", "STA", "SWE"};
 
