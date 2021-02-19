@@ -351,8 +351,10 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         releasePlayer();
+        if (audioManager != null) {
+            audioManager.abandonAudioFocus(this);
+        }
 
         try {
             if (receiver != null && becomingNoisyReceiver != null) {
@@ -365,6 +367,7 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
         }
 
         Log.d(TAG, "RadioService is destroyed!");
+        super.onDestroy();
     }
 
     @Override
