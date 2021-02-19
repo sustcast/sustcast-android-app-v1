@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
@@ -39,12 +40,13 @@ import static com.sust.sustcast.data.Constants.PAUSED;
 import static com.sust.sustcast.data.Constants.PLAY;
 import static com.sust.sustcast.data.Constants.PLAYING;
 
-public class RadioService extends Service {
+public class RadioService extends Service implements AudioManager.OnAudioFocusChangeListener {
     private static final String TAG = "RadioService";
     private SimpleExoPlayer exoPlayer;
     private Context context;
     private BroadcastReceiver receiver;
     private String iceURL;
+    private AudioManager audioManager;
 
     @Nullable
     @Override
@@ -68,11 +70,36 @@ public class RadioService extends Service {
 
         startForeground(1234, CreateNotification(getCustomPlayDesign()));
 
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+        context.registerReceiver(becomingNoisyReceiver, new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY));
+
+        int result = audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        if (result != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+
+            //stop();
+            Pause();
+
+            Log.d(TAG, "onStartCommand: " + AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+
+            return START_NOT_STICKY;
+        }
+
         Log.d(TAG, "Starting RadioService");
 
         return START_STICKY;
     }
 
+
+    private BroadcastReceiver becomingNoisyReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Pause();
+            Log.d(TAG, "onReceive: " + "Noisy");
+        }
+    };
 
     public void InitializePlayer(String url) {
         if (url == null || url.isEmpty()) {
@@ -94,14 +121,6 @@ public class RadioService extends Service {
             exoPlayer.prepare(mediaSource, true, true);
             exoPlayer.setHandleWakeLock(true);
 
-            /*
-        AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                .setUsage(C.USAGE_MEDIA)
-                .setContentType(C.CONTENT_TYPE_MUSIC)
-                .build();
-
-        exoPlayer.setAudioAttributes(audioAttributes, true);
-             */
 
             exoPlayer.addListener(new Player.EventListener() {
                 @Override
@@ -124,10 +143,19 @@ public class RadioService extends Service {
     }
 
 
+    private void initAudioFocus() {
+        if (audioManager != null) {
+            audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+        }
+
+    }
+
+
     public void Play() {
         InitializePlayer(iceURL);
         if (exoPlayer != null) {
             exoPlayer.setPlayWhenReady(true);
+            initAudioFocus();
         }
         startForeground(1234, CreateNotification(getCustomPlayDesign()));
 
@@ -136,8 +164,18 @@ public class RadioService extends Service {
     public void Pause() {
         if (exoPlayer != null) {
             exoPlayer.setPlayWhenReady(false);
+            audioManager.abandonAudioFocus(this);
         }
 
+
+    }
+
+    public void stop() {
+
+        exoPlayer.stop();
+
+        audioManager.abandonAudioFocus(this);
+        Log.d(TAG, "stop: ");
     }
 
     public void releasePlayer() {
@@ -317,8 +355,9 @@ public class RadioService extends Service {
         releasePlayer();
 
         try {
-            if (receiver != null) {
+            if (receiver != null && becomingNoisyReceiver != null) {
                 context.unregisterReceiver(receiver);
+                context.unregisterReceiver(becomingNoisyReceiver);
             }
         } catch (Exception exception) {
             Log.d(TAG, "onDestroyView: " + "Exception!!");
@@ -328,4 +367,40 @@ public class RadioService extends Service {
         Log.d(TAG, "RadioService is destroyed!");
     }
 
+    @Override
+    public void onAudioFocusChange(int focusChange) {
+
+        Intent pauseIntent = new Intent(PAUSE).setPackage(context.getPackageName());
+
+        switch (focusChange) {
+
+            case AudioManager.AUDIOFOCUS_LOSS:
+
+                context.sendBroadcast(pauseIntent);
+                Log.d(TAG, "onAudioFocusChange: " + AudioManager.AUDIOFOCUS_LOSS);
+
+                break;
+
+
+            case AudioManager.AUDIOFOCUS_GAIN:
+
+                Play();
+                Log.d(TAG, "onAudioFocusChange: " + AudioManager.AUDIOFOCUS_GAIN);
+
+                break;
+
+
+            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+
+                context.sendBroadcast(pauseIntent);
+                Log.d(TAG, "onAudioFocusChange: " + AudioManager.AUDIOFOCUS_LOSS_TRANSIENT);
+                break;
+
+            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                Log.d(TAG, "onAudioFocusChange: " + AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK);
+
+                break;
+
+        }
+    }
 }
