@@ -96,7 +96,7 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Pause();
+            //Pause();
             Log.d(TAG, "onReceive: " + "Noisy");
         }
     };

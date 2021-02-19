@@ -120,6 +120,7 @@ public class StreamFragment extends Fragment {
                         Intent intent = new Intent(getContext(), RadioService.class);
                         intent.putExtra("url", LoadBalancingUtil.selectIceCastSource(iceUrlList).getUrl());
                         getContext().startService(intent);
+                        ToggleButton(true);
                     } else {
                         Log.d(TAG, "run: " + "Context is null");
                     }
@@ -143,7 +144,10 @@ public class StreamFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                Log.d(TAG, "onCancelled: ");
             }
+
+
         });
     }
 
