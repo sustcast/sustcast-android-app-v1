@@ -20,7 +20,7 @@ Currently our features include :
 ## App Structure and Tools
 
 * App Front-end follows the MVVM architecture and created with ![badge-java](https://img.shields.io/badge/java-FFD700?style=for-the-badge&logo=java&logoColor=white) on ![badge-android](https://img.shields.io/badge/androidstudio-FFD700?style=for-the-badge&logo=android&logoColor=white) . 
-App is integrated with ![badge-firebase](https://img.shields.io/badge/firebase-FFD700?style=for-the-badge&logo=firebase&logoColor=white). Supports a minimum SDK *16* and above.  
+App is integrated with ![badge-firebase](https://img.shields.io/badge/firebase-FFD700?style=for-the-badge&logo=firebase&logoColor=white). Supports a minimum SDK *21* and above.  
 
 ## Showcase
 <p align="center">
