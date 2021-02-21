@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -32,6 +34,7 @@ import com.google.android.exoplayer2.util.Util;
 import com.sust.sustcast.R;
 import com.sust.sustcast.fragment.FragmentHolder;
 
+import static android.media.AudioManager.AUDIOFOCUS_GAIN;
 import static com.sust.sustcast.data.Constants.CHANNEL_ID;
 import static com.sust.sustcast.data.Constants.CHANNEL_NAME;
 import static com.sust.sustcast.data.Constants.ERROR;
@@ -47,6 +50,7 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
     private BroadcastReceiver receiver;
     private String iceURL;
     private AudioManager audioManager;
+    private AudioFocusRequest request;
 
     @Nullable
     @Override
@@ -72,18 +76,9 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
 
         audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
+        requestAudioFocus();
+
         context.registerReceiver(becomingNoisyReceiver, new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY));
-
-        int result = audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
-        if (result != AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-
-            //stop();
-            Pause();
-
-            Log.d(TAG, "onStartCommand: " + AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
-
-            return START_NOT_STICKY;
-        }
 
         Log.d(TAG, "Starting RadioService");
 
@@ -142,12 +137,36 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private AudioFocusRequest audioFocusRequest() {
+        request = new AudioFocusRequest.Builder(AUDIOFOCUS_GAIN)
+                .setOnAudioFocusChangeListener(this)
+                .build();
 
-    private void initAudioFocus() {
+        return request;
+    }
+
+
+    public void requestAudioFocus() {
         if (audioManager != null) {
-            audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                audioManager.requestAudioFocus(audioFocusRequest());
+            } else {
+                audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AUDIOFOCUS_GAIN);
+            }
         }
 
+    }
+
+    public void abandonAudioFocus() {
+        if (audioManager != null) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                audioManager.abandonAudioFocusRequest(audioFocusRequest());
+            } else {
+                audioManager.abandonAudioFocus(this);
+            }
+        }
     }
 
 
@@ -155,7 +174,7 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
         InitializePlayer(iceURL);
         if (exoPlayer != null) {
             exoPlayer.setPlayWhenReady(true);
-            initAudioFocus();
+            requestAudioFocus();
         }
         startForeground(1234, CreateNotification(getCustomPlayDesign()));
 
@@ -164,18 +183,10 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
     public void Pause() {
         if (exoPlayer != null) {
             exoPlayer.setPlayWhenReady(false);
-            audioManager.abandonAudioFocus(this);
+            abandonAudioFocus();
         }
 
 
-    }
-
-    public void stop() {
-
-        exoPlayer.stop();
-
-        audioManager.abandonAudioFocus(this);
-        Log.d(TAG, "stop: ");
     }
 
     public void releasePlayer() {
@@ -353,7 +364,7 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
     public void onDestroy() {
         releasePlayer();
         if (audioManager != null) {
-            audioManager.abandonAudioFocus(this);
+            abandonAudioFocus();
         }
 
         try {
@@ -385,10 +396,10 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
                 break;
 
 
-            case AudioManager.AUDIOFOCUS_GAIN:
+            case AUDIOFOCUS_GAIN:
 
                 Play();
-                Log.d(TAG, "onAudioFocusChange: " + AudioManager.AUDIOFOCUS_GAIN);
+                Log.d(TAG, "onAudioFocusChange: " + AUDIOFOCUS_GAIN);
 
                 break;
 
