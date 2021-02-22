@@ -26,6 +26,7 @@ import butterknife.Unbinder;
 
 import static com.sust.sustcast.data.Constants.CHECKNET;
 import static com.sust.sustcast.data.Constants.ERROR;
+import static com.sust.sustcast.data.Constants.NO_INTERNET;
 import static com.sust.sustcast.data.Constants.PAUSE;
 import static com.sust.sustcast.data.Constants.PLAY;
 import static com.sust.sustcast.data.Constants.SERVEROFF;
@@ -33,7 +34,7 @@ import static com.sust.sustcast.data.Constants.SERVEROFF;
 
 public class NewsReaderFragment extends Fragment {
 
-    boolean isPlaying;
+    boolean isPlaying = true;
     private Unbinder unbinder;
     private Button bPlay;
     View rootView;
@@ -65,11 +66,14 @@ public class NewsReaderFragment extends Fragment {
             if (!aBoolean) {
                 Log.d(TAG, "onCreateView: " + "No internet");
                 Toast.makeText(rootView.getContext(), CHECKNET, Toast.LENGTH_LONG).show();
+
+                Intent pauseIntent = new Intent(NO_INTERNET).setPackage(getContext().getPackageName());
+                getContext().sendBroadcast(pauseIntent);
+                isPlaying = false;
+                ToggleButton(false);
             }
         });
 
-
-        isPlaying = true;
         setButton();
 
         Intent intent = new Intent(rootView.getContext(), RadioService.class);
@@ -96,8 +100,10 @@ public class NewsReaderFragment extends Fragment {
                     if (!(intent.getAction() == null)) {
                         if (intent.getAction().equals(PAUSE)) {
                             ToggleButton(false);
+                            isPlaying = false;
                         } else if (intent.getAction().equals(PLAY)) {
                             ToggleButton(true);
+                            isPlaying = true;
                         } else if (intent.getAction().equals(ERROR)) {
                             ToggleButton(false);
                             Toast.makeText(context, SERVEROFF, Toast.LENGTH_SHORT).show();
@@ -147,6 +153,7 @@ public class NewsReaderFragment extends Fragment {
                 intent.putExtra("url", getContext().getString(R.string.bbc_news));
                 getContext().startService(intent);
                 ToggleButton(true);
+                isPlaying = true;
             } else {
 
                 /*
@@ -156,9 +163,9 @@ public class NewsReaderFragment extends Fragment {
 
                 getContext().stopService(intent);
                 ToggleButton(false);
+                isPlaying = false;
             }
 
-            isPlaying = !isPlaying;
         });
 
     }

@@ -41,6 +41,7 @@ import butterknife.Unbinder;
 
 import static com.sust.sustcast.data.Constants.CHECKNET;
 import static com.sust.sustcast.data.Constants.ERROR;
+import static com.sust.sustcast.data.Constants.NO_INTERNET;
 import static com.sust.sustcast.data.Constants.PAUSE;
 import static com.sust.sustcast.data.Constants.PLAY;
 import static com.sust.sustcast.data.Constants.SERVEROFF;
@@ -53,7 +54,7 @@ public class StreamFragment extends Fragment {
     Unbinder unbinder;
     Button bPlay;
     TextView tvPlaying;
-    private boolean isPlaying;
+    private boolean isPlaying = true;    // Make the boolean global so that we can change the value as per our needs
     private DatabaseReference rootRef;
     private DatabaseReference songReference;
     private DatabaseReference urlRef;
@@ -88,13 +89,19 @@ public class StreamFragment extends Fragment {
         unbinder = ButterKnife.bind(this, rootView);
         ConnectionLiveData connectionLiveData = new ConnectionLiveData(rootView.getContext());
 
-        isPlaying = true;
         setButton();
 
         connectionLiveData.observe(getViewLifecycleOwner(), aBoolean -> {
             if (!aBoolean) {
                 Log.d(TAG, "onCreateView: " + "No internet");
                 Toast.makeText(rootView.getContext(), CHECKNET, Toast.LENGTH_LONG).show();
+
+                Intent pauseIntent = new Intent(NO_INTERNET).setPackage(getContext().getPackageName());
+                getContext().sendBroadcast(pauseIntent);
+                isPlaying = false;
+                ToggleButton(false);
+
+
             }
         });
 
@@ -200,6 +207,7 @@ public class StreamFragment extends Fragment {
 
                 getContext().stopService(intent);
                 ToggleButton(false);
+                isPlaying = false;
             } else {
 
                 /*
@@ -210,8 +218,9 @@ public class StreamFragment extends Fragment {
                 intent.putExtra("url", LoadBalancingUtil.selectIceCastSource(iceUrlList).getUrl());
                 getContext().startService(intent);
                 ToggleButton(true);
+                isPlaying = true;
             }
-            isPlaying = !isPlaying;
+            //isPlaying = !isPlaying;
         });
 
 
@@ -226,6 +235,7 @@ public class StreamFragment extends Fragment {
         intentFilter.addAction(PAUSE);
         intentFilter.addAction(PLAY);
         intentFilter.addAction(ERROR);
+        intentFilter.addAction(NO_INTERNET);
 
         if (receiver == null) {
             receiver = new BroadcastReceiver() {
@@ -236,13 +246,19 @@ public class StreamFragment extends Fragment {
                         if (intent.getAction().equals(PAUSE)) {
                             Log.d(TAG, "onReceive: " + "Paused");
                             ToggleButton(false);
+                            isPlaying = false;
                         } else if (intent.getAction().equals(PLAY)) {
                             Log.d(TAG, "onReceive: " + "Playing");
                             ToggleButton(true);
+                            isPlaying = true;
                         } else if (intent.getAction().equals(ERROR)) {
                             Log.d(TAG, "onReceive: " + "ERROR");
                             ToggleButton(false);
                             Toast.makeText(context, SERVEROFF, Toast.LENGTH_SHORT).show();
+                        } else if (intent.getAction().equals(NO_INTERNET)) {
+                            Log.d(TAG, "onReceive: " + "NO internet");
+                            ToggleButton(false);
+                            Toast.makeText(context, CHECKNET, Toast.LENGTH_LONG).show();
                         }
                     } else {
                         Log.d(TAG, "onReceive: " + "Nothing received!");

@@ -38,6 +38,7 @@ import static android.media.AudioManager.AUDIOFOCUS_GAIN;
 import static com.sust.sustcast.data.Constants.CHANNEL_ID;
 import static com.sust.sustcast.data.Constants.CHANNEL_NAME;
 import static com.sust.sustcast.data.Constants.ERROR;
+import static com.sust.sustcast.data.Constants.NO_INTERNET;
 import static com.sust.sustcast.data.Constants.PAUSE;
 import static com.sust.sustcast.data.Constants.PAUSED;
 import static com.sust.sustcast.data.Constants.PLAY;
@@ -99,8 +100,8 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
     public void InitializePlayer(String url) {
         if (url == null || url.isEmpty()) {
             Log.d(TAG, "Empty url");
-            Intent errorIntent = new Intent(ERROR).setPackage(context.getPackageName());
-            context.sendBroadcast(errorIntent);
+            Intent noNetIntent = new Intent(NO_INTERNET).setPackage(context.getPackageName());
+            context.sendBroadcast(noNetIntent);
             return;
         }
 
@@ -319,12 +320,20 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
         return pendingIntent;
     }
 
+    public void Stop() {
+        Pause();
+        PauseNotification();
+        stopForeground(false);
+        releasePlayer();
+    }
+
     public void registerReceiver() {
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(PAUSE);
         intentFilter.addAction(PLAY);
         intentFilter.addAction(ERROR);
+        intentFilter.addAction(NO_INTERNET);
 
         if (receiver == null) {
             receiver = new BroadcastReceiver() {
@@ -340,10 +349,9 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
                         } else if (intent.getAction().equals(PLAY)) {
                             Play();
                         } else if (intent.getAction().equals(ERROR)) {
-                            Pause();
-                            PauseNotification();
-                            stopForeground(false);
-                            releasePlayer();
+                            Stop();
+                        } else if (intent.getAction().equals(NO_INTERNET)) {
+                            Stop();
                         }
                     } else {
                         Log.d(TAG, "onReceive: " + "Nothing received!");
@@ -396,10 +404,10 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
                 break;
 
 
-            case AUDIOFOCUS_GAIN:
+            case AudioManager.AUDIOFOCUS_GAIN:
 
-                Play();
-                Log.d(TAG, "onAudioFocusChange: " + AUDIOFOCUS_GAIN);
+                //Play();
+                Log.d(TAG, "onAudioFocusChange: " + AudioManager.AUDIOFOCUS_GAIN);
 
                 break;
 
