@@ -26,7 +26,7 @@ jobs:
     - name: Get app name
       run: echo "APP_NAME=SUSTcast${{ env.APP_VERSION }}-DEBUG#${{ github.run_number }}" >> $GITHUB_ENV
     - name: Rename the APK file
-      run: mv ./app/build/outputs/universal_apk/debug/SUSTcast-debug-universal.apk ./${{ env.APP_NAME }}.apk
+      run: mv ./app/build/outputs/universal_apk/debug/app-debug-universal.apk ./${{ env.APP_NAME }}.apk
     - name: Store generated APK file
       uses: actions/upload-artifact@v1
       with:
