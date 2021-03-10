@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.sust.sustcast.R;
 import com.sust.sustcast.services.RadioService;
 import com.sust.sustcast.utils.ConnectionLiveData;
@@ -184,7 +184,7 @@ public class NewsReaderFragment extends Fragment {
             }
         } catch (Exception exception) {
             Log.d(TAG, "onDestroyView: " + "Exception!!");
-            Crashlytics.logException(exception);
+            FirebaseCrashlytics.getInstance().recordException(exception);
         }
 
 

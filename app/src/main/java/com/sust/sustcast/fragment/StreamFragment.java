@@ -20,7 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -305,7 +305,7 @@ public class StreamFragment extends Fragment {
             }
         } catch (Exception exception) {
             Log.d(TAG, "onDestroyView: " + "Exception!!");
-            Crashlytics.logException(exception);
+            FirebaseCrashlytics.getInstance().recordException(exception);
         }
 
     }

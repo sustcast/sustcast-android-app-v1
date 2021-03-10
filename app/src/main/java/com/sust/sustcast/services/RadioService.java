@@ -22,7 +22,6 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -31,6 +30,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.sust.sustcast.R;
 import com.sust.sustcast.fragment.FragmentHolder;
 
@@ -126,7 +126,7 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
                     Intent errorIntent = new Intent(ERROR).setPackage(context.getPackageName());
                     context.sendBroadcast(errorIntent);
                     stopForeground(false);
-                    Crashlytics.logException(exception);
+                    FirebaseCrashlytics.getInstance().recordException(exception);
 
                 }
             });
@@ -382,7 +382,7 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
             }
         } catch (Exception exception) {
             Log.d(TAG, "onDestroyView: " + "Exception!!");
-            Crashlytics.logException(exception);
+            FirebaseCrashlytics.getInstance().recordException(exception);
         }
 
         Log.d(TAG, "RadioService is destroyed!");

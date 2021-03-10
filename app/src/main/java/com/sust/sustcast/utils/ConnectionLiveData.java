@@ -12,7 +12,7 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 public class ConnectionLiveData extends LiveData<Boolean> {
 
@@ -51,7 +51,7 @@ public class ConnectionLiveData extends LiveData<Boolean> {
             try {
                 connectivityManager.unregisterNetworkCallback(connectivityManagerCallback);
             } catch (Exception exception) {
-                Crashlytics.logException(exception);
+                FirebaseCrashlytics.getInstance().recordException(exception);
             }
         }
 

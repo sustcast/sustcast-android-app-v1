@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
@@ -26,6 +25,7 @@ import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.sust.sustcast.R;
 import com.sust.sustcast.dialogs.SimpleAlertDialog;
@@ -85,7 +85,7 @@ public class FragmentHolder extends AppCompatActivity {
         try {
             checkForUpdate();
         } catch (Exception ex) {
-            Crashlytics.logException(ex);
+            FirebaseCrashlytics.getInstance().recordException(ex);
         }
 
         bottomNavigation = findViewById(R.id.bottom_navigation);
@@ -141,7 +141,7 @@ public class FragmentHolder extends AppCompatActivity {
                                 FragmentHolder.this,
                                 RC_APP_UPDATE);
                     } catch (IntentSender.SendIntentException ignored) {
-                        Crashlytics.logException(ignored);
+                        FirebaseCrashlytics.getInstance().recordException(ignored);
                     }
                 } else {
                     Log.i("Update", "updateStatus " + appUpdateInfo.updateAvailability());
@@ -153,7 +153,7 @@ public class FragmentHolder extends AppCompatActivity {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            Crashlytics.logException(e);
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
 
     }
