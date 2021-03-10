@@ -24,6 +24,10 @@ public interface Constants {
     String CHANNEL_ID = "123";
     String CHANNEL_NAME = "SUSTcast";
     String SERVEROFF = "Broadcasting Paused";
+    String PLAY = "com.sust.sustcast.PLAY";
+    String PAUSE = "com.sust.sustcast.PAUSE";
+    String ERROR = "com.sust.sustcast.ERROR";
+    String NO_INTERNET = "com.sustcast.NO_INTERNET";
 
     String[] DEPARTMENTS = new String[]{"ANP", "ARC", "BMB", "BNG", "BUS", "CEE", "CEP", "CHE", "CSE", "ECO", "EEE", "ENG", "FES", "FET", "GEB", "GEE", "IPE", "MAT", "MEE", "OCG", "PAD", "PHY", "PME", "PSS", "SCW", "SOC", "STA", "SWE"};
 
@@ -102,7 +106,7 @@ public interface Constants {
             "We endeavor to provide the best service we can, but you understand and agree that THE SUSTcast SERVICE IS PROVIDED “AS IS”, WITHOUT EXPRESS OR IMPLIED WARRANTY OR CONDITION OF ANY KIND. YOU USE THE SUSTcast SERVICE AT YOUR OWN RISK.SUSTcast DISCLAIMS ANY WARRANTIES OR CONDITIONS OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT. In addition, SUSTcast does not warrant, endorse, guarantee or assume responsibility for any Third Party Applications, Third Party Application content, User Content, or any other product or service advertised or offered by a third party on or through the SUSTcast Service or any hyperlinked website, or featured in any banner or other advertising. You understand and agree that SUSTcast is not responsible or liable for any transaction between you and third-party providers of Third Party Applications or products or services advertised on or through the SUSTcast Service. As with any purchase of a product or service through any medium or in any environment, you should use your judgment and exercise caution where appropriate. No advice or information whether oral or in writing obtained by you from SUSTcast shall create any warranty on behalf of SUSTcast in this regard. Some aspects of this section may not apply in some jurisdictions.\n" +
             "\n" +
             "13. Limitation\n" +
-            "You agree that, to the extent permitted by applicable law, your sole and exclusive remedy for any problems or dissatisfaction with the SUSTcast Service, the Third Party Applications or the Third Party Application content is to uninstall any SUSTcast software and to stop using the SUSTcast Service, the Third Party Applications or the Third Party Application content.\n" +
+            "You agree that, to the extent permitted by applicable law, your sole and exclusive remedy for any problems or dissatisfaction with the SUSTcast Service, the Third Party Applications or the Third Party Application content is to uninstall any SUSTcast software and to Stop using the SUSTcast Service, the Third Party Applications or the Third Party Application content.\n" +
             "\n" +
             "Nothing in these Agreements removes or limits SUSTcast’s liability for fraud, fraudulent misrepresentation, death or personal injury caused by its negligence. Some aspects of this section may not apply in some jurisdictions.\n" +
             "\n" +

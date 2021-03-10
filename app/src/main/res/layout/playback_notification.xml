@@ -30,13 +30,11 @@
         <!-- For the color: https://stackoverflow.com/a/52016259/13296516 -->
         <TextView
             android:id="@+id/notification_title"
+            style="@style/TextAppearance.Compat.Notification.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/playback_paused"
-            android:textAllCaps="false"
-            android:textSize="18sp"
-            style="@style/TextAppearance.Compat.Notification.Title"
-            />
+            android:textAllCaps="false" />
 
     </LinearLayout>
 
@@ -44,17 +42,17 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:padding="12dp">
+
         <ImageButton
+            android:id="@+id/notification_button"
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/notification_button"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
             android:layout_weight="1"
             android:gravity="center"
-            android:src="@drawable/exo_notification_play"
-            />
+            android:src="@drawable/exo_notification_play" />
 
 
     </LinearLayout>
