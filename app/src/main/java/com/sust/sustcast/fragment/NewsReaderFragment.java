@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.sust.sustcast.R;
 import com.sust.sustcast.services.RadioService;
@@ -59,7 +60,6 @@ public class NewsReaderFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_news_reader, container, false);
         bPlay = rootView.findViewById(R.id.button_play);
         unbinder = ButterKnife.bind(this, rootView);
-
 
         ConnectionLiveData connectionLiveData = new ConnectionLiveData(rootView.getContext());
         connectionLiveData.observe(getViewLifecycleOwner(), aBoolean -> {

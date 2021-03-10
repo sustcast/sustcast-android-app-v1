@@ -96,6 +96,7 @@ public class StreamFragment extends Fragment {
                 Log.d(TAG, "onCreateView: " + "No internet");
                 Toast.makeText(rootView.getContext(), CHECKNET, Toast.LENGTH_LONG).show();
 
+
                 Intent pauseIntent = new Intent(NO_INTERNET).setPackage(getContext().getPackageName());
                 getContext().sendBroadcast(pauseIntent);
                 isPlaying = false;

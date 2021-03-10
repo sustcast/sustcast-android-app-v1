@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "911091727898",
+    "firebase_url": "https://sustcast-android-app-v1.firebaseio.com",
+    "project_id": "sustcast-android-app-v1",
+    "storage_bucket": "sustcast-android-app-v1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911091727898:android:eac5b1ddf3001f144f9ba3",
+        "android_client_info": {
+          "package_name": "com.sust.sustcast"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911091727898-56taajmjgg1v2uhqoquojrum4nvk4djo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sust.sustcast",
+            "certificate_hash": "21eb58e30c7bec4022b8a68c33223f6d11fba98c"
+          }
+        },
+        {
+          "client_id": "911091727898-bfu0b08sbfq0mk03pjmetqjhn157t4hi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sust.sustcast",
+            "certificate_hash": "4e927ff9c1dedf2f81f4f291115fd4ca475d7e8f"
+          }
+        },
+        {
+          "client_id": "911091727898-sr6bihouagtp047p9e58okla3i7umc2v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTBgUDakwfp3P569_1I-3v7yPgLC8DYpo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911091727898-sr6bihouagtp047p9e58okla3i7umc2v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
