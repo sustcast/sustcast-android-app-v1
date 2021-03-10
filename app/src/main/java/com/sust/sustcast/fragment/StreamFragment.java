@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -89,12 +90,7 @@ public class StreamFragment extends Fragment {
         unbinder = ButterKnife.bind(this, rootView);
         ConnectionLiveData connectionLiveData = new ConnectionLiveData(rootView.getContext());
 
-        setButton();
 
-        connectionLiveData.observe(getViewLifecycleOwner(), aBoolean -> {
-            if (!aBoolean) {
-                Log.d(TAG, "onCreateView: " + "No internet");
-                Toast.makeText(rootView.getContext(), CHECKNET, Toast.LENGTH_LONG).show();
 
                 Intent pauseIntent = new Intent(NO_INTERNET).setPackage(getContext().getPackageName());
                 getContext().sendBroadcast(pauseIntent);
