@@ -5,6 +5,8 @@
 [![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/sustcast/sustcast-android-app-v1?color=FFD700&style=for-the-badge&labelColor=black)
 
+[![SUSTcast Android CI](https://github.com/sustcast/sustcast-android-app-v1/actions/workflows/android.yml/badge.svg)](https://github.com/sustcast/sustcast-android-app-v1/actions/workflows/android.yml)
+
 
 
 SUSTCast is an AI-enhanced online radio app built for the SUSTians, by the SUSTians!!<br/>
