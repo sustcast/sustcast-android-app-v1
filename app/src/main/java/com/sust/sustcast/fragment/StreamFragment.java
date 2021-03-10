@@ -19,9 +19,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Player;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -96,20 +96,17 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             public void onPlayerError(ExoPlaybackException error) {
                 Log.i(TAG, "NETWORKERROR");
 
-                if (!(getContext() == null))
-                {
+                if (!(getContext() == null)) {
                     Toast.makeText(getContext(), SERVEROFF, Toast.LENGTH_LONG).show();
-                }
-
-                else
-                {
+                } else {
                     Log.d(TAG, "onPlayerError: " + "Context is null");
+                    FirebaseCrashlytics.getInstance().recordException(error);
                 }
 
 
                 exoHelper.ToggleButton(false);
                 exoHelper.StopNotification();
-                Crashlytics.logException(error);
+                FirebaseCrashlytics.getInstance().recordException(error);
 
             }
 
@@ -263,7 +260,7 @@ public class StreamFragment extends Fragment implements Player.EventListener {
             }
         } catch (Exception exception) {
             Log.d(TAG, "onDestroyView: " + "Exception!!");
-            Crashlytics.logException(exception);
+            FirebaseCrashlytics.getInstance().recordException(exception);
         }
 
     }

@@ -14,10 +14,10 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.sust.sustcast.R;
 import com.sust.sustcast.utils.ExoHelper;
 import com.sust.sustcast.utils.NetworkInfoUtility;
@@ -69,15 +69,11 @@ public class NewsReaderFragment extends Fragment {
         exoHelper = new ExoHelper(getContext(), new Player.EventListener() {
             @Override
             public void onPlayerError(ExoPlaybackException error) {
-                Crashlytics.logException(error);
+                FirebaseCrashlytics.getInstance().recordException(error);
 
-                if (!(getContext() == null))
-                {
+                if (!(getContext() == null)) {
                     Toast.makeText(getContext(), SERVEROFF, Toast.LENGTH_LONG).show();
-                }
-
-                else
-                {
+                } else {
                     Log.d(TAG, "onPlayerError: " + "Context is null");
                 }
 
@@ -162,7 +158,7 @@ public class NewsReaderFragment extends Fragment {
             }
         } catch (Exception exception) {
             Log.d(TAG, "onDestroyView: " + "Exception!!");
-            Crashlytics.logException(exception);
+            FirebaseCrashlytics.getInstance().recordException(exception);
         }
 
 
