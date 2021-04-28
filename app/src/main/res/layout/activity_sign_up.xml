@@ -171,6 +171,7 @@
                         app:boxStrokeColor="@color/grey300"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
+                        app:passwordToggleEnabled="true"
                         app:layout_constraintTop_toBottomOf="@id/outlinedDepartmentField">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -191,6 +192,7 @@
                         android:layout_marginTop="10dp"
                         android:hint="@string/confirm_password"
                         app:boxStrokeColor="@color/grey300"
+                        app:passwordToggleEnabled="true"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/outlinedPasswordField">
@@ -217,6 +219,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/kollektif"
+                            android:layout_marginTop="10dp"
                             android:text="@string/i_accept_the_policy_and_terms"
                             android:textColor="@color/grey500"
                             android:textSize="15sp"
@@ -230,6 +233,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
+                            android:layout_marginTop="10dp"
                             app:checked="true"
                             app:enabled="true"
                             app:forceAspectRatio="false"
@@ -248,6 +252,7 @@
                         android:id="@+id/btn_signup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:layout_marginBottom="40dp"
                         android:background="@drawable/button_rounded"
                         android:fontFamily="@font/kollektif_bold"

@@ -36,9 +36,10 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/SignUpLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/LoginLayout"
+            android:layout_marginTop="40dp"
+            app:layout_constraintBottom_toTopOf="@id/landingLine"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/logoLayout">
@@ -68,11 +69,12 @@
                 android:text="@string/tvSignUp"
                 android:textAllCaps="false"
                 android:textColor="@color/grey800"
+                android:layout_marginBottom="40dp"
                 android:textSize="25sp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvSignUpProceed" />
+                app:layout_constraintTop_toBottomOf="@id/tvSignUpProceed"
+                app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ImageView
@@ -87,26 +89,24 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/LoginLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_margin="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/SignUpLayout">
+            app:layout_constraintTop_toBottomOf="@id/landingLine">
 
             <TextView
                 android:id="@+id/tvAccountAlreadyText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="204dp"
+                android:layout_height="24dp"
                 android:fontFamily="@font/kollektif"
                 android:text="@string/tvAccountAlreadyText"
                 android:textColor="@color/grey500"
                 android:textSize="17sp"
-                app:layout_constraintBottom_toTopOf="@id/tvLogin"
-                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="parent" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/tvLogin"
@@ -121,6 +121,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/grey800"
                 android:textSize="25sp"
+                android:layout_marginBottom="40dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
