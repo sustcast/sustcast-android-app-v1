@@ -125,7 +125,7 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
                     Log.d(TAG, "onPlayerError: ");
                     Intent errorIntent = new Intent(ERROR).setPackage(context.getPackageName());
                     context.sendBroadcast(errorIntent);
-                    stopForeground(false);
+                    stopForeground(true);
                     FirebaseCrashlytics.getInstance().recordException(exception);
 
                 }
@@ -349,7 +349,7 @@ public class RadioService extends Service implements AudioManager.OnAudioFocusCh
                         } else if (intent.getAction().equals(PLAY)) {
                             Play();
                         } else if (intent.getAction().equals(ERROR)) {
-                            Stop();
+                            stopSelf();
                         } else if (intent.getAction().equals(NO_INTERNET)) {
                             Stop();
                         }
