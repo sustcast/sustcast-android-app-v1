@@ -78,7 +78,7 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
-        binding.Name.addTextChangedListener(new TextWatcher() {
+        binding.confirmPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -91,6 +91,23 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+                String text = binding.Password.getText().toString();
+                if (StringValidationRules.CONFIRMPASSWORD.validate(editable, text)) {
+                    binding.confirmPassword.setError(INVALIDPASSWORD);
+                }
+            }
+        });
+        binding.Name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
                 if (StringValidationRules.NOT_EMPTY.validate(editable)) {
                     binding.Name.setError(INVALIDNAME);
                 }
@@ -99,14 +116,11 @@ public class SignUpActivity extends AppCompatActivity {
         binding.PhoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
-
             @Override
             public void afterTextChanged(Editable editable) {
                 if (StringValidationRules.PHONE.validate(editable)) {

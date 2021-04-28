@@ -39,4 +39,5 @@
     <string name="backpress_dialogue">Want to close app?\nYou can put in on background pressing the Home Button!</string>
     <string name="playback_paused">SUSTcast is paused</string>
     <string name="collaboration_tag">Made in collaboration with</string>
+    <string name="confirm_password">CONFIRM PASSWORD</string>
 </resources>

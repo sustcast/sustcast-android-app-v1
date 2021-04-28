@@ -158,14 +158,15 @@
                 android:fontFamily="@font/kollektif_bold"
                 android:onClick="@{()-> loginActivity.signIn(etEmail.getText().toString(),etPassword.getText().toString())}"
                 android:paddingHorizontal="70dp"
-                android:stateListAnimator="@null"
                 android:text="@string/tvLoginText"
                 android:textAllCaps="false"
                 android:textColor="@color/grey700"
                 android:textSize="25sp"
+                android:layout_marginBottom="30dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/remember_layout" />
+                app:layout_constraintTop_toBottomOf="@id/remember_layout"
+                app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
