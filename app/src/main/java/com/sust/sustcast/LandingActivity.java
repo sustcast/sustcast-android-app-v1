@@ -14,6 +14,7 @@ import com.sust.sustcast.authentication.SignUpActivity;
 import com.sust.sustcast.databinding.ActivityLandingBinding;
 import com.sust.sustcast.utils.ConnectionLiveData;
 import com.sust.sustcast.utils.FontHelper;
+import com.sust.sustcast.utils.FirebaseMessageReceiver;
 
 import static com.sust.sustcast.data.Constants.CHECKNET;
 
@@ -35,7 +36,6 @@ public class LandingActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), CHECKNET, Toast.LENGTH_LONG).show();
             }
         });
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             FontHelper.adjustFontScale(this, getResources().getConfiguration());
