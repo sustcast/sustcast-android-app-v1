@@ -16,33 +16,75 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/collaboration_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@id/buttonLayout"
+                android:paddingVertical="40dp"
+                app:layout_constraintTop_toTopOf="parent">
+                <TextView
+                    android:id="@+id/collaborators"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/collaboration_tag"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/kollektif"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/tv_dept"/>
+                <ImageView
+                    android:id="@+id/ic_robosust"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:src="@drawable/ic_robosust"
+                    app:layout_constraintEnd_toStartOf="@id/tv_dept"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/collaborators" />
+                <TextView
+                    android:id="@+id/tv_dept"
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:fontFamily="@font/kollektif_family"
+                    android:gravity="center"
+                    android:text="@string/dept_of_ncse_sust"
+                    android:textAlignment="center"
+                    android:textColor="@color/grey700"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toStartOf="@id/ic_meow"
+                    app:layout_constraintStart_toEndOf="@id/ic_robosust"
+                    app:layout_constraintTop_toBottomOf="@id/collaborators" />
 
-            <ImageView
-                android:id="@+id/logoFeedback"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_marginTop="20dp"
-                android:src="@drawable/ic_logo"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
+                <ImageView
+                    android:id="@+id/ic_meow"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:src="@drawable/meow"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_dept"
+                    app:layout_constraintTop_toBottomOf="@id/collaborators" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/buttonLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/logoFeedback">
+                app:layout_constraintTop_toBottomOf="@id/collaboration_container">
 
                 <Button
                     android:id="@+id/feedback_button"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_width="280dp"
+                    android:layout_height="60dp"
                     android:background="@drawable/rounded_button"
-                    android:drawableLeft="@drawable/feedback"
+                    android:drawableRight="@drawable/feedback"
                     android:drawableTint="@color/grey700"
+                    android:paddingHorizontal="40dp"
                     android:fontFamily="@font/kollektif"
                     android:gravity="left|center_vertical"
                     android:onClick="@{()->feedbackFragment.giveFeedback()}"
@@ -56,15 +98,12 @@
 
                 <Button
                     android:id="@+id/facebook_button"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_width="280dp"
+                    android:layout_height="60dp"
                     android:background="@drawable/rounded_button"
-                    android:drawableLeft="@drawable/facebook"
+                    android:drawableRight="@drawable/facebook"
                     android:drawableTint="@color/grey700"
+                    android:paddingHorizontal="40dp"
                     android:fontFamily="@font/kollektif"
                     android:gravity="left|center_vertical"
                     android:onClick="@{()->feedbackFragment.startActivity(feedbackFragment.visitFacebook())}"
@@ -72,21 +111,19 @@
                     android:textAllCaps="false"
                     android:textColor="@color/grey700"
                     android:textSize="18sp"
+                    android:layout_marginTop="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/feedback_button" />
 
                 <Button
                     android:id="@+id/rate_button"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_width="280dp"
+                    android:layout_height="60dp"
                     android:background="@drawable/rounded_button"
-                    android:drawableLeft="@drawable/google_play"
+                    android:drawableRight="@drawable/google_play"
                     android:drawableTint="@color/grey700"
+                    android:paddingHorizontal="40dp"
                     android:fontFamily="@font/kollektif"
                     android:gravity="left|center_vertical"
                     android:onClick="@{()->feedbackFragment.giveRate()}"
@@ -94,21 +131,19 @@
                     android:textAllCaps="false"
                     android:textColor="@color/grey700"
                     android:textSize="18sp"
+                    android:layout_marginTop="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/facebook_button" />
 
                 <Button
                     android:id="@+id/logout_button"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="20dp"
+                    android:layout_width="280dp"
+                    android:layout_height="60dp"
                     android:background="@drawable/rounded_button"
-                    android:drawableLeft="@drawable/log_out"
+                    android:drawableRight="@drawable/log_out"
                     android:drawableTint="@color/grey700"
+                    android:paddingHorizontal="40dp"
                     android:fontFamily="@font/kollektif"
                     android:gravity="left|center_vertical"
                     android:onClick="@{()->feedbackFragment.logOut()}"
@@ -116,54 +151,12 @@
                     android:textAllCaps="false"
                     android:textColor="@color/grey700"
                     android:textSize="18sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/rate_button" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="20dp"
-                android:paddingBottom="100dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/buttonLayout">
-
-                <ImageView
-                    android:id="@+id/ic_robosust"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/ic_robosust"
-                    app:layout_constraintEnd_toStartOf="@id/tv_dept"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_dept"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:fontFamily="@font/kollektif_family"
-                    android:gravity="center"
-                    android:text="@string/dept_of_ncse_sust"
-                    android:textAlignment="center"
-                    android:textColor="@color/grey700"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toStartOf="@id/ic_meow"
-                    app:layout_constraintStart_toEndOf="@id/ic_robosust"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/ic_meow"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@drawable/meow"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tv_dept"
-                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

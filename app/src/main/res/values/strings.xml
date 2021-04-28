@@ -29,13 +29,14 @@
     <string name="facebook_page">Facebook Page</string>
     <string name="rate_the_app">Rate the App</string>
     <string name="log_out">Log Out</string>
-    <string name="dept_of_ncse_sust">Dept. of \nCSE, SUST</string>
-    <string name="news_nreader">News\nReader!</string>
-    <string name="currently_reading">Currently Reading :</string>
+    <string name="dept_of_ncse_sust">Dept. of\nCSE, SUST</string>
+    <string name="news_nreader">News Reader</string>
+    <string name="currently_reading">Currently Reading</string>
     <string name="bbc_news_tv">BBC News</string>
     <string name="currently_playing">Currently Playing</string>
     <string name="no_music_playing">No Music Playing</string>
     <string name="mail_address">sustcast@gmail.com</string>
     <string name="backpress_dialogue">Want to close app?\nYou can put in on background pressing the Home Button!</string>
     <string name="playback_paused">SUSTcast is paused</string>
+    <string name="collaboration_tag">Made in collaboration with</string>
 </resources>
