@@ -28,6 +28,7 @@ import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.android.play.core.tasks.Task;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.sust.sustcast.R;
 import com.sust.sustcast.dialogs.SimpleAlertDialog;
 import com.sust.sustcast.utils.FontHelper;
@@ -83,6 +84,7 @@ public class FragmentHolder extends AppCompatActivity {
 
         createNotificationChannel();
 
+        SubscribeToFCM();
         try {
             checkForUpdate();
         } catch (Exception ex) {
@@ -215,6 +217,20 @@ public class FragmentHolder extends AppCompatActivity {
         builder.setMessage(alertmessage)
                 .setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
+
+    }
+
+
+    private void SubscribeToFCM(){
+
+        FirebaseMessaging.getInstance().subscribeToTopic("Stream").addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Log.d(TAG, "Successfully Subscribed to Notification Service");
+
+            } else {
+                Log.d(TAG, "Subscription to Notification Service failed");
+            }
+        });
 
     }
 
